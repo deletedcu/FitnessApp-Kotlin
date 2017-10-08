@@ -1,0 +1,28 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryLightColor</item>
+        <item name="colorControlNormal">@color/secondaryLightColor</item>
+        <item name="android:windowBackground">@color/secondaryDarkColor</item>
+        <item name="buttonStyle">@style/LiveRowingButton</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="AppTheme" />
+
+    <style name="AppTheme.PopupOverlay" parent="AppTheme" />
+
+    <style name="LiveRowingButton" parent="Base.Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+</resources>
