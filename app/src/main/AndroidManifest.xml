@@ -6,6 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
 
     <application
         android:name=".LiveRowing"
@@ -35,9 +42,12 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AppTheme"></activity>
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
+        <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
+        <activity android:name=".activity.DeviceScanActivity" />
     </application>
 
 </manifest>

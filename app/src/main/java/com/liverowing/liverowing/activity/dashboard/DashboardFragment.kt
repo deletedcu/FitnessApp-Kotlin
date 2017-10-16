@@ -10,15 +10,24 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 
 import com.liverowing.liverowing.R
+import com.liverowing.liverowing.activity.workouttype.WorkoutTypeDetailActivity
+import com.liverowing.liverowing.activity.workouttype.WorkoutTypeDetailIntent
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
 import com.liverowing.liverowing.api.model.User
 import com.liverowing.liverowing.api.model.WorkoutType
 import com.liverowing.liverowing.util.SimpleItemDecorator
 import com.parse.ParseQuery
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import android.app.ActivityOptions
+import android.graphics.Point
+import com.liverowing.liverowing.screenWidth
+import kotlinx.android.synthetic.main.fragment_dashboard_workout_type_card.view.*
 
 
 class DashboardFragment : Fragment() {
+    val featuredWorkoutsList = mutableListOf<WorkoutType>()
+    val recentAndLikedWorkoutsList = mutableListOf<WorkoutType>()
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -28,39 +37,67 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val featuredUsers = ParseQuery.getQuery(User::class.java)
-        featuredUsers.whereEqualTo("isFeatured", true)
+        setupFeaturedWorkouts()
+        setupRecentAndLikedWorkouts()
+    }
 
-        val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
-        featuredWorkouts.include("createdBy")
-        featuredWorkouts.whereEqualTo("isFeatured", true)
-        featuredWorkouts.whereMatchesQuery("createdBy", featuredUsers)
-        featuredWorkouts.addAscendingOrder("createdBy")
-        featuredWorkouts.addDescendingOrder("createdAt")
+    private fun setupFeaturedWorkouts() {
+        val cardWidth = minOf(600, (activity!!.screenWidth() * .75).toInt())
+        f_dashboard_featured_recyclerview.apply {
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+            adapter = DashboardWorkoutTypeAdapter(featuredWorkoutsList, cardWidth, { image, workoutType ->
+                run {
+                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, image, "image")
+                    activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                }
+            });
+            isHorizontalScrollBarEnabled = false
+            addItemDecoration(SimpleItemDecorator(5, true))
+        }
+        LinearSnapHelper().attachToRecyclerView(f_dashboard_featured_recyclerview)
 
+        val featuredWorkouts = WorkoutType.featuredWorkouts()
         featuredWorkouts.findInBackground { objects, e ->
             if (e === null) {
-                f_dashboard_featured_recyclerview.apply {
-                    layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-                    adapter = DashboardWorkoutTypeAdapter(objects, { _ -> Log.d("LiveRowing", "listener!") })
-                    isHorizontalScrollBarEnabled = false
-                    addItemDecoration(SimpleItemDecorator(5, true))
-                }
-
-                val snapHelper = LinearSnapHelper()
-                snapHelper.attachToRecyclerView(f_dashboard_featured_recyclerview)
+                featuredWorkoutsList.clear()
+                featuredWorkoutsList.addAll(objects)
+                f_dashboard_featured_recyclerview.adapter.notifyDataSetChanged()
             } else {
                 Log.d("LiveRowing", e.message)
             }
         }
+    }
 
+    private fun setupRecentAndLikedWorkouts() {
+        val cardWidth = minOf(400, (activity!!.screenWidth() * .45).toInt())
+        f_dashboard_liked_and_recent_recyclerview.apply {
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+            adapter = DashboardWorkoutTypeAdapter(recentAndLikedWorkoutsList, cardWidth, { image, workoutType ->
+                run {
+                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, image, "image")
+                    activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                }
+            });
+            isHorizontalScrollBarEnabled = false
+            addItemDecoration(SimpleItemDecorator(5, true))
+        }
+        LinearSnapHelper().attachToRecyclerView(f_dashboard_liked_and_recent_recyclerview)
+
+        val recentAndLikedWorkouts = WorkoutType.recentAndLikedWorkouts()
+        recentAndLikedWorkouts.findInBackground { objects, e ->
+            if (e === null) {
+                recentAndLikedWorkoutsList.clear()
+                recentAndLikedWorkoutsList.addAll(objects)
+                f_dashboard_liked_and_recent_recyclerview.adapter.notifyDataSetChanged()
+            } else {
+                Log.d("LiveRowing", e.message)
+            }
+        }
     }
 
     companion object {
         fun newInstance(): DashboardFragment {
-            Log.d("LiveRowing", "newInstance")
             return DashboardFragment()
         }
     }
-
 }

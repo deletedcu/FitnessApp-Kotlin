@@ -6,4 +6,9 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_scan"
+        android:icon="@drawable/ic_bluetooth_black"
+        android:title="Scan"
+        app:showAsAction="ifRoom" />
 </menu>

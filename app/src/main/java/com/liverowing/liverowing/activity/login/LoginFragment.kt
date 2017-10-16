@@ -1,14 +1,15 @@
 package com.liverowing.liverowing.activity.login
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
+import com.liverowing.liverowing.activity.MainIntent
 import com.parse.ParseException
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -34,7 +35,10 @@ class LoginFragment : Fragment() {
                         if (e !== null) {
                             Snackbar.make(view!!, e.message.toString(), Snackbar.LENGTH_LONG).show()
                         } else {
-                            Log.d("LiveRowing", user?.username)
+                            val intent: Intent = activity.MainIntent()
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            startActivity(intent)
+                            activity.finish()
                         }
                     })
         }

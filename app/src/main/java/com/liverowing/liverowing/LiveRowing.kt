@@ -6,14 +6,15 @@ import com.parse.Parse
 import com.parse.ParseInstallation
 import com.parse.ParseObject
 import android.util.Log
-import okhttp3.Interceptor
-import okhttp3.Response
 import java.io.IOException
-import okhttp3.OkHttpClient
 import com.squareup.picasso.Picasso
 import com.jakewharton.picasso.OkHttp3Downloader
-import okhttp3.Cache
+import okhttp3.*
+import okio.Buffer
 import java.io.File
+import com.squareup.picasso.OkHttpDownloader
+
+
 
 
 /**
@@ -36,24 +37,16 @@ class LiveRowing : Application() {
 
         val conf = Parse.Configuration.Builder(this)
                 .applicationId("ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo")
-                .server("http://192.168.0.103:1337")
+                .server("https://api.liverowing.com")
                 .clientBuilder(clientBuilder)
                 .build()
         Parse.initialize(conf)
         ParseInstallation.getCurrentInstallation().saveInBackground()
 
-        val httpCacheDirectory = File(cacheDir, "picasso-cache")
-        val cache = Cache(httpCacheDirectory, 10 * 1024 * 1024)
+        val picasso = Picasso.Builder(this).downloader(OkHttp3Downloader(cacheDir, 250000000)).build()
+        picasso.setIndicatorsEnabled(true)
+        Picasso.setSingletonInstance(picasso)
 
-        clientBuilder.cache(cache)
-        val picassoBuilder = Picasso.Builder(applicationContext)
-        picassoBuilder.downloader(OkHttp3Downloader(clientBuilder.build()))
-        val picasso = picassoBuilder.build()
-        try {
-            Picasso.setSingletonInstance(picasso)
-        } catch (ignored: IllegalStateException) {
-            Log.e("LiveRowing", "Picasso instance already used")
-        }
 
     }
 }
@@ -64,18 +57,33 @@ class LoggingInterceptor : Interceptor {
         val request = chain.request()
 
         val t1 = System.nanoTime()
-        Log.i(TAG, String.format("Sending %s request %s on %s%n%s%n%s", request.method(),
-                request.url(), chain.connection(), request.headers(),
-                request.body().toString()))
+        Log.i(TAG, String.format("Sending %s request %s on %s%n%s", request.method(),
+                request.url(), chain.connection(),
+                stringifyRequestBody(request)))
 
         val response = chain.proceed(request)
 
         val t2 = System.nanoTime()
 
-        Log.i(TAG, String.format("Received response for %s in %.1fms%n%s", response.request().url(),
-                (t2 - t1) / 1e6, response.headers()))
+        Log.i(TAG, String.format("Received response for %s in %.1fms", response.request().url(),
+                (t2 - t1) / 1e6))
 
         return response
+    }
+
+    private fun stringifyRequestBody(request: Request): String {
+        if (request.body() != null) {
+            try {
+                val copy = request.newBuilder().build()
+                val buffer = Buffer()
+                copy.body()!!.writeTo(buffer)
+                return buffer.readUtf8()
+            } catch (e: IOException) {
+                Log.w(TAG, "Failed to stringify request body: " + e.message)
+            }
+
+        }
+        return ""
     }
 
     companion object {

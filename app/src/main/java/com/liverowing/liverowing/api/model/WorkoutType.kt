@@ -1,9 +1,7 @@
 package com.liverowing.liverowing.api.model
 
-import com.parse.ParseClassName
-import com.parse.ParseFile
-import com.parse.ParseObject
-import com.parse.ParseRelation
+import bolts.Task
+import com.parse.*
 import java.util.*
 
 /**
@@ -37,4 +35,34 @@ class WorkoutType : ParseObject() {
     var namedChallenger by ParseDelegate<User?>()
     var fixedChallenge by ParseDelegate<Workout?>()
     var isAutoCompete by ParseDelegate<Boolean?>()
+
+    companion object {
+        fun featuredWorkouts() : ParseQuery<WorkoutType> {
+            val featuredUsers = ParseQuery.getQuery(User::class.java)
+            featuredUsers.whereEqualTo("isFeatured", true)
+
+            val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            featuredWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+
+            featuredWorkouts.include("createdBy")
+            featuredWorkouts.whereEqualTo("isFeatured", true)
+            featuredWorkouts.whereMatchesQuery("createdBy", featuredUsers)
+            featuredWorkouts.addAscendingOrder("createdBy")
+            featuredWorkouts.addDescendingOrder("createdAt")
+
+            return featuredWorkouts
+        }
+
+        fun recentAndLikedWorkouts() : ParseQuery<WorkoutType> {
+            val completedWorkouts = ParseQuery.getQuery(Workout::class.java)
+            completedWorkouts.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+            completedWorkouts.whereEqualTo("isDone", true)
+
+            val recentAndLikedWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            recentAndLikedWorkouts.whereMatchesKeyInQuery("objectId", "workoutType", completedWorkouts)
+            recentAndLikedWorkouts.limit = 10
+
+            return recentAndLikedWorkouts
+        }
+    }
 }
