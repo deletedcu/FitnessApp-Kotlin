@@ -1,12 +1,9 @@
 package com.liverowing.liverowing.activity
 
-import android.app.FragmentManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Message
 import android.support.design.internal.NavigationMenu
-import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -14,20 +11,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.liverowing.liverowing.R
+import com.liverowing.liverowing.R.id.action_single_distance
 import com.liverowing.liverowing.activity.dashboard.DashboardFragment
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.fragment_quick_workout.*
-import android.support.design.widget.BottomSheetDialog
-import android.view.View
-import com.liverowing.liverowing.R.id.action_single_distance
-import com.liverowing.liverowing.R.id.bottomSheet
-
-
-
-
-
 
 
 fun Context.MainIntent(): Intent {

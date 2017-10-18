@@ -3,7 +3,7 @@ package com.liverowing.liverowing.api.model
 import com.parse.ParseObject
 import kotlin.reflect.KProperty
 
-public class ParseDelegate<T> {
+class ParseDelegate<T> {
     @Suppress("UNCHECKED_CAST")
     operator fun getValue(parseObj: ParseObject, propertyMetadata: KProperty<*>): T {
         return parseObj.get(propertyMetadata.name) as T

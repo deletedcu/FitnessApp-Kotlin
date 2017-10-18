@@ -48,6 +48,11 @@
         <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
         <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
         <activity android:name=".activity.DeviceScanActivity" />
+
+        <service
+            android:name=".service.PerformanceMonitorBLEService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -3,14 +3,10 @@ package com.liverowing.liverowing.activity.login
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.api.model.User
-
-
 
 
 /**

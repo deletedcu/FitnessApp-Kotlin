@@ -1,30 +1,33 @@
 package com.liverowing.liverowing.activity
 
 import android.Manifest
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.le.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Toast
-import com.liverowing.liverowing.R
-import android.bluetooth.BluetoothAdapter
-import android.app.Activity
-import android.Manifest.permission
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.os.Build
-import android.util.Log
-import android.bluetooth.BluetoothGatt
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.le.*
+import android.os.Bundle
 import android.os.Handler
 import android.os.ParcelUuid
+import android.support.design.widget.Snackbar
+import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.widget.Toast
+import com.liverowing.liverowing.R
+import com.liverowing.liverowing.extensions.action
+import com.liverowing.liverowing.extensions.requestPermission
+import com.liverowing.liverowing.extensions.shouldShowPermissionRationale
+import com.liverowing.liverowing.extensions.snack
+import com.liverowing.liverowing.service.PerformanceMonitorBLEService
+import kotlinx.android.synthetic.main.activity_device_scan.*
 import java.util.*
-import android.view.InputDevice.getDevice
-import android.bluetooth.le.ScanCallback
-
-
 
 
 fun Context.DeviceScanIntent(): Intent {
@@ -63,7 +66,37 @@ class DeviceScanActivity : AppCompatActivity() {
             return
         }
 
+        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        localBroadcastManager.registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                localBroadcastManager.unregisterReceiver(this)
+                localBroadcastManager
+                        .sendBroadcast(Intent(PerformanceMonitorBLEService.ACTION_SERVICE_MESSAGE)
+                                .putExtra("operation", "list-devices"))
+            }
+        }, IntentFilter(PerformanceMonitorBLEService.ACTION_SERVICE_READY))
+
         startScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) startScan() else {
+                Toast.makeText(this, "Enable Bluetooth to enable scanning for devices.", Toast.LENGTH_LONG).show()
+                finish()
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_FINE_LOCATION) {
+            if (grantResults[0] == 0) startScan()  else {
+                Toast.makeText(this, "Access to location is needed to be able to scan for devices.", Toast.LENGTH_LONG).show()
+                finish()
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun startScan() {
@@ -76,10 +109,6 @@ class DeviceScanActivity : AppCompatActivity() {
 
         mBluetoothLeScanner = mBluetoothAdapter!!.bluetoothLeScanner
 
-        // Note: Filtering does not work the same (or at all) on most devices. It also is unable to
-        // search for a mask or anything less than a full UUID.
-        // Unless the full UUID of the server is known, manual filtering may be necessary.
-        // For example, when looking for a brand of device that contains a char sequence in the UUID
         val scanFilter = ScanFilter.Builder()
                 .setServiceUuid(ParcelUuid.fromString("CE060000-43E5-11E4-916C-0800200C9A66"))
                 .build()
@@ -137,8 +166,12 @@ class DeviceScanActivity : AppCompatActivity() {
     }
 
     private fun requestLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FINE_LOCATION)
+        if (shouldShowPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            a_device_scan_root.snack("LiveRowing needs access to location to be able to scan for devices.", Snackbar.LENGTH_INDEFINITE, {
+                action("Action") { requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_FINE_LOCATION) }
+            })
+        } else {
+            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_FINE_LOCATION)
         }
     }
 

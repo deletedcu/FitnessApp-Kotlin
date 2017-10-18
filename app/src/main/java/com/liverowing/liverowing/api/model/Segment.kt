@@ -3,8 +3,6 @@ package com.liverowing.liverowing.api.model
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
-import com.parse.ParseRelation
-import java.util.*
 
 /**
  * Created by henrikmalmberg on 2017-10-01.

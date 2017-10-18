@@ -1,20 +1,21 @@
 package com.liverowing.liverowing
 
 import android.app.Application
+import android.content.Intent
+import android.util.Log
+import com.jakewharton.picasso.OkHttp3Downloader
 import com.liverowing.liverowing.api.model.*
+import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 import com.parse.Parse
 import com.parse.ParseInstallation
 import com.parse.ParseObject
-import android.util.Log
-import java.io.IOException
 import com.squareup.picasso.Picasso
-import com.jakewharton.picasso.OkHttp3Downloader
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okio.Buffer
-import java.io.File
-import com.squareup.picasso.OkHttpDownloader
-
-
+import java.io.IOException
 
 
 /**
@@ -47,7 +48,7 @@ class LiveRowing : Application() {
         picasso.setIndicatorsEnabled(true)
         Picasso.setSingletonInstance(picasso)
 
-
+        startService(Intent(this, PerformanceMonitorBLEService::class.java))
     }
 }
 

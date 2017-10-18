@@ -1,27 +1,21 @@
 package com.liverowing.liverowing.activity.dashboard
 
+import android.app.ActivityOptions
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.*
+import android.support.v7.widget.LinearSnapHelper
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.activity.workouttype.WorkoutTypeDetailActivity
 import com.liverowing.liverowing.activity.workouttype.WorkoutTypeDetailIntent
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
-import com.liverowing.liverowing.api.model.User
 import com.liverowing.liverowing.api.model.WorkoutType
-import com.liverowing.liverowing.util.SimpleItemDecorator
-import com.parse.ParseQuery
-import kotlinx.android.synthetic.main.fragment_dashboard.*
-import android.app.ActivityOptions
-import android.graphics.Point
 import com.liverowing.liverowing.screenWidth
-import kotlinx.android.synthetic.main.fragment_dashboard_workout_type_card.view.*
+import com.liverowing.liverowing.util.SimpleItemDecorator
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 
 class DashboardFragment : Fragment() {
@@ -50,7 +44,7 @@ class DashboardFragment : Fragment() {
                     val options = ActivityOptions.makeSceneTransitionAnimation(activity, image, "image")
                     activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }
-            });
+            })
             isHorizontalScrollBarEnabled = false
             addItemDecoration(SimpleItemDecorator(5, true))
         }
@@ -77,7 +71,7 @@ class DashboardFragment : Fragment() {
                     val options = ActivityOptions.makeSceneTransitionAnimation(activity, image, "image")
                     activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }
-            });
+            })
             isHorizontalScrollBarEnabled = false
             addItemDecoration(SimpleItemDecorator(5, true))
         }
