@@ -21,10 +21,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/LiveRowingTheme">
         <meta-data
             android:name="com.parse.SERVER_URL"
-            android:value="http://192.168.0.101:1337" />
+            android:value="http://10.0.2.2:1337" />
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo" />
@@ -39,12 +39,12 @@
         <activity
             android:name=".activity.login.LoginRegisterActivity"
             android:label="@string/title_activity_login_register"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/LiveRowingTheme" />
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/LiveRowingTheme" />
         <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
         <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
         <activity android:name=".activity.DeviceScanActivity" />

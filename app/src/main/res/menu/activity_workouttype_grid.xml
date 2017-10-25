@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_filter_list"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:enabled="false"
+                android:title="WORKOUT TYPE" />
+            <group android:checkableBehavior="all">
+                <item
+                    android:id="@+id/action_single_distance"
+                    android:title="Single distance" />
+                <item
+                    android:id="@+id/action_single_time"
+                    android:title="Single time" />
+                <item
+                    android:id="@+id/action_intervals"
+                    android:title="Intervals" />
+            </group>
+            <item
+                android:enabled="false"
+                android:title="TAGS" />
+            <group android:checkableBehavior="all">
+                <item
+                    android:id="@+id/action_tag_hiit"
+                    android:title="HIIT" />
+                <item
+                    android:id="@+id/action_tag_weight_loss"
+                    android:title="Weight loss" />
+                <item
+                    android:id="@+id/action_tag_power"
+                    android:title="Power" />
+                <item
+                    android:id="@+id/action_tag_cardio"
+                    android:title="Cardio" />
+                <item
+                    android:id="@+id/action_tag_cross_training"
+                    android:title="Cross training" />
+            </group>
+        </menu>
+    </item>
+</menu>

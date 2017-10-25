@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.activity.workouttype.WorkoutTypeDetailIntent
+import com.liverowing.liverowing.activity.workouttype.WorkoutTypeGridActivity
+import com.liverowing.liverowing.activity.workouttype.WorkoutTypeGridIntent
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
 import com.liverowing.liverowing.api.model.WorkoutType
 import com.liverowing.liverowing.screenWidth
@@ -33,6 +35,9 @@ class DashboardFragment : Fragment() {
 
         setupFeaturedWorkouts()
         setupRecentAndLikedWorkouts()
+
+        f_dashboard_featured_title.setOnClickListener({ this.onClickedWorkoutTypeHeader() })
+        f_dashboard_liked_and_recent_title.setOnClickListener({ this.onClickedWorkoutTypeHeader() })
     }
 
     private fun setupFeaturedWorkouts() {
@@ -87,6 +92,10 @@ class DashboardFragment : Fragment() {
                 Log.d("LiveRowing", e.message)
             }
         }
+    }
+
+    private fun onClickedWorkoutTypeHeader() {
+        startActivity(activity.WorkoutTypeGridIntent())
     }
 
     companion object {
