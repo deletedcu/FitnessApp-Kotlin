@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
+    
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_filter_list"
@@ -31,12 +30,6 @@
                 android:title="TAGS" />
             <group android:checkableBehavior="all">
                 <item
-                    android:id="@+id/action_tag_hiit"
-                    android:title="HIIT" />
-                <item
-                    android:id="@+id/action_tag_weight_loss"
-                    android:title="Weight loss" />
-                <item
                     android:id="@+id/action_tag_power"
                     android:title="Power" />
                 <item
@@ -45,6 +38,15 @@
                 <item
                     android:id="@+id/action_tag_cross_training"
                     android:title="Cross training" />
+                <item
+                    android:id="@+id/action_tag_hiit"
+                    android:title="HIIT" />
+                <item
+                    android:id="@+id/action_tag_speed"
+                    android:title="Speed" />
+                <item
+                    android:id="@+id/action_tag_weight_loss"
+                    android:title="Weight loss" />
             </group>
         </menu>
     </item>

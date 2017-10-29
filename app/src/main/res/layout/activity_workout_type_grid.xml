@@ -17,6 +17,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/a_workout_type_grid_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -29,54 +35,55 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/a_workout_type_grid_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize" />
+            android:layout_height="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.Widget.Toolbar.Popup">
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/a_workout_type_grid_categories"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:background="@null"
+                android:entries="@array/workout_categories"
+                android:theme="@style/AppTheme.Widget.Toolbar.Spinner" />
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
+            android:id="@+id/a_workout_type_grid_tabbar"
             style="@style/LRToolbarTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="scrollable">
 
             <android.support.design.widget.TabItem
+                android:id="@+id/a_workout_type_grid_tab_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All" />
 
             <android.support.design.widget.TabItem
+                android:id="@+id/a_workout_type_grid_tab_new"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New" />
 
             <android.support.design.widget.TabItem
+                android:id="@+id/a_workout_type_grid_tab_popular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Popular" />
 
             <android.support.design.widget.TabItem
+                android:id="@+id/a_workout_type_grid_tab_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Completed" />
 
             <android.support.design.widget.TabItem
+                android:id="@+id/a_workout_type_grid_tab_never_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Featured" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Community" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Standard" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your custom" />
+                android:text="Never Completed" />
         </android.support.design.widget.TabLayout>
 
 

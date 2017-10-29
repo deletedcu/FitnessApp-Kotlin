@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.login.LoginRegisterActivity$PlaceholderFragment">
+    tools:context=".activity.login.LoginRegisterActivity">
 
     <ScrollView
         android:layout_width="0dp"
@@ -50,16 +50,17 @@
                     android:imeOptions="actionGo"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/f_login_button_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </LinearLayout>
     </ScrollView>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/f_login_button_login"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

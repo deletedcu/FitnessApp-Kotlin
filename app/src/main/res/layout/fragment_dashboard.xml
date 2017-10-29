@@ -42,7 +42,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
-        android:text="LIKED &amp; RECENT >"
+        android:text="RECENT &amp; LIKED >"
         android:textAlignment="viewStart"
         android:textSize="18sp"
         android:textStyle="bold"

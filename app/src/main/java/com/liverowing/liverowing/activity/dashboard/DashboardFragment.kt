@@ -1,6 +1,5 @@
 package com.liverowing.liverowing.activity.dashboard
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearSnapHelper
@@ -10,14 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.activity.workouttype.WorkoutTypeDetailIntent
-import com.liverowing.liverowing.activity.workouttype.WorkoutTypeGridActivity
-import com.liverowing.liverowing.activity.workouttype.WorkoutTypeGridIntent
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
 import com.liverowing.liverowing.api.model.WorkoutType
 import com.liverowing.liverowing.screenWidth
 import com.liverowing.liverowing.util.SimpleItemDecorator
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import android.support.v4.app.ActivityOptionsCompat
+import com.liverowing.liverowing.activity.workouttype.*
 
 
 class DashboardFragment : Fragment() {
@@ -36,22 +34,22 @@ class DashboardFragment : Fragment() {
         setupFeaturedWorkouts()
         setupRecentAndLikedWorkouts()
 
-        f_dashboard_featured_title.setOnClickListener({ this.onClickedWorkoutTypeHeader() })
-        f_dashboard_liked_and_recent_title.setOnClickListener({ this.onClickedWorkoutTypeHeader() })
+        f_dashboard_featured_title.setOnClickListener({ this.onClickedWorkoutTypeHeader(it) })
+        f_dashboard_liked_and_recent_title.setOnClickListener({ this.onClickedWorkoutTypeHeader(it) })
     }
 
     private fun setupFeaturedWorkouts() {
         val cardWidth = minOf(600, (activity!!.screenWidth() * .75).toInt())
         f_dashboard_featured_recyclerview.apply {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-            adapter = DashboardWorkoutTypeAdapter(featuredWorkoutsList, cardWidth, { image, workoutType ->
+            adapter = DashboardWorkoutTypeAdapter(featuredWorkoutsList, cardWidth, null, { image, workoutType ->
                 run {
-                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, image, "image")
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, image, "image")
                     activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }
             })
             isHorizontalScrollBarEnabled = false
-            addItemDecoration(SimpleItemDecorator(5, true))
+            addItemDecoration(SimpleItemDecorator(15))
         }
         LinearSnapHelper().attachToRecyclerView(f_dashboard_featured_recyclerview)
 
@@ -71,14 +69,14 @@ class DashboardFragment : Fragment() {
         val cardWidth = minOf(400, (activity!!.screenWidth() * .45).toInt())
         f_dashboard_liked_and_recent_recyclerview.apply {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-            adapter = DashboardWorkoutTypeAdapter(recentAndLikedWorkoutsList, cardWidth, { image, workoutType ->
+            adapter = DashboardWorkoutTypeAdapter(recentAndLikedWorkoutsList, cardWidth, null, { image, workoutType ->
                 run {
-                    val options = ActivityOptions.makeSceneTransitionAnimation(activity, image, "image")
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, image, "image")
                     activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }
             })
             isHorizontalScrollBarEnabled = false
-            addItemDecoration(SimpleItemDecorator(5, true))
+            addItemDecoration(SimpleItemDecorator(15))
         }
         LinearSnapHelper().attachToRecyclerView(f_dashboard_liked_and_recent_recyclerview)
 
@@ -94,8 +92,13 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun onClickedWorkoutTypeHeader() {
-        startActivity(activity.WorkoutTypeGridIntent())
+    private fun onClickedWorkoutTypeHeader(sender: View) {
+        var workoutCategory = 0
+        when (sender.id) {
+            R.id.f_dashboard_featured_title -> { workoutCategory = WORKOUT_CATEGORY_FEATURED }
+            R.id.f_dashboard_liked_and_recent_title -> { workoutCategory = WORKOUT_CATEGORY_RECENT_AND_LIKED }
+        }
+        startActivity(activity.WorkoutTypeGridIntent(workoutCategory))
     }
 
     companion object {

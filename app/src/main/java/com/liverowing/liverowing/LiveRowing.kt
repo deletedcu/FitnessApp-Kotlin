@@ -38,10 +38,11 @@ class LiveRowing : Application() {
 
         val conf = Parse.Configuration.Builder(this)
                 .applicationId("ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo")
-                .server("https://10.0.2.2:1337")
+                .server("https://api.liverowing.com")
                 .clientBuilder(clientBuilder)
                 .build()
         Parse.initialize(conf)
+
         ParseInstallation.getCurrentInstallation().saveInBackground()
 
         val picasso = Picasso.Builder(this).downloader(OkHttp3Downloader(cacheDir, 250000000)).build()

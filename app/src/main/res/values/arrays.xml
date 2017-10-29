@@ -5,4 +5,11 @@
         <item>@color/primaryLightColor</item>
         <item>@color/primaryDarkColor</item>
     </integer-array>
+
+    <string-array name="workout_categories">
+        <item>Featured</item>
+        <item>Community</item>
+        <item>Recent &amp; Liked</item>
+        <item>Affiliate</item>
+    </string-array>
 </resources>

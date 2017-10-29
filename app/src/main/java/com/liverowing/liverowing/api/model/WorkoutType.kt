@@ -58,10 +58,33 @@ class WorkoutType : ParseObject() {
             completedWorkouts.whereEqualTo("isDone", true)
 
             val recentAndLikedWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            recentAndLikedWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
             recentAndLikedWorkouts.whereMatchesKeyInQuery("objectId", "workoutType", completedWorkouts)
             recentAndLikedWorkouts.limit = 10
 
             return recentAndLikedWorkouts
+        }
+
+        fun communityWorkouts(): ParseQuery<WorkoutType> {
+            val communityWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            communityWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            communityWorkouts.include("createdBy")
+            communityWorkouts.whereEqualTo("isPublic", true)
+
+            return communityWorkouts
+        }
+
+        fun affiliateWorkouts(): ParseQuery<WorkoutType> {
+            val affiliatedUsers = ParseQuery.getQuery(User::class.java)
+            affiliatedUsers.whereEqualTo("isAffiliate", true)
+
+            val affiliateWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            affiliateWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+
+            affiliateWorkouts.include("createdBy")
+            affiliateWorkouts.whereMatchesQuery("createdBy", affiliatedUsers)
+
+            return affiliateWorkouts
         }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         f_login_button_login.setOnClickListener {
+            Log.d("LiveRowing", "test")
             ParseUser.logInInBackground(
                     f_login_txt_account.editText?.text.toString(),
                     f_login_txt_password.editText?.text.toString(),
@@ -46,8 +48,7 @@ class LoginFragment : Fragment() {
 
     companion object {
         fun newInstance(): LoginFragment {
-            val fragment = LoginFragment()
-            return fragment
+            return LoginFragment()
         }
     }
 }

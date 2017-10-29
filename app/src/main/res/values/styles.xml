@@ -1,23 +1,42 @@
 <resources>
-    <style name="LiveRowingTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorControlNormal">@color/primaryTextColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
 
-
-        <item name="toolbarStyle">@style/LRToolbar</item>
-        <item name="buttonStyle">@style/LRButton</item>
+        <item name="toolbarStyle">@style/AppTheme.Widget.Toolbar</item>
         <item name="bottomSheetDialogTheme">@style/LRBottomSheetDialogTheme</item>
     </style>
 
+    <style name="AppTheme" parent="AppTheme.Base" />
+
+    <style name="AppTheme.Widget" />
+
     <!-- ActionBar/Toolbar -->
-    <style name="LRToolbar" parent="Widget.AppCompat.Toolbar">
+    <style name="AppTheme.Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:textColorPrimary">#ffffff</item>
         <item name="android:textColorSecondary">#ffffff</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="titleTextColor">#ffffff</item>
+        <item name="android:textSize">@dimen/action_bar_title_text_size</item>
     </style>
+
+    <style name="AppTheme.Widget.Toolbar.Popup" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Widget.Toolbar.Spinner">
+        <item name="android:background">@null</item>
+        <item name="android:spinnerItemStyle">@style/AppTheme.Widget.Toolbar.Spinner.Item</item>
+    </style>
+
+    <style name="AppTheme.Widget.Toolbar.Spinner.Item">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:drawableEnd">@drawable/ic_arrow_drop_down_white</item>
+    </style>
+
 
     <!-- TabLayout inside a Toolbar -->
     <style name="LRToolbarTabLayout" parent="Widget.Design.TabLayout">
@@ -58,9 +77,4 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <!-- Button -->
-    <style name="LRButton" parent="Base.Widget.AppCompat.Button.Borderless.Colored">
-        <item name="android:background">@drawable/button_background</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
-    </style>
 </resources>
