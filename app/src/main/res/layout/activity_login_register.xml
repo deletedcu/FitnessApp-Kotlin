@@ -31,7 +31,7 @@
 
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/a_login_register_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -51,7 +51,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/a_login_register_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

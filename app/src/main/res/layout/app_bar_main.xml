@@ -42,9 +42,7 @@
         app:fabGravity="bottom_end"
         app:fabMenu="@menu/activity_main_fab"
         app:fabDrawable="@drawable/ic_play_arrow_black"
-        app:miniFabBackgroundTint="@android:color/white"
-        app:miniFabDrawableTint="?attr/colorPrimaryDark"
-        app:miniFabTitleTextColor="?attr/colorPrimaryDark"
-        app:miniFabBackgroundTintList="@array/mini_fab_background_colors"/>
+        app:fabBackgroundTint="#aaaaaa"
+        app:fabDrawableTint="#ffffff"/>
 
 </android.support.design.widget.CoordinatorLayout>

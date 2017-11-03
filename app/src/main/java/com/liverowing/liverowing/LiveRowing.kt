@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import com.jakewharton.picasso.OkHttp3Downloader
-import com.liverowing.liverowing.api.model.*
+import com.liverowing.liverowing.model.parse.*
 import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 import com.parse.Parse
 import com.parse.ParseInstallation
@@ -32,12 +32,14 @@ class LiveRowing : Application() {
         ParseObject.registerSubclass(User::class.java)
         ParseObject.registerSubclass(WorkoutType::class.java)
         ParseObject.registerSubclass(Workout::class.java)
+        ParseObject.registerSubclass(UserStats::class.java)
 
         val clientBuilder = OkHttpClient.Builder()
         clientBuilder.addInterceptor(LoggingInterceptor())
 
         val conf = Parse.Configuration.Builder(this)
                 .applicationId("ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo")
+                //.server("http://10.0.2.2:1337")
                 .server("https://api.liverowing.com")
                 .clientBuilder(clientBuilder)
                 .build()
@@ -48,8 +50,6 @@ class LiveRowing : Application() {
         val picasso = Picasso.Builder(this).downloader(OkHttp3Downloader(cacheDir, 250000000)).build()
         picasso.setIndicatorsEnabled(true)
         Picasso.setSingletonInstance(picasso)
-
-        startService(Intent(this, PerformanceMonitorBLEService::class.java))
     }
 }
 

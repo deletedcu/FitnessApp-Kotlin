@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
-import com.liverowing.liverowing.api.model.WorkoutType
+import com.liverowing.liverowing.model.parse.WorkoutType
 import com.liverowing.liverowing.screenWidth
 import com.liverowing.liverowing.util.SimpleItemDecorator
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -19,8 +19,8 @@ import com.liverowing.liverowing.activity.workouttype.*
 
 
 class DashboardFragment : Fragment() {
-    val featuredWorkoutsList = mutableListOf<WorkoutType>()
-    val recentAndLikedWorkoutsList = mutableListOf<WorkoutType>()
+    private val featuredWorkoutsList = mutableListOf<WorkoutType>()
+    private val recentAndLikedWorkoutsList = mutableListOf<WorkoutType>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

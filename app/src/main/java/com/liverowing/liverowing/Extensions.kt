@@ -6,6 +6,7 @@ import android.content.Context
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,6 +86,10 @@ fun String.isValidEmail(): Boolean {
     return pattern.matcher(this).matches()
 }
 
+fun Double.milliSecondsToTimespan(milliSecondPrecision: Int = 0): String {
+    return this.toLong().milliSecondsToTimespan(milliSecondPrecision)
+}
+
 fun Int.milliSecondsToTimespan(milliSecondPrecision: Int = 0): String {
     return this.toLong().milliSecondsToTimespan(milliSecondPrecision)
 }
@@ -101,12 +106,16 @@ fun Long.milliSecondsToTimespan(milliSecondPrecision: Int = 0): String {
         sb.append(hours)
         sb.append(":")
     }
-    sb.append(minutes.toString().padStart(2, '0'))
-    sb.append(":")
+
+    if (minutes > 0) {
+        sb.append(minutes.toString().padStart(2, '0'))
+        sb.append(":")
+    }
+
     sb.append(seconds.toString().padStart(2, '0'))
     if (milliSecondPrecision > 0) {
         sb.append(".")
-        sb.append(milliseconds)
+        sb.append(milliseconds.toString().subSequence(0, milliSecondPrecision))
     }
     return sb.toString()
 }

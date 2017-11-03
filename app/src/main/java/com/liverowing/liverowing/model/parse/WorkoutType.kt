@@ -1,4 +1,4 @@
-package com.liverowing.liverowing.api.model
+package com.liverowing.liverowing.model.parse
 
 import com.parse.*
 import java.util.*
@@ -37,16 +37,12 @@ class WorkoutType : ParseObject() {
 
     companion object {
         fun featuredWorkouts() : ParseQuery<WorkoutType> {
-            val featuredUsers = ParseQuery.getQuery(User::class.java)
-            featuredUsers.whereEqualTo("isFeatured", true)
-
             val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
             featuredWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
 
             featuredWorkouts.include("createdBy")
             featuredWorkouts.whereEqualTo("isFeatured", true)
-            featuredWorkouts.whereMatchesQuery("createdBy", featuredUsers)
-            featuredWorkouts.addAscendingOrder("createdBy")
+            featuredWorkouts.whereNotEqualTo("isDeleted", true)
             featuredWorkouts.addDescendingOrder("createdAt")
 
             return featuredWorkouts

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/f_device_scan_row_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/f_device_scan_row_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
+        android:text="Name of device"
+        app:layout_constraintBottom_toBottomOf="@+id/f_device_scan_row_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/f_device_scan_row_image"
+        app:layout_constraintTop_toTopOf="@+id/f_device_scan_row_image" />
+
+    <TextView
+        android:id="@+id/f_device_scan_row_status"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical|end"
+        android:text="Status"
+        app:layout_constraintBottom_toBottomOf="@+id/f_device_scan_row_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/f_device_scan_row_name"
+        app:layout_constraintTop_toTopOf="@+id/f_device_scan_row_image" />
+</android.support.constraint.ConstraintLayout>

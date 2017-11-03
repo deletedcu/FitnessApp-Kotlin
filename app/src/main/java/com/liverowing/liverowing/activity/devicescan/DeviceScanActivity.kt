@@ -1,4 +1,4 @@
-package com.liverowing.liverowing.activity
+package com.liverowing.liverowing.activity.devicescan
 
 import android.Manifest
 import android.app.Activity
@@ -6,28 +6,27 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.*
-import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.ParcelUuid
+import android.os.*
 import android.support.design.widget.Snackbar
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.extensions.action
 import com.liverowing.liverowing.extensions.requestPermission
 import com.liverowing.liverowing.extensions.shouldShowPermissionRationale
 import com.liverowing.liverowing.extensions.snack
-import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 import kotlinx.android.synthetic.main.activity_device_scan.*
 import java.util.*
+import android.support.v7.widget.LinearLayoutManager
+import com.liverowing.liverowing.adapter.BLEDeviceAdapter
+import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 
 
 fun Context.DeviceScanIntent(): Intent {
@@ -37,11 +36,15 @@ fun Context.DeviceScanIntent(): Intent {
 class DeviceScanActivity : AppCompatActivity() {
     private var mScanning: Boolean = false
     private var mHandler: Handler? = null
-    private var mScanResults: Map<String, BluetoothDevice>? = null
+    private var mDevices = mutableListOf<BluetoothDevice>()
 
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private var mBluetoothLeScanner: BluetoothLeScanner? = null
     private var mScanCallback: ScanCallback? = null
+
+    private var mServiceBound = false
+    private lateinit var mPerformanceMonitorBLEService: PerformanceMonitorBLEService
+    private lateinit var mServiceConnection: ServiceConnection
 
     companion object {
         const val REQUEST_ENABLE_BT = 1
@@ -52,9 +55,13 @@ class DeviceScanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_scan)
 
+        setSupportActionBar(a_device_scan_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, "Bluetooth LE not supported.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Bluetooth LE is not supported.", Toast.LENGTH_SHORT).show()
             finish()
+            return
         }
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -66,47 +73,86 @@ class DeviceScanActivity : AppCompatActivity() {
             return
         }
 
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        localBroadcastManager.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                localBroadcastManager.unregisterReceiver(this)
-                localBroadcastManager
-                        .sendBroadcast(Intent(PerformanceMonitorBLEService.ACTION_SERVICE_MESSAGE)
-                                .putExtra("operation", "list-devices"))
-            }
-        }, IntentFilter(PerformanceMonitorBLEService.ACTION_SERVICE_READY))
+        a_device_scan_recyclerview.apply {
+            layoutManager = LinearLayoutManager(this@DeviceScanActivity, LinearLayoutManager.VERTICAL, false)
+            adapter = BLEDeviceAdapter(mDevices, { device ->
+                run {
+                    mPerformanceMonitorBLEService.connectToDevice(device)
+                }
+            })
+        }
 
         startScan()
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        mServiceConnection = object: ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+                mServiceBound = true
+                mPerformanceMonitorBLEService = (binder as PerformanceMonitorBLEService.Binder).service
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                mServiceBound = false
+            }
+        }
+
+        val intent = Intent(this, PerformanceMonitorBLEService::class.java)
+        startService(intent)
+        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (mServiceBound) {
+            unbindService(mServiceConnection)
+            mServiceBound = false
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                supportFinishAfterTransition()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == Activity.RESULT_OK) startScan() else {
                 Toast.makeText(this, "Enable Bluetooth to enable scanning for devices.", Toast.LENGTH_LONG).show()
-                finish()
+                supportFinishAfterTransition()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_FINE_LOCATION) {
             if (grantResults[0] == 0) startScan()  else {
                 Toast.makeText(this, "Access to location is needed to be able to scan for devices.", Toast.LENGTH_LONG).show()
-                finish()
+                supportFinishAfterTransition()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
 
     private fun startScan() {
         if (!hasPermissions() || mScanning) {
             return
         }
 
-        mScanResults = HashMap()
-        mScanCallback = BtleScanCallback(mScanResults as HashMap<String, BluetoothDevice>)
-
+        mDevices.clear()
         mBluetoothLeScanner = mBluetoothAdapter!!.bluetoothLeScanner
 
         val scanFilter = ScanFilter.Builder()
@@ -116,9 +162,31 @@ class DeviceScanActivity : AppCompatActivity() {
         filters.add(scanFilter)
 
         val settings = ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                 .build()
 
+        mScanCallback = (object: ScanCallback() {
+            override fun onScanResult(callbackType: Int, result: ScanResult) {
+                addScanResult(result)
+            }
+
+            override fun onBatchScanResults(results: List<ScanResult>) {
+                for (result in results) {
+                    addScanResult(result)
+                }
+            }
+
+            override fun onScanFailed(errorCode: Int) {
+                Log.d("LiveRowing", errorCode.toString())
+            }
+
+            private fun addScanResult(result: ScanResult) {
+                if (!mDevices.contains(result.device)) {
+                    mDevices.add(result.device)
+                    a_device_scan_recyclerview.adapter.notifyDataSetChanged()
+                }
+            }
+        })
         mBluetoothLeScanner!!.startScan(filters, settings, mScanCallback)
 
         mHandler = Handler()
@@ -154,7 +222,7 @@ class DeviceScanActivity : AppCompatActivity() {
     private fun requestBluetoothEnable() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-        Log.d("LiveRowing", "Requested user enables Bluetooth. Try starting the scan again.")
+        Log.d("LiveRowing", "Requested that the  user enables Bluetooth.")
     }
 
     private fun hasLocationPermissions(): Boolean {
@@ -172,29 +240,6 @@ class DeviceScanActivity : AppCompatActivity() {
             })
         } else {
             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_FINE_LOCATION)
-        }
-    }
-
-    private class BtleScanCallback internal constructor(private val mScanResults: MutableMap<String, BluetoothDevice>) : ScanCallback() {
-        override fun onScanResult(callbackType: Int, result: ScanResult) {
-            addScanResult(result)
-        }
-
-        override fun onBatchScanResults(results: List<ScanResult>) {
-            for (result in results) {
-                addScanResult(result)
-            }
-        }
-
-        override fun onScanFailed(errorCode: Int) {
-            Log.d("LiveRowing", errorCode.toString())
-        }
-
-        private fun addScanResult(result: ScanResult) {
-            val device = result.device
-            val deviceAddress = device.address
-            Log.d("LiveRowing", deviceAddress)
-            mScanResults.put(deviceAddress, device)
         }
     }
 }

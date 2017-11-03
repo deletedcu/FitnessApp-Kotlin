@@ -13,6 +13,7 @@ import android.view.MenuItem
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.R.id.action_single_distance
 import com.liverowing.liverowing.activity.dashboard.DashboardFragment
+import com.liverowing.liverowing.activity.devicescan.DeviceScanIntent
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*

@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.parse.SERVER_URL"
-            android:value="https://api.liverowing.com" />
+            android:value="http://10.0.2.2:1337" />
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo" />
@@ -47,7 +47,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
         <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
-        <activity android:name=".activity.DeviceScanActivity" />
+        <activity android:name=".activity.devicescan.DeviceScanActivity" />
 
         <service
             android:name=".service.PerformanceMonitorBLEService"

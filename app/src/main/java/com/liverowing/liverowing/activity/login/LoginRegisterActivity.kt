@@ -41,10 +41,10 @@ class LoginRegisterActivity : AppCompatActivity() {
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-        container.adapter = mSectionsPagerAdapter
+        a_login_register_container.adapter = mSectionsPagerAdapter
 
-        container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+        a_login_register_container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(a_login_register_tabs))
+        a_login_register_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(a_login_register_container))
 
     }
 
@@ -55,10 +55,10 @@ class LoginRegisterActivity : AppCompatActivity() {
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            when (position) {
-                0 -> return LoginFragment.newInstance()
-                1 -> return RegisterFragment.newInstance()
-                else -> return Fragment()
+            return when (position) {
+                0 -> LoginFragment.newInstance()
+                1 -> RegisterFragment.newInstance()
+                else -> Fragment()
             }
         }
 

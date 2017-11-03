@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.api.model.WorkoutType
+import com.liverowing.liverowing.model.parse.WorkoutType
 import com.liverowing.liverowing.inflate
 import com.liverowing.liverowing.loadUrl
 import com.liverowing.liverowing.util.PicassoCircleTransformation

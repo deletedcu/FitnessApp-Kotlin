@@ -1,4 +1,4 @@
-package com.liverowing.liverowing.api.model
+package com.liverowing.liverowing.model.parse
 
 import com.parse.ParseClassName
 import com.parse.ParseObject

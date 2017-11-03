@@ -1,11 +1,14 @@
 package com.liverowing.liverowing.activity.workouttype
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -17,10 +20,12 @@ import android.widget.AdapterView
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.R.id.*
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
-import com.liverowing.liverowing.api.model.WorkoutType
+import com.liverowing.liverowing.model.parse.User
+import com.liverowing.liverowing.model.parse.WorkoutType
+import com.liverowing.liverowing.model.pm.RowingStatus
 import com.liverowing.liverowing.screenWidth
+import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 import com.liverowing.liverowing.util.SimpleItemDecorator
-import com.parse.ParseQuery
 import khronos.Dates
 import khronos.Duration
 import khronos.endOfDay
@@ -117,6 +122,12 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
             2 -> {
                 query.whereGreaterThanOrEqualTo("likes", 10)
                 query.orderByDescending("likes")
+            }
+            3 -> {
+                query.whereMatchesKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
+            }
+            4 -> {
+                query.whereDoesNotMatchKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
             }
         }
 

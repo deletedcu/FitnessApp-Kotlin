@@ -1,8 +1,7 @@
-package com.liverowing.liverowing.api.model
+package com.liverowing.liverowing.model.parse
 
-import com.parse.ParseFile
-import com.parse.ParseRelation
-import com.parse.ParseUser
+
+import com.parse.*
 import java.util.*
 
 /**
@@ -27,7 +26,7 @@ class User : ParseUser() {
     var affiliateJoined by ParseDelegate<Date?>()
     var displayName by ParseDelegate<String?>()
     var roles by ParseDelegate<String?>()
-    var isHeavyWeight by ParseDelegate<Boolean?>()
+    var isHeavyweight by ParseDelegate<Boolean?>()
     var featureUsers by ParseDelegate<List<User>?>()
     var unfeatureUsers by ParseDelegate<List<User>?>()
     var reGrow by ParseDelegate<Date?>()
@@ -41,4 +40,20 @@ class User : ParseUser() {
     var maxHR by ParseDelegate<Int?>()
     var getFullAccessLinkLabel by ParseDelegate<String?>()
     var rotationRank by ParseDelegate<Int?>()
+    val userClass: String
+        get() {
+            val gender = if (this.gender.isNullOrEmpty()) "male" else this.gender!!.toLowerCase()
+            val heavyWeight = if (this.isHeavyweight == true) 1 else 0
+            return gender + heavyWeight.toString()
+        }
+
+    companion object {
+        fun completedWorkouts(): ParseQuery<Workout> {
+            val completedWorkouts = ParseQuery.getQuery(Workout::class.java)
+            completedWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            completedWorkouts.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+
+            return completedWorkouts
+        }
+    }
 }
