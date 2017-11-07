@@ -16,10 +16,8 @@ import com.liverowing.liverowing.R
 class DashboardWorkoutTypeCard : Fragment() {
 
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_dashboard_workout_type_card, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_dashboard_workout_type_card, container, false)
     }
 
 }// Required empty public constructor

@@ -26,10 +26,10 @@ class WorkoutTypeDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        workoutType = arguments.getParcelable(ARGUMENT_WORKOUT_TYPE)
+        workoutType = arguments!!.getParcelable(ARGUMENT_WORKOUT_TYPE)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         f_workout_type_details_description.text = workoutType.descriptionText.toString()

@@ -182,6 +182,7 @@ class DeviceScanActivity : AppCompatActivity() {
 
             private fun addScanResult(result: ScanResult) {
                 if (!mDevices.contains(result.device)) {
+                    result.device.createBond()
                     mDevices.add(result.device)
                     a_device_scan_recyclerview.adapter.notifyDataSetChanged()
                 }

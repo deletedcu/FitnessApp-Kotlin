@@ -11,9 +11,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.liverowing.liverowing.R
+import com.liverowing.liverowing.R.id.action_just_row
 import com.liverowing.liverowing.R.id.action_single_distance
 import com.liverowing.liverowing.activity.dashboard.DashboardFragment
 import com.liverowing.liverowing.activity.devicescan.DeviceScanIntent
+import com.liverowing.liverowing.activity.race.RaceIntent
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -40,16 +42,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         a_main_fab.setMenuListener(object : SimpleMenuListenerAdapter() {
             override fun onMenuItemSelected(menuItem: MenuItem?): Boolean {
+                if (menuItem?.itemId == action_just_row) {
+                    startActivity(RaceIntent(null))
+                    return true
+                }
+
                 val dialog = QuickWorkoutFragment.newInstance()
                 dialog.show(supportFragmentManager, QuickWorkoutFragment::class.toString())
                 val type = if (menuItem!!.itemId == action_single_distance) 1 else 2
                 dialog.mType = type
                 return true
-            }
-
-            override fun onPrepareMenu(navigationMenu: NavigationMenu?): Boolean {
-
-                return super.onPrepareMenu(navigationMenu)
             }
         })
 

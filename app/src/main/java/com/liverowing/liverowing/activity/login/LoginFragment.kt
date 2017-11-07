@@ -19,13 +19,11 @@ import kotlinx.android.synthetic.main.fragment_login.*
  * A simple [Fragment] subclass.
  */
 class LoginFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        return inflater!!.inflate(R.layout.fragment_login, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         f_login_button_login.setOnClickListener {
@@ -35,12 +33,12 @@ class LoginFragment : Fragment() {
                     f_login_txt_password.editText?.text.toString(),
                     { user: ParseUser?, e: ParseException? ->
                         if (e !== null) {
-                            Snackbar.make(view!!, e.message.toString(), Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(view, e.message.toString(), Snackbar.LENGTH_LONG).show()
                         } else {
-                            val intent: Intent = activity.MainIntent()
+                            val intent: Intent = activity!!.MainIntent()
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(intent)
-                            activity.finish()
+                            activity!!.finish()
                         }
                     })
         }

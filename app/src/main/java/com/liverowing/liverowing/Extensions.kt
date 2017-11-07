@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Transformation
+import java.time.Duration
 import java.util.regex.Pattern
 
 fun ViewGroup.inflate(layoutRes: Int): View {
@@ -86,37 +87,23 @@ fun String.isValidEmail(): Boolean {
     return pattern.matcher(this).matches()
 }
 
-fun Double.milliSecondsToTimespan(milliSecondPrecision: Int = 0): String {
-    return this.toLong().milliSecondsToTimespan(milliSecondPrecision)
+fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
+    return this.toDouble().secondsToTimespan(milliSecondPrecision)
 }
 
-fun Int.milliSecondsToTimespan(milliSecondPrecision: Int = 0): String {
-    return this.toLong().milliSecondsToTimespan(milliSecondPrecision)
-}
+fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
+    println(this.toString())
 
-fun Long.milliSecondsToTimespan(milliSecondPrecision: Int = 0): String {
+
+    val hours = Math.floor(this / 3600).toInt()
+    val minutes = Math.floor((this % 3600) / 60).toInt()
+    val seconds = if (milliSecondPrecision) "%02.1f".format(this % 60) else Math.floor(this % 60).toString()
+
     val sb = StringBuffer()
-    val diffInSeconds = this / 1000
-    val milliseconds = this % 1000
-    val seconds = if (diffInSeconds >= 60) diffInSeconds % 60 else diffInSeconds
-    val minutes = if ((diffInSeconds / 60) >= 60) (diffInSeconds / 60) % (60) else diffInSeconds / 60
-    val hours = if ((diffInSeconds / 3600) >= 24) (diffInSeconds / 3600) % (24) else diffInSeconds / 3600
+    if (hours > 0) { sb.append(hours.toString() + ':' + if (minutes < 10) "0" else "") }
+    sb.append(minutes.toString() + ":" + if (this % 60 < 10) "0" else "")
+    sb.append(seconds)
 
-    if (hours > 0) {
-        sb.append(hours)
-        sb.append(":")
-    }
-
-    if (minutes > 0) {
-        sb.append(minutes.toString().padStart(2, '0'))
-        sb.append(":")
-    }
-
-    sb.append(seconds.toString().padStart(2, '0'))
-    if (milliSecondPrecision > 0) {
-        sb.append(".")
-        sb.append(milliseconds.toString().subSequence(0, milliSecondPrecision))
-    }
     return sb.toString()
 }
 

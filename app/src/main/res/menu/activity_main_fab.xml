@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Just row"
-        android:orderInCategory="0"/>
+        android:id="@+id/action_just_row"
+        android:orderInCategory="0"
+        android:title="Just row" />
     <item
         android:id="@+id/action_single_distance"
         android:title="Single distance"

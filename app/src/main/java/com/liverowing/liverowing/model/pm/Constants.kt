@@ -4,7 +4,7 @@ package com.liverowing.liverowing.model.pm
  * Created by henrikmalmberg on 2017-11-03.
  */
 
-enum class ErgMachineType (val i: Int) {
+enum class ErgMachineType (val value: Int) {
     STATIC_D(0),
     STATIC_C(1),
     STATIC_A(2),
@@ -18,25 +18,35 @@ enum class ErgMachineType (val i: Int) {
     SLIDES_B(17),
     SLIDES_DYNAMIC(32),
     STATIC_DYNO(64),
-    STATIC_SKI(128)
+    STATIC_SKI(128);
+
+    companion object {
+        private val map = ErgMachineType.values().associateBy(ErgMachineType::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }
 
-enum class WorkoutType {
-    JUSTROW_NOSPLITS,
-    JUSTROW_SPLITS,
-    FIXEDDIST_NOSPLITS,
-    FIXEDDIST_SPLITS,
-    FIXEDTIME_NOSPLITS,
-    FIXEDTIME_SPLITS,
-    FIXEDTIME_INTERVAL,
-    FIXEDDIST_INTERVAL,
-    VARIABLE_INTERVAL,
-    VARIABLE_UNDEFINEDREST_INTERVAL,
-    FIXED_CALORIE,
-    FIXED_WATTMINUTES
+enum class WorkoutType (val value: Int) {
+    JUSTROW_NOSPLITS(0),
+    JUSTROW_SPLITS(1),
+    FIXEDDIST_NOSPLITS(2),
+    FIXEDDIST_SPLITS(3),
+    FIXEDTIME_NOSPLITS(4),
+    FIXEDTIME_SPLITS(5),
+    FIXEDTIME_INTERVAL(6),
+    FIXEDDIST_INTERVAL(7),
+    VARIABLE_INTERVAL(8),
+    VARIABLE_UNDEFINEDREST_INTERVAL(9),
+    FIXED_CALORIE(10),
+    FIXED_WATTMINUTES(11);
+
+    companion object {
+        private val map = WorkoutType.values().associateBy(WorkoutType::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }
 
-enum class IntervalType (val i: Int) {
+enum class IntervalType (val value: Int) {
     TIME(0),
     DIST(1),
     REST(2),
@@ -47,42 +57,67 @@ enum class IntervalType (val i: Int) {
     CALRESTUNDEFINED(7),
     WATTMINUTE(8),
     WATTMINUTERESTUNDEFINED(9),
-    NONE(255)
+    NONE(255);
+
+    companion object {
+        private val map = IntervalType.values().associateBy(IntervalType::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }
 
-enum class WorkoutState {
-    WAITTOBEGIN,
-    WORKOUTROW,
-    COUNTDOWNPAUSE,
-    INTERVALREST,
-    INTERVALWORKTIME,
-    INTERVALWORKDISTANCE,
-    INTERVALRESTENDTOWORKTIME,
-    INTERVALRESTENDTOWORKDISTANCE,
-    INTERVALWORKTIMETOREST,
-    INTERVALWORKDISTANCETOREST,
-    WORKOUTEND,
-    TERMINATE,
-    WORKOUTLOGGED,
-    REARM
+enum class WorkoutState (val value: Int) {
+    WAITTOBEGIN(0),
+    WORKOUTROW(1),
+    COUNTDOWNPAUSE(2),
+    INTERVALREST(3),
+    INTERVALWORKTIME(4),
+    INTERVALWORKDISTANCE(5),
+    INTERVALRESTENDTOWORKTIME(6),
+    INTERVALRESTENDTOWORKDISTANCE(7),
+    INTERVALWORKTIMETOREST(8),
+    INTERVALWORKDISTANCETOREST(9),
+    WORKOUTEND(10),
+    TERMINATE(11),
+    WORKOUTLOGGED(12),
+    REARM(13);
+
+    companion object {
+        private val map = WorkoutState.values().associateBy(WorkoutState::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }
 
-enum class RowingState {
-    INACTIVE,
-    ACTIVE
+enum class RowingState (val value: Int) {
+    INACTIVE(0),
+    ACTIVE(1);
+
+    companion object {
+        private val map = RowingState.values().associateBy(RowingState::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }
 
-enum class StrokeState {
-    WAITING_FOR_WHEEL_TO_REACH_MIN_SPEED_STATE,
-    WAITING_FOR_WHEEL_TO_ACCELERATE_STATE,
-    DRIVING_STATE,
-    DWELLING_AFTER_DRIVE_STATE,
-    RECOVERY_STATE
+enum class StrokeState (val value: Int) {
+    WAITING_FOR_WHEEL_TO_REACH_MIN_SPEED_STATE(0),
+    WAITING_FOR_WHEEL_TO_ACCELERATE_STATE(1),
+    DRIVING_STATE(2),
+    DWELLING_AFTER_DRIVE_STATE(3),
+    RECOVERY_STATE(4);
+
+    companion object {
+        private val map = StrokeState.values().associateBy(StrokeState::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }
 
-enum class DurationType (val i: Int) {
+enum class DurationType (val value: Int) {
     TIME(0),
     CALORIES(0x40),
     DISTANCE(0x80),
-    WATTS(0xC0)
+    WATTS(0xC0);
+
+    companion object {
+        private val map = DurationType.values().associateBy(DurationType::value)
+        fun fromInt(type: Int) = map[type]!!
+    }
 }

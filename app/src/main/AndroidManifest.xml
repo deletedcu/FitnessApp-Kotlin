@@ -48,11 +48,17 @@
         <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
         <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
         <activity android:name=".activity.devicescan.DeviceScanActivity" />
+        <activity
+            android:name=".activity.race.RaceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_race"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".service.PerformanceMonitorBLEService"
             android:enabled="true"
             android:exported="false" />
+
     </application>
 
 </manifest>

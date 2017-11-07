@@ -22,13 +22,11 @@ class DashboardFragment : Fragment() {
     private val featuredWorkoutsList = mutableListOf<WorkoutType>()
     private val recentAndLikedWorkoutsList = mutableListOf<WorkoutType>()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_dashboard, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupFeaturedWorkouts()
@@ -44,8 +42,8 @@ class DashboardFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
             adapter = DashboardWorkoutTypeAdapter(featuredWorkoutsList, cardWidth, null, { image, workoutType ->
                 run {
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, image, "image")
-                    activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, image, "image")
+                    activity!!.startActivity(activity!!.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }
             })
             isHorizontalScrollBarEnabled = false
@@ -71,8 +69,8 @@ class DashboardFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
             adapter = DashboardWorkoutTypeAdapter(recentAndLikedWorkoutsList, cardWidth, null, { image, workoutType ->
                 run {
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, image, "image")
-                    activity.startActivity(activity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, image, "image")
+                    activity!!.startActivity(activity!!.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }
             })
             isHorizontalScrollBarEnabled = false
@@ -98,7 +96,7 @@ class DashboardFragment : Fragment() {
             R.id.f_dashboard_featured_title -> { workoutCategory = WORKOUT_CATEGORY_FEATURED }
             R.id.f_dashboard_liked_and_recent_title -> { workoutCategory = WORKOUT_CATEGORY_RECENT_AND_LIKED }
         }
-        startActivity(activity.WorkoutTypeGridIntent(workoutCategory))
+        startActivity(activity!!.WorkoutTypeGridIntent(workoutCategory))
     }
 
     companion object {

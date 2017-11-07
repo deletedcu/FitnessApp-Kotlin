@@ -1,14 +1,13 @@
 package com.liverowing.liverowing.adapter
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.model.parse.UserStats
 import com.liverowing.liverowing.inflate
 import com.liverowing.liverowing.loadUrl
-import com.liverowing.liverowing.milliSecondsToTimespan
+import com.liverowing.liverowing.secondsToTimespan
 import com.liverowing.liverowing.util.PicassoCircleTransformation
 import kotlinx.android.synthetic.main.fragment_user_stats_row.view.*
 
@@ -28,7 +27,7 @@ class UserStatsAdapter(private val items: List<UserStats>, private val listener:
         fun bind(item: UserStats, listener: (View, UserStats) -> Unit) = with(itemView) {
             if (item.user?.image != null) f_user_stats_row_image.loadUrl(item.user!!.image!!.url, PicassoCircleTransformation())
             if (item.user?.userClass != null) f_user_stats_row_username.text = item.user!!.username
-            f_user_stats_row_value.text = (item.record.value * 1000).milliSecondsToTimespan(1)
+            f_user_stats_row_value.text = item.record.value.secondsToTimespan(true)
         }
     }
 }
