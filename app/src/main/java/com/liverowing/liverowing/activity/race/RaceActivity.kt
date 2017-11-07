@@ -12,6 +12,7 @@ import com.liverowing.liverowing.csafe.Communication
 import com.liverowing.liverowing.secondsToTimespan
 import com.liverowing.liverowing.model.pm.AdditionalRowingStatus1
 import com.liverowing.liverowing.model.pm.RowingStatus
+import com.liverowing.liverowing.model.pm.StrokeData
 import com.liverowing.liverowing.model.pm.WorkoutType
 import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 import kotlinx.android.synthetic.main.activity_race.*
@@ -87,11 +88,16 @@ class RaceActivity : AppCompatActivity() {
                         a_race_status.text = data?.workoutState.toString()
                         a_race_time.text = data?.elapsedTime?.secondsToTimespan(true)
                         a_race_distance.text = data?.distance.toString() + "m"
+                        a_race_stroke_state.text = data?.strokeState.toString()
                     }
 
                     AdditionalRowingStatus1::class.java.simpleName -> {
                         val data = intent?.getParcelableExtra<AdditionalRowingStatus1>("data")
                         a_race_spm.text = data?.strokeRate.toString()
+                    }
+
+                    StrokeData::class.java.simpleName -> {
+                        val data = intent?.getParcelableExtra<StrokeData>("data")
                     }
                 }
             }

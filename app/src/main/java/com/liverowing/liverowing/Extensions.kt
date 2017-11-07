@@ -92,9 +92,6 @@ fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
 }
 
 fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
-    println(this.toString())
-
-
     val hours = Math.floor(this / 3600).toInt()
     val minutes = Math.floor((this % 3600) / 60).toInt()
     val seconds = if (milliSecondPrecision) "%02.1f".format(this % 60) else Math.floor(this % 60).toString()
