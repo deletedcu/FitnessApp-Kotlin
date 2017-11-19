@@ -2,9 +2,7 @@ package com.liverowing.liverowing.model.pm
 
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
-import com.liverowing.liverowing.extensions.calcDistance
 import com.liverowing.liverowing.extensions.calcLogEntryDateTime
-import com.liverowing.liverowing.extensions.calcTime
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 

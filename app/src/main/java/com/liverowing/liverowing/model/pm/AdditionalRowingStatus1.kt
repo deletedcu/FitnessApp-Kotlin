@@ -2,7 +2,6 @@ package com.liverowing.liverowing.model.pm
 
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
-import android.util.Log
 import com.liverowing.liverowing.extensions.calcSpeed
 import com.liverowing.liverowing.extensions.calcTime
 import kotlinx.android.parcel.Parcelize
@@ -29,7 +28,6 @@ data class AdditionalRowingStatus1(val elapsedTime: Float,
             val currentPace = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 7).toFloat() / 100
             val averagePace = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 9).toFloat() / 100
             val restDistance = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 11)
-            val restTime2 = data.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 13).toFloat() / 100 // Time is in 0.01 sec resolution
             val restTime = data.calcTime(13)
 
             return AdditionalRowingStatus1(

@@ -2,16 +2,9 @@ package com.liverowing.liverowing.util
 
 import android.content.Context
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
-import android.util.Log
-import android.view.View
-import android.support.v7.widget.StaggeredGridLayoutManager
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.annotation.DimenRes
-import android.support.v7.widget.OrientationHelper
-
-
+import android.support.v7.widget.*
+import android.view.View
 
 
 /**
@@ -86,57 +79,49 @@ class SimpleItemDecorator : RecyclerView.ItemDecoration {
     protected fun getTotalSpan(parent: RecyclerView): Int {
 
         val mgr = parent.layoutManager
-        if (mgr is GridLayoutManager) {
-            return mgr.spanCount
-        } else if (mgr is StaggeredGridLayoutManager) {
-            return mgr.spanCount
-        } else if (mgr is LinearLayoutManager) {
-            return 1
+        return when (mgr) {
+            is GridLayoutManager -> mgr.spanCount
+            is StaggeredGridLayoutManager -> mgr.spanCount
+            is LinearLayoutManager -> 1
+            else -> -1
         }
 
-        return -1
     }
 
     protected fun getItemSpanSize(parent: RecyclerView, childIndex: Int): Int {
 
         val mgr = parent.layoutManager
-        if (mgr is GridLayoutManager) {
-            return mgr.spanSizeLookup.getSpanSize(childIndex)
-        } else if (mgr is StaggeredGridLayoutManager) {
-            return 1
-        } else if (mgr is LinearLayoutManager) {
-            return 1
+        return when (mgr) {
+            is GridLayoutManager -> mgr.spanSizeLookup.getSpanSize(childIndex)
+            is StaggeredGridLayoutManager -> 1
+            is LinearLayoutManager -> 1
+            else -> -1
         }
 
-        return -1
     }
 
     protected fun getItemSpanIndex(parent: RecyclerView, childIndex: Int): Int {
 
         val mgr = parent.layoutManager
-        if (mgr is GridLayoutManager) {
-            return mgr.spanSizeLookup.getSpanIndex(childIndex, spanCount)
-        } else if (mgr is StaggeredGridLayoutManager) {
-            return childIndex % spanCount
-        } else if (mgr is LinearLayoutManager) {
-            return 0
+        return when (mgr) {
+            is GridLayoutManager -> mgr.spanSizeLookup.getSpanIndex(childIndex, spanCount)
+            is StaggeredGridLayoutManager -> childIndex % spanCount
+            is LinearLayoutManager -> 0
+            else -> -1
         }
 
-        return -1
     }
 
     protected fun getOrientation(parent: RecyclerView): Int {
 
         val mgr = parent.layoutManager
-        if (mgr is LinearLayoutManager) {
-            return mgr.orientation
-        } else if (mgr is GridLayoutManager) {
-            return mgr.orientation
-        } else if (mgr is StaggeredGridLayoutManager) {
-            return mgr.orientation
+        return when (mgr) {
+            is LinearLayoutManager -> mgr.orientation
+            is GridLayoutManager -> mgr.orientation
+            is StaggeredGridLayoutManager -> mgr.orientation
+            else -> VERTICAL
         }
 
-        return VERTICAL
     }
 
     protected fun isLeftEdge(parent: RecyclerView, childCount: Int, childIndex: Int, itemSpanSize: Int, spanIndex: Int): Boolean {
@@ -204,7 +189,7 @@ class SimpleItemDecorator : RecyclerView.ItemDecoration {
         var totalSpanRemaining = 0
         if (isOneOfLastItems) {
             for (i in childIndex until childCount) {
-                totalSpanRemaining = totalSpanRemaining + getItemSpanSize(parent, i)
+                totalSpanRemaining += getItemSpanSize(parent, i)
             }
         }
 

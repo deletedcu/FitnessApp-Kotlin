@@ -1,14 +1,11 @@
 package com.liverowing.liverowing.activity.workouttype
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -17,14 +14,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.R.id.*
 import com.liverowing.liverowing.adapter.DashboardWorkoutTypeAdapter
 import com.liverowing.liverowing.model.parse.User
 import com.liverowing.liverowing.model.parse.WorkoutType
-import com.liverowing.liverowing.model.pm.RowingStatus
 import com.liverowing.liverowing.screenWidth
-import com.liverowing.liverowing.service.PerformanceMonitorBLEService
 import com.liverowing.liverowing.util.SimpleItemDecorator
 import khronos.Dates
 import khronos.Duration
@@ -59,12 +56,14 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
+        val glide = Glide.with(this)
         val cardWidth = (screenWidth()) / 2
         val cardHeight = (cardWidth * 0.80).toInt()
         a_workout_type_grid_recyclerview.apply {
             layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
-            adapter = DashboardWorkoutTypeAdapter(workouts, cardWidth, cardHeight, { image, workoutType ->
+            adapter = DashboardWorkoutTypeAdapter(workouts, glide, cardWidth, cardHeight, { image, workoutType ->
                 run {
+                    Log.d("LiveRowing", "From grid: " + workoutType.image?.url)
                     val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@WorkoutTypeGridActivity, image, "image")
                     this@WorkoutTypeGridActivity.startActivity(this@WorkoutTypeGridActivity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
                 }

@@ -1,8 +1,10 @@
 package com.liverowing.liverowing.model.parse
 
+import com.liverowing.liverowing.secondsToTimespan
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
+import khronos.second
 
 /**
  * Created by henrikmalmberg on 2017-10-01.
@@ -19,4 +21,13 @@ class Segment : ParseObject() {
     var image by ParseDelegate<ParseFile?>()
     var targetRate by ParseDelegate<Int?>()
 
+    val friendlyValue: String
+        get() {
+            return if (valueType == SegmentValueType.TIMED.value) value!!.secondsToTimespan() else value.toString() + "m"
+        }
+
+    val friendlyRestValue: String
+        get() {
+            return restValue!!.secondsToTimespan() + "r"
+        }
 }

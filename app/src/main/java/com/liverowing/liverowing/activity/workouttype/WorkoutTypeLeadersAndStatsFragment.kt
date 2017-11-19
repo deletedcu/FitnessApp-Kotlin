@@ -8,6 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.liverowing.liverowing.LiveRowing.Companion.eventBus
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.adapter.UserStatsAdapter
 import com.liverowing.liverowing.model.parse.User
@@ -16,6 +20,8 @@ import com.liverowing.liverowing.model.parse.WorkoutType
 import com.parse.FunctionCallback
 import com.parse.ParseCloud
 import com.parse.ParseUser
+import com.squareup.otto.Subscribe
+import kotlinx.android.synthetic.main.fragment_workout_type_details.*
 import kotlinx.android.synthetic.main.fragment_workout_type_leaders_and_stats.*
 
 private const val ARGUMENT_WORKOUT_TYPE = "workout_type"
@@ -30,18 +36,13 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_workout_type_leaders_and_stats, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        workoutType = arguments!!.getParcelable(ARGUMENT_WORKOUT_TYPE)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         f_workout_type_leaders_and_stats_recyclerview.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            adapter = UserStatsAdapter(userStats, { image, userStats ->
+            adapter = UserStatsAdapter(userStats, Glide.with(this), { image, userStats ->
                 run {
                     Log.d("LiveRowing", "Clicked UserStats row")
                 }
@@ -49,6 +50,11 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
             //addItemDecoration(SimpleItemDecorator(15))
         }
 
+        eventBus.register(this)
+    }
+
+    @Subscribe
+    fun onReceiveWorkoutType(workoutType: WorkoutType) {
         val haveLeaderBoards = true
         if (haveLeaderBoards) {
             ParseCloud.callFunctionInBackground(
@@ -69,13 +75,19 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
                     }
             )
         }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        eventBus.unregister(this)
     }
 
     companion object {
-        fun newInstance(workoutType: WorkoutType): WorkoutTypeLeadersAndStatsFragment {
+        fun newInstance(): WorkoutTypeLeadersAndStatsFragment {
             return WorkoutTypeLeadersAndStatsFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(ARGUMENT_WORKOUT_TYPE, workoutType)
+                    //putParcelable(ARGUMENT_WORKOUT_TYPE, workoutType)
                 }
             }
         }

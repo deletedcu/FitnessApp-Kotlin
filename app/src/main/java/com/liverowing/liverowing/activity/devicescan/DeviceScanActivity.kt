@@ -36,7 +36,7 @@ fun Context.DeviceScanIntent(): Intent {
 class DeviceScanActivity : AppCompatActivity() {
     private var mScanning: Boolean = false
     private var mHandler: Handler? = null
-    private var mDevices = mutableListOf<BluetoothDevice>()
+    private var mScanResult = mutableListOf<ScanResult>()
 
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private var mBluetoothLeScanner: BluetoothLeScanner? = null
@@ -74,10 +74,13 @@ class DeviceScanActivity : AppCompatActivity() {
         }
 
         a_device_scan_recyclerview.apply {
-            layoutManager = LinearLayoutManager(this@DeviceScanActivity, LinearLayoutManager.VERTICAL, false)
-            adapter = BLEDeviceAdapter(mDevices, { device ->
+            isNestedScrollingEnabled = false
+            layoutManager = LinearLayoutManager(this@DeviceScanActivity, LinearLayoutManager.VERTICAL, false).apply {
+                isAutoMeasureEnabled = true
+            }
+            adapter = BLEDeviceAdapter(mScanResult, { result ->
                 run {
-                    mPerformanceMonitorBLEService.connectToDevice(device)
+                    mPerformanceMonitorBLEService.connectToDevice(result.device)
                 }
             })
         }
@@ -152,7 +155,7 @@ class DeviceScanActivity : AppCompatActivity() {
             return
         }
 
-        mDevices.clear()
+        mScanResult.clear()
         mBluetoothLeScanner = mBluetoothAdapter!!.bluetoothLeScanner
 
         val scanFilter = ScanFilter.Builder()
@@ -162,10 +165,11 @@ class DeviceScanActivity : AppCompatActivity() {
         filters.add(scanFilter)
 
         val settings = ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                 .build()
 
         mScanCallback = (object: ScanCallback() {
+            private val mDevices = mutableMapOf<String, ScanResult>()
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 addScanResult(result)
             }
@@ -181,11 +185,11 @@ class DeviceScanActivity : AppCompatActivity() {
             }
 
             private fun addScanResult(result: ScanResult) {
-                if (!mDevices.contains(result.device)) {
-                    result.device.createBond()
-                    mDevices.add(result.device)
-                    a_device_scan_recyclerview.adapter.notifyDataSetChanged()
-                }
+                mDevices[result.device.address] = result
+                mScanResult.clear()
+                mScanResult.addAll(mDevices.values)
+                Log.d("LiveRowing", mScanResult.toString())
+                a_device_scan_recyclerview.adapter.notifyDataSetChanged()
             }
         })
         mBluetoothLeScanner!!.startScan(filters, settings, mScanCallback)

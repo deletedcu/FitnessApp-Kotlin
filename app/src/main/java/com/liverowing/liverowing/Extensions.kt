@@ -6,31 +6,17 @@ import android.content.Context
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Transformation
-import java.time.Duration
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import com.bumptech.glide.request.RequestOptions
 import java.util.regex.Pattern
 
 fun ViewGroup.inflate(layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
-}
-
-fun ImageView.loadUrl(url: String) {
-    Picasso.with(this.context)
-            .load(url)
-            .into(this)
-}
-
-fun ImageView.loadUrl(url: String, transformation: Transformation) {
-    Picasso.with(this.context)
-            .load(url)
-            .transform(transformation)
-            .into(this)
 }
 
 fun View.visible() {
@@ -87,19 +73,26 @@ fun String.isValidEmail(): Boolean {
     return pattern.matcher(this).matches()
 }
 
-fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
-    return this.toDouble().secondsToTimespan(milliSecondPrecision)
+fun Int.secondsToTimespan(milliSecondPrecision: Boolean = false, withSeconds: Boolean = true) : String {
+    return this.toDouble().secondsToTimespan(milliSecondPrecision, withSeconds)
 }
 
-fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
+fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false, withSeconds: Boolean = true): String {
+    return this.toDouble().secondsToTimespan(milliSecondPrecision, withSeconds)
+}
+
+fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false, withSeconds: Boolean = true): String {
     val hours = Math.floor(this / 3600).toInt()
     val minutes = Math.floor((this % 3600) / 60).toInt()
-    val seconds = if (milliSecondPrecision) "%02.1f".format(this % 60) else Math.floor(this % 60).toString()
+    val seconds = if (milliSecondPrecision) "%02.1f".format(this % 60) else Math.floor(this % 60).toInt().toString()
 
     val sb = StringBuffer()
     if (hours > 0) { sb.append(hours.toString() + ':' + if (minutes < 10) "0" else "") }
-    sb.append(minutes.toString() + ":" + if (this % 60 < 10) "0" else "")
-    sb.append(seconds)
+    sb.append(minutes.toString())
+    if (withSeconds) {
+        sb.append(":" + if (this % 60 < 10) "0" else "")
+        sb.append(seconds)
+    }
 
     return sb.toString()
 }

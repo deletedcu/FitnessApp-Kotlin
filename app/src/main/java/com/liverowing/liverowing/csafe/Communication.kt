@@ -1,9 +1,5 @@
 package com.liverowing.liverowing.csafe
 
-import android.util.Log
-import com.liverowing.liverowing.model.pm.WorkoutType
-import java.util.*
-
 /**
  * Created by henrikmalmberg on 2017-11-05.
  */

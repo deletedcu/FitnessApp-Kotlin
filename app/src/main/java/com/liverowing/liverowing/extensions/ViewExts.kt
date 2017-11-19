@@ -11,3 +11,7 @@ inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG, f: Sn
     snack.f()
     snack.show()
 }
+
+fun View.toggle() {
+    visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+}

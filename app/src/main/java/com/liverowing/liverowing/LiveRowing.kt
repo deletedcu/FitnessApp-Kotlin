@@ -1,15 +1,11 @@
 package com.liverowing.liverowing
 
 import android.app.Application
-import android.content.Intent
 import android.util.Log
-import com.jakewharton.picasso.OkHttp3Downloader
+import com.bumptech.glide.Glide
 import com.liverowing.liverowing.model.parse.*
-import com.liverowing.liverowing.service.PerformanceMonitorBLEService
-import com.parse.Parse
-import com.parse.ParseInstallation
-import com.parse.ParseObject
-import com.squareup.picasso.Picasso
+import com.parse.*
+import com.squareup.otto.Bus
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -46,10 +42,15 @@ class LiveRowing : Application() {
         Parse.initialize(conf)
 
         ParseInstallation.getCurrentInstallation().saveInBackground()
+        ParseConfig.getInBackground(object: ConfigCallback {
+            override fun done(config: ParseConfig?, e: ParseException?) {
+                Log.d("LiveRowing", config.toString())
+            }
+        })
+    }
 
-        val picasso = Picasso.Builder(this).downloader(OkHttp3Downloader(cacheDir, 250000000)).build()
-        picasso.setIndicatorsEnabled(true)
-        Picasso.setSingletonInstance(picasso)
+    companion object {
+        val eventBus = Bus()
     }
 }
 

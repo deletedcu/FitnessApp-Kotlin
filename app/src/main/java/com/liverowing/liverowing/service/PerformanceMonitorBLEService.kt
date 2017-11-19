@@ -77,7 +77,7 @@ class PerformanceMonitorBLEService : Service() {
             unpairDevice(mDevice)
         }
 
-        mGatt = mDevice.connectGatt(this@PerformanceMonitorBLEService, true, GattClientCallback(mDevice))
+        mGatt = mDevice.connectGatt(this@PerformanceMonitorBLEService, false, GattClientCallback(mDevice))
     }
 
     fun sendCsafeCommand(csafe: ByteArray) {
@@ -165,9 +165,9 @@ class PerformanceMonitorBLEService : Service() {
 
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d("LiveRowing", "Callback: Wrote GATT Descriptor successfully.");
+                Log.d("LiveRowing", "Callback: Wrote GATT Descriptor successfully.")
             } else {
-                Log.d("LiveRowing", "Callback: Error writing GATT Descriptor: " + status);
+                Log.d("LiveRowing", "Callback: Error writing GATT Descriptor: " + status)
             }
 
             descriptorWriteQueue.remove()

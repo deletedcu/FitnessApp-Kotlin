@@ -10,7 +10,13 @@
         <item name="bottomSheetDialogTheme">@style/LRBottomSheetDialogTheme</item>
     </style>
 
-    <style name="AppTheme" parent="AppTheme.Base" />
+    <style name="AppTheme" parent="AppTheme.Base" >
+
+        true
+
+
+        true
+        true</style>
 
     <style name="AppTheme.Widget" />
 

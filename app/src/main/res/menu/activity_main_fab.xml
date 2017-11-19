@@ -7,11 +7,12 @@
         android:title="Just row" />
     <item
         android:id="@+id/action_single_distance"
-        android:title="Single distance"
-        android:orderInCategory="1"/>
+        android:orderInCategory="1"
+        android:title="Single distance">
+    </item>
     <item
         android:id="@+id/action_single_time"
         android:icon="@drawable/ic_timer_black"
-        android:title="Single time"
-        android:orderInCategory="1"/>
+        android:orderInCategory="1"
+        android:title="Single time" />
 </menu>
