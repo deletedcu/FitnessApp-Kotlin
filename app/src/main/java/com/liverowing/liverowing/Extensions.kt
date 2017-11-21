@@ -73,26 +73,27 @@ fun String.isValidEmail(): Boolean {
     return pattern.matcher(this).matches()
 }
 
-fun Int.secondsToTimespan(milliSecondPrecision: Boolean = false, withSeconds: Boolean = true) : String {
-    return this.toDouble().secondsToTimespan(milliSecondPrecision, withSeconds)
+fun Int.secondsToTimespan(milliSecondPrecision: Boolean = false) : String {
+    return this.toDouble().secondsToTimespan(milliSecondPrecision)
 }
 
-fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false, withSeconds: Boolean = true): String {
-    return this.toDouble().secondsToTimespan(milliSecondPrecision, withSeconds)
+fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
+    return this.toDouble().secondsToTimespan(milliSecondPrecision)
 }
 
-fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false, withSeconds: Boolean = true): String {
+fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
     val hours = Math.floor(this / 3600).toInt()
     val minutes = Math.floor((this % 3600) / 60).toInt()
     val seconds = if (milliSecondPrecision) "%02.1f".format(this % 60) else Math.floor(this % 60).toInt().toString()
 
     val sb = StringBuffer()
-    if (hours > 0) { sb.append(hours.toString() + ':' + if (minutes < 10) "0" else "") }
+    if (hours > 0) { sb.append(hours.toString() + ':') }
+
+    if (minutes < 10) sb.append("0")
     sb.append(minutes.toString())
-    if (withSeconds) {
-        sb.append(":" + if (this % 60 < 10) "0" else "")
-        sb.append(seconds)
-    }
+    sb.append(":" + if (this % 60 < 10) "0" else "")
+
+    sb.append(seconds)
 
     return sb.toString()
 }

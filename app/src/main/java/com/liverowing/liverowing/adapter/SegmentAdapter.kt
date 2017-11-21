@@ -26,7 +26,7 @@ class SegmentAdapter(private val items: List<Segment>, val glide: RequestManager
             intervalDescription.append(if (item.valueType == SegmentValueType.TIMED.value) "Duration: " else "Distance: ")
             intervalDescription.append(item.friendlyValue + "\n")
             if (item.targetRate != null) intervalDescription.append("Target Rate: " + item.targetRate + "\n")
-            if (item.restValue != null) intervalDescription.append("Rest Period: " + item.value?.secondsToTimespan(false, false) + "\n")
+            if (item.restValue != null) intervalDescription.append("Rest Period: " + item.restValue?.secondsToTimespan(false) + "\n")
 
             if (item.image != null) {
                 glide
@@ -36,8 +36,6 @@ class SegmentAdapter(private val items: List<Segment>, val glide: RequestManager
 
             f_segment_row_title.text = if (item.name.isNullOrEmpty()) "Interval " + (adapterPosition + 1) else item.name
             f_segment_row_metrics.text = intervalDescription
-
-
         }
     }
 }

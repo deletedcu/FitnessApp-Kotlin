@@ -22,6 +22,11 @@ import com.liverowing.liverowing.model.parse.WorkoutType
 import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.activity_workout_type_detail.*
 import kotlinx.android.synthetic.main.fragment_workout_type_details.*
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.animation.ObjectAnimator
+import android.support.transition.ChangeBounds
+import android.support.transition.TransitionSet
+
 
 private const val ARGUMENT_WORKOUT_TYPE = "workout_type"
 
@@ -48,11 +53,16 @@ class WorkoutTypeDetailsFragment : Fragment() {
             })
         }
 
-        f_workout_type_details_interval_toggle.setOnClickListener {
+        f_workout_type_details_interval_toggle.isClickable = false
+        f_workout_type_details_interval_group.setOnClickListener {
             f_workout_type_details_interval_friendly.toggle()
             f_workout_type_details_interval_recyclerview.toggle()
-            TransitionManager.beginDelayedTransition(f_workout_type_details_interval_group)
-            f_workout_type_details_interval_toggle.rotation += 180f
+
+            val rotation = f_workout_type_details_interval_toggle.rotationX
+            val animation = ObjectAnimator.ofFloat(f_workout_type_details_interval_toggle, "rotationX", rotation, rotation + 180f)
+            animation.duration = 250
+            animation.interpolator = AccelerateDecelerateInterpolator()
+            animation.start()
         }
 
         eventBus.register(this)

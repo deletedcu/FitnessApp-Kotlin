@@ -37,10 +37,12 @@ class WorkoutType : ParseObject() {
     val friendlySegmentDescription: String
     get() {
         val parts = mutableListOf<String>()
-        for (segment in segments!!) {
-            if (segment.isDataAvailable) {
-                parts.add(segment.friendlyValue)
-                parts.add(segment.friendlyRestValue)
+        if (segments != null) {
+            for (segment in segments!!) {
+                if (segment.isDataAvailable) {
+                    parts.add(segment.friendlyValue)
+                    parts.add(segment.friendlyRestValue)
+                }
             }
         }
 

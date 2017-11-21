@@ -12,6 +12,7 @@ class Communication {
 
         const val CSAFE_SETUSERCFG1_CMD = 0x1A
         const val CSAFE_SETPMCFG_CMD = 0x76
+        const val CSAFE_SETHORIZONTAL_CMD = 0x31
 
         const val CSAFE_PM_SET_WORKOUTTYPE = 0x01
 
@@ -27,13 +28,15 @@ class Communication {
 
     fun justRow(): ByteArray {
         val commands = listOf(
-                Command(CSAFE_SETPMCFG_CMD, CSAFE_PM_SET_WORKOUTTYPE, listOf(1)),
+                Command(LongPerformanceMonitorProprietaryCommands.SETPMCFG_CMD.value, CSAFE_PM_SET_WORKOUTTYPE, listOf(1)),
                 Command(CSAFE_SETPMCFG_CMD, CSAFE_PM_CONFIGURE_WORKOUT, listOf(1)),
                 Command(CSAFE_SETPMCFG_CMD, CSAFE_PM_SET_SCREENSTATE, listOf(SCREENTYPE_WORKOUT, SCREENVALUEWORKOUT_PREPARETOROWWORKOUT))
         )
 
         return wrap(commands)
     }
+
+    fun
 
     fun wrap(commands: List<Command>): ByteArray {
         val buffer = mutableListOf<Int>()
