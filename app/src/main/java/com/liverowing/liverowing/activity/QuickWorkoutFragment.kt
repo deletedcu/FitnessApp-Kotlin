@@ -1,6 +1,7 @@
 package com.liverowing.liverowing.activity
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
@@ -9,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.activity.race.RaceIntent
+import com.liverowing.liverowing.activity.race.RaceActivity
 import com.liverowing.liverowing.secondsToTimespan
 import kotlinx.android.synthetic.main.fragment_quick_workout.*
 
@@ -26,7 +27,7 @@ class QuickWorkoutFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         f_quick_workout_start_button.setOnClickListener {
-            startActivity(activity!!.RaceIntent(null))
+            startActivity(Intent(activity, RaceActivity::class.java))
             dismiss()
         }
 

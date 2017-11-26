@@ -1,5 +1,6 @@
 package com.liverowing.liverowing.activity.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearSnapHelper
@@ -16,9 +17,8 @@ import com.liverowing.liverowing.util.SimpleItemDecorator
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import android.support.v4.app.ActivityOptionsCompat
 import com.bumptech.glide.Glide
-import com.liverowing.liverowing.LiveRowing.Companion.eventBus
 import com.liverowing.liverowing.activity.workouttype.*
-import com.squareup.otto.Produce
+import org.greenrobot.eventbus.EventBus
 
 
 class DashboardFragment : Fragment() {
@@ -35,7 +35,6 @@ class DashboardFragment : Fragment() {
 
         setupFeaturedWorkouts()
         setupRecentAndLikedWorkouts()
-        eventBus.register(this)
 
         f_dashboard_featured_title.setOnClickListener({ this.onClickedWorkoutTypeHeader(it) })
         f_dashboard_liked_and_recent_title.setOnClickListener({ this.onClickedWorkoutTypeHeader(it) })
@@ -47,10 +46,9 @@ class DashboardFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
             adapter = DashboardWorkoutTypeAdapter(featuredWorkoutsList, Glide.with(this), cardWidth, null, { image, workoutType ->
                 run {
-                    mWorkoutType = workoutType
-
+                    EventBus.getDefault().postSticky(workoutType)
                     val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, image, "image")
-                    activity!!.startActivity(activity!!.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                    activity!!.startActivity(Intent(activity, WorkoutTypeDetailActivity::class.java), options.toBundle())
                 }
             })
             isHorizontalScrollBarEnabled = false
@@ -77,9 +75,9 @@ class DashboardFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
             adapter = DashboardWorkoutTypeAdapter(recentAndLikedWorkoutsList, Glide.with(this), cardWidth, null, { image, workoutType ->
                 run {
-                    mWorkoutType = workoutType
+                    EventBus.getDefault().postSticky(workoutType)
                     val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, image, "image")
-                    activity!!.startActivity(activity!!.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                    activity!!.startActivity(Intent(activity, WorkoutTypeDetailActivity::class.java), options.toBundle())
                 }
             })
             isHorizontalScrollBarEnabled = false
@@ -106,11 +104,6 @@ class DashboardFragment : Fragment() {
             R.id.f_dashboard_liked_and_recent_title -> { workoutCategory = WORKOUT_CATEGORY_RECENT_AND_LIKED }
         }
         startActivity(activity!!.WorkoutTypeGridIntent(workoutCategory))
-    }
-
-    @Produce
-    fun produceWorkoutType() : WorkoutType {
-        return mWorkoutType
     }
 
     companion object {

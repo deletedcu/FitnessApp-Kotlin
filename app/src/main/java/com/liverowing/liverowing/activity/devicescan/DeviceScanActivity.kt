@@ -25,8 +25,17 @@ import com.liverowing.liverowing.extensions.snack
 import kotlinx.android.synthetic.main.activity_device_scan.*
 import java.util.*
 import android.support.v7.widget.LinearLayoutManager
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.View
+import com.liverowing.liverowing.R.id.action_scan
 import com.liverowing.liverowing.adapter.BLEDeviceAdapter
 import com.liverowing.liverowing.service.PerformanceMonitorBLEService
+import com.liverowing.liverowing.service.messages.BLEDeviceConnectRequest
+import com.liverowing.liverowing.service.messages.BLEDeviceConnected
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 fun Context.DeviceScanIntent(): Intent {
@@ -34,17 +43,14 @@ fun Context.DeviceScanIntent(): Intent {
 }
 
 class DeviceScanActivity : AppCompatActivity() {
+    private lateinit var  mHandler: Handler
+
     private var mScanning: Boolean = false
-    private var mHandler: Handler? = null
-    private var mScanResult = mutableListOf<ScanResult>()
+    private var mScanResult = mutableListOf<BLEDeviceAdapter.BLEDevice>()
 
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private var mBluetoothLeScanner: BluetoothLeScanner? = null
     private var mScanCallback: ScanCallback? = null
-
-    private var mServiceBound = false
-    private lateinit var mPerformanceMonitorBLEService: PerformanceMonitorBLEService
-    private lateinit var mServiceConnection: ServiceConnection
 
     companion object {
         const val REQUEST_ENABLE_BT = 1
@@ -80,7 +86,7 @@ class DeviceScanActivity : AppCompatActivity() {
             }
             adapter = BLEDeviceAdapter(mScanResult, { result ->
                 run {
-                    mPerformanceMonitorBLEService.connectToDevice(result.device)
+                    EventBus.getDefault().post(BLEDeviceConnectRequest(result.device))
                 }
             })
         }
@@ -91,36 +97,40 @@ class DeviceScanActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        mServiceConnection = object: ServiceConnection {
-            override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
-                mServiceBound = true
-                mPerformanceMonitorBLEService = (binder as PerformanceMonitorBLEService.Binder).service
-            }
-
-            override fun onServiceDisconnected(name: ComponentName?) {
-                mServiceBound = false
-            }
-        }
-
-        val intent = Intent(this, PerformanceMonitorBLEService::class.java)
-        startService(intent)
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
+        EventBus.getDefault().register(this)
     }
 
     override fun onStop() {
         super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 
-        if (mServiceBound) {
-            unbindService(mServiceConnection)
-            mServiceBound = false
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onBLEDeviceConnected(message: BLEDeviceConnected) {
+        Toast.makeText(this, "Connected to " + message.device.name, Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.activity_device_scan, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(action_scan)?.isEnabled = !mScanning
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 supportFinishAfterTransition()
+                true
+            }
+
+            action_scan -> {
+                startScan()
                 true
             }
 
@@ -155,7 +165,11 @@ class DeviceScanActivity : AppCompatActivity() {
             return
         }
 
+        a_device_scan_progressbar.visibility = View.VISIBLE
+        invalidateOptionsMenu()
+
         mScanResult.clear()
+        a_device_scan_recyclerview.adapter.notifyDataSetChanged()
         mBluetoothLeScanner = mBluetoothAdapter!!.bluetoothLeScanner
 
         val scanFilter = ScanFilter.Builder()
@@ -169,7 +183,7 @@ class DeviceScanActivity : AppCompatActivity() {
                 .build()
 
         mScanCallback = (object: ScanCallback() {
-            private val mDevices = mutableMapOf<String, ScanResult>()
+            private val mDevices = mutableMapOf<String, BLEDeviceAdapter.BLEDevice>()
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 addScanResult(result)
             }
@@ -185,17 +199,22 @@ class DeviceScanActivity : AppCompatActivity() {
             }
 
             private fun addScanResult(result: ScanResult) {
-                mDevices[result.device.address] = result
-                mScanResult.clear()
-                mScanResult.addAll(mDevices.values)
-                Log.d("LiveRowing", mScanResult.toString())
-                a_device_scan_recyclerview.adapter.notifyDataSetChanged()
+                runOnUiThread {
+                    if (!mDevices.containsKey(result.device.address)) {
+                        mDevices[result.device.address] = BLEDeviceAdapter.BLEDevice(result.device, result.rssi)
+                        mScanResult.add(mDevices[result.device.address]!!)
+                    } else {
+                        mDevices[result.device.address]!!.rssi = result.rssi
+                    }
+
+                    a_device_scan_recyclerview.adapter.notifyDataSetChanged()
+                }
             }
         })
         mBluetoothLeScanner!!.startScan(filters, settings, mScanCallback)
 
         mHandler = Handler()
-        mHandler!!.postDelayed({ this.stopScan() }, 5000)
+        mHandler.postDelayed({ this.stopScan() }, 5000)
         mScanning = true
 
         Log.d("LiveRowing", "Started scan")
@@ -205,12 +224,13 @@ class DeviceScanActivity : AppCompatActivity() {
         if (mScanning && mBluetoothAdapter != null && mBluetoothAdapter!!.isEnabled && mBluetoothLeScanner != null) {
             mBluetoothLeScanner!!.stopScan(mScanCallback)
             Log.d("LiveRowing", "Stopped scan")
-            //scanComplete()
         }
+
+        a_device_scan_progressbar.visibility = View.GONE
+        invalidateOptionsMenu()
 
         mScanCallback = null
         mScanning = false
-        mHandler = null
     }
 
     private fun hasPermissions(): Boolean {

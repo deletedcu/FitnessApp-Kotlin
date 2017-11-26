@@ -1,30 +1,26 @@
 package com.liverowing.liverowing.activity.workouttype
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.internal.NavigationMenu
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
-import com.liverowing.liverowing.LiveRowing.Companion.eventBus
 import com.liverowing.liverowing.R
+import com.liverowing.liverowing.activity.race.RaceActivity
 import com.liverowing.liverowing.model.parse.WorkoutType
-import com.squareup.otto.Subscribe
+import com.liverowing.liverowing.service.messages.ProgramWorkout
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
 import kotlinx.android.synthetic.main.activity_workout_type_detail.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.EventBus
 
-fun Context.WorkoutTypeDetailIntent(workoutType: WorkoutType): Intent {
-    Log.d("LiveRowing", "WorkoutTypeDetailIntent: " + workoutType.createdBy?.username)
-    return Intent(this, WorkoutTypeDetailActivity::class.java).apply {
-    }
-}
 
-private const val INTENT_WORKOUT_TYPE = "workout_type"
 
 class WorkoutTypeDetailActivity : AppCompatActivity() {
     private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
@@ -41,15 +37,26 @@ class WorkoutTypeDetailActivity : AppCompatActivity() {
         a_workout_type_detail_container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(a_workout_type_detail_tabs))
         a_workout_type_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(a_workout_type_detail_container))
 
-        eventBus.register(this)
+        a_workout_type_detail_fab.setMenuListener(object: SimpleMenuListenerAdapter() {
+            override fun onPrepareMenu(navigationMenu: NavigationMenu?): Boolean {
+                startActivity(Intent(this@WorkoutTypeDetailActivity, RaceActivity::class.java))
+                return true
+            }
+        })
+
     }
 
-    override fun onStop() {
+    public override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    public override fun onStop() {
+        EventBus.getDefault().unregister(this)
         super.onStop()
-        eventBus.unregister(this)
     }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     fun onReceiveWorkoutType(workoutType: WorkoutType) {
         supportActionBar?.title = workoutType.name
         if (workoutType.image?.url != null) {
@@ -76,8 +83,8 @@ class WorkoutTypeDetailActivity : AppCompatActivity() {
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> WorkoutTypeDetailsFragment.newInstance()
-                1 -> WorkoutTypeLeadersAndStatsFragment.newInstance()
+                0 -> WorkoutTypeDetailsFragment()
+                1 -> WorkoutTypeLeadersAndStatsFragment()
                 else -> Fragment()
             }
         }

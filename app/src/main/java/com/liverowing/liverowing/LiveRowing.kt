@@ -1,16 +1,20 @@
 package com.liverowing.liverowing
 
 import android.app.Application
+import android.content.Intent
 import android.util.Log
-import com.bumptech.glide.Glide
 import com.liverowing.liverowing.model.parse.*
+import com.liverowing.liverowing.service.PerformanceMonitorBLEService
+import com.liverowing.liverowing.service.messages.BLEDeviceConnected
+import com.liverowing.liverowing.service.messages.BLEDeviceDisconnected
 import com.parse.*
-import com.squareup.otto.Bus
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okio.Buffer
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.io.IOException
 
 
@@ -20,6 +24,7 @@ import java.io.IOException
 class LiveRowing : Application() {
     override fun onCreate() {
         super.onCreate()
+        EventBus.getDefault().register(this)
 
         ParseObject.registerSubclass(Affiliate::class.java)
         ParseObject.registerSubclass(Goals::class.java)
@@ -47,10 +52,23 @@ class LiveRowing : Application() {
                 Log.d("LiveRowing", config.toString())
             }
         })
+
+        val intent = Intent(this, PerformanceMonitorBLEService::class.java)
+        startService(intent)
+    }
+
+    @Subscribe
+    fun onBLEDeviceConnected(message: BLEDeviceConnected) {
+        BluetoothDeviceConnected = true
+    }
+
+    @Subscribe
+    fun onBLEDeviceDisconnected(message: BLEDeviceDisconnected) {
+        BluetoothDeviceConnected = false
     }
 
     companion object {
-        val eventBus = Bus()
+        var BluetoothDeviceConnected = false
     }
 }
 

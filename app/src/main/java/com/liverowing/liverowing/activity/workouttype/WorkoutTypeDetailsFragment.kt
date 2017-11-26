@@ -2,7 +2,6 @@ package com.liverowing.liverowing.activity.workouttype
 
 
 import android.os.Bundle
-import android.support.transition.TransitionManager
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -12,27 +11,31 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.liverowing.liverowing.LiveRowing.Companion.eventBus
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.adapter.SegmentAdapter
 import com.liverowing.liverowing.extensions.toggle
 import com.liverowing.liverowing.model.parse.Segment
-import com.liverowing.liverowing.model.parse.Workout
 import com.liverowing.liverowing.model.parse.WorkoutType
-import com.squareup.otto.Subscribe
-import kotlinx.android.synthetic.main.activity_workout_type_detail.*
 import kotlinx.android.synthetic.main.fragment_workout_type_details.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.animation.ObjectAnimator
-import android.support.transition.ChangeBounds
-import android.support.transition.TransitionSet
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.EventBus
 
-
-private const val ARGUMENT_WORKOUT_TYPE = "workout_type"
 
 class WorkoutTypeDetailsFragment : Fragment() {
     private lateinit var workoutType: WorkoutType
     private var segments = mutableListOf<Segment>()
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -64,11 +67,9 @@ class WorkoutTypeDetailsFragment : Fragment() {
             animation.interpolator = AccelerateDecelerateInterpolator()
             animation.start()
         }
-
-        eventBus.register(this)
     }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     fun onReceiveWorkoutType(workoutType: WorkoutType) {
         this.workoutType = workoutType
         f_workout_type_details_createdby_username.text = workoutType.createdBy!!.username
@@ -91,17 +92,6 @@ class WorkoutTypeDetailsFragment : Fragment() {
                     .load(workoutType.createdBy?.image?.url)
                     .apply(RequestOptions.bitmapTransform(CircleCrop()))
                     .into(f_workout_type_details_createdby_image)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        eventBus.unregister(this)
-    }
-
-    companion object {
-        fun newInstance(): WorkoutTypeDetailsFragment {
-            return WorkoutTypeDetailsFragment()
         }
     }
 }

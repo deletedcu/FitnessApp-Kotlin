@@ -14,6 +14,17 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGattDescriptor
 import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
+import com.liverowing.liverowing.csafe.Communication
+import com.liverowing.liverowing.service.messages.BLEDeviceConnectRequest
+import com.liverowing.liverowing.service.messages.BLEDeviceConnected
+import com.liverowing.liverowing.service.messages.BLEDeviceDisconnected
+import com.liverowing.liverowing.service.messages.ProgramWorkout
+import com.liverowing.liverowing.service.operations.GattOperation
+import com.liverowing.liverowing.service.operations.GattReadCharacteristicOperation
+import com.liverowing.liverowing.service.operations.GattSetNotificationOperation
+import com.liverowing.liverowing.service.operations.GattWriteCharacteristicOperation
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 
 class PerformanceMonitorBLEService : Service() {
@@ -29,20 +40,20 @@ class PerformanceMonitorBLEService : Service() {
     var Connected: Boolean = false
     var mGatt: BluetoothGatt? = null
 
-    private val descriptorWriteQueue = LinkedList<BluetoothGattDescriptor>()
-    private val characteristicWriteQueue = LinkedList<BluetoothGattCharacteristic>()
-    private val characteristicReadQueue = LinkedList<BluetoothGattCharacteristic>()
-
-    private lateinit var controlTx: BluetoothGattCharacteristic
-    private lateinit var controlRx: BluetoothGattCharacteristic
+    private val operationQueue = LinkedList<GattOperation>()
 
     override fun onCreate() {
+        super.onCreate()
+        EventBus.getDefault().register(this)
+
         // The service is being created
         mBinder = Binder()
         Log.d("LiveRowing", "Service: onCreate")
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
         // The service is starting, due to a call to startService()
         Log.d("LiveRowing", "Service: onStartCommand")
         return mStartMode
@@ -55,49 +66,89 @@ class PerformanceMonitorBLEService : Service() {
     }
 
     override fun onUnbind(intent: Intent): Boolean {
+        super.onUnbind(intent)
+
         // All clients have unbound with unbindService()
         Log.d("LiveRowing", "Service: onUnBind")
         return mAllowRebind
     }
 
     override fun onRebind(intent: Intent) {
+        super.onRebind(intent)
         // A client is binding to the service with bindService(),
         // after onUnbind() has already been called
         Log.d("LiveRowing", "Service: onReBind")
     }
 
     override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+
         Log.d("LiveRowing", "Service: onDestroy")
         // The service is no longer used and is being destroyed
     }
 
-    fun connectToDevice(device: BluetoothDevice) {
-        mDevice = device
-        if (device.bondState == BluetoothDevice.BOND_BONDED) {
+    @Subscribe
+    fun onBLEDeviceConnectRequest(message: BLEDeviceConnectRequest) {
+        mDevice = message.device
+        if (mDevice.bondState == BluetoothDevice.BOND_BONDED) {
             unpairDevice(mDevice)
         }
 
         mGatt = mDevice.connectGatt(this@PerformanceMonitorBLEService, false, GattClientCallback(mDevice))
     }
 
-    fun sendCsafeCommand(csafe: ByteArray) {
-        controlTx.value = csafe
-        writeGattCharacteristic(controlTx)
-    }
+    @Subscribe
+    fun onProgramWorkout(message: ProgramWorkout) {
+        val workoutType = message.workoutType
+        Log.d("LiveRowing", "Should program workout: " + workoutType.name)
 
-    fun readCharacteristic(characteristic: BluetoothGattCharacteristic) {
-        Log.d("LiveRowing", "Should read characteristic")
-        characteristicReadQueue.add(characteristic)
-        if (characteristicReadQueue.size == 1 && descriptorWriteQueue.size == 0 && characteristicWriteQueue.size == 0) {
-            mGatt!!.readCharacteristic(characteristic)
+        when (workoutType.valueType) {
+            1 -> { // Distance
+                val distance = workoutType.value!! * 100
+                var split = 100
+                if (workoutType.splitLength !== null) {
+                    split = workoutType.splitLength!!
+                } else {
+                    split = distance / 5
+                    if (split < 100) split = 100
+                }
+
+                val workout = Communication().fixedWorkout(
+                        WorkoutType.FIXEDDIST_NOSPLITS,
+                        distance,
+                        split,
+                        0
+                )
+
+                sendCsafeCommand(workout)
+            }
         }
     }
 
-    fun writeGattCharacteristic(characteristic: BluetoothGattCharacteristic) {
-        Log.d("LiveRowing", "Should write characteristic")
-        characteristicWriteQueue.add(characteristic)
-        if (characteristicWriteQueue.size == 1 && descriptorWriteQueue.size == 0) {
-            mGatt!!.writeCharacteristic(characteristic)
+    fun addOperation(operation: GattOperation) {
+        operationQueue.add(operation)
+        if (operationQueue.size == 1) {
+            operation.execute(mGatt!!)
+        }
+    }
+
+    fun sendCsafeCommand(csafe: ByteArray) {
+        Log.d("LiveRowing", csafe.contentToString())
+
+        var i = 0
+        while (i <= csafe.size - 1) {
+            val bytes = csafe.slice(IntRange(i, Math.min(i+19, csafe.size - 1))).toByteArray()
+            i += bytes.size
+
+            addOperation(
+                    GattWriteCharacteristicOperation(
+                            mDevice,
+                            UUID.fromString("ce060020-43e5-11e4-916c-0800200c9a66"),
+                            UUID.fromString("ce060021-43e5-11e4-916c-0800200c9a66"),
+                            bytes
+                    )
+            )
         }
     }
 
@@ -121,13 +172,11 @@ class PerformanceMonitorBLEService : Service() {
                 Log.e("LiveRowing", "Connection Gatt failure status " + status)
                 Connected = false
                 //disconnectGattServer()
-                return
             } else if (status != BluetoothGatt.GATT_SUCCESS) {
                 // handle anything not SUCCESS as failure
                 Log.e("LiveRowing", "Connection not GATT success status " + status)
                 Connected = false
                 //disconnectGattServer()
-                return
             }
 
             if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -135,11 +184,18 @@ class PerformanceMonitorBLEService : Service() {
                 Connected = true
                 mGatt = gatt
                 gatt.discoverServices()
+
+                EventBus.getDefault().postSticky(BLEDeviceConnected(mDevice))
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.d("LiveRowing", "Disconnected from device")
 
                 Connected = false
                 mGatt = null
+
+                EventBus.getDefault().apply {
+                    removeStickyEvent(BLEDeviceConnected(mDevice))
+                    post(BLEDeviceDisconnected(mDevice))
+                }
             }
         }
 
@@ -153,14 +209,9 @@ class PerformanceMonitorBLEService : Service() {
 
             Log.d("LiveRowing", "Initializing: setting write type and enabling notification for rowing service")
             val rowingService = gatt.getService(UUID.fromString("ce060030-43e5-11e4-916c-0800200c9a66"))
-            for (characteristic in rowingService.characteristics) {
-                characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                enableCharacteristicNotification(gatt, characteristic)
-            }
-
-            val controlService = gatt.getService(UUID.fromString("ce060020-43e5-11e4-916c-0800200c9a66"))
-            controlTx = controlService.getCharacteristic(UUID.fromString("ce060021-43e5-11e4-916c-0800200c9a66"))
-            controlRx = controlService.getCharacteristic(UUID.fromString("ce060022-43e5-11e4-916c-0800200c9a66"))
+            rowingService.characteristics
+                    .filter { it.descriptors.size > 0 }
+                    .forEach { addOperation(GattSetNotificationOperation(mDevice, rowingService.uuid, it.uuid, it.descriptors[0].uuid)) }
         }
 
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
@@ -170,11 +221,9 @@ class PerformanceMonitorBLEService : Service() {
                 Log.d("LiveRowing", "Callback: Error writing GATT Descriptor: " + status)
             }
 
-            descriptorWriteQueue.remove()
-            when {
-                descriptorWriteQueue.size > 0 -> mGatt!!.writeDescriptor(descriptorWriteQueue.element())
-                characteristicWriteQueue.size > 0 -> mGatt!!.writeCharacteristic(characteristicWriteQueue.element())
-                characteristicReadQueue.size > 0 -> mGatt!!.readCharacteristic(characteristicReadQueue.element())
+            operationQueue.remove()
+            if (operationQueue.size > 0) {
+                operationQueue.element().execute(mGatt!!)
             }
         }
 
@@ -187,11 +236,9 @@ class PerformanceMonitorBLEService : Service() {
                 //disconnectGattServer()
             }
 
-            characteristicWriteQueue.remove()
-            when {
-                descriptorWriteQueue.size > 0 -> mGatt!!.writeDescriptor(descriptorWriteQueue.element())
-                characteristicWriteQueue.size > 0 -> mGatt!!.writeCharacteristic(characteristicWriteQueue.element())
-                characteristicReadQueue.size > 0 -> mGatt!!.readCharacteristic(characteristicReadQueue.element())
+            operationQueue.remove()
+            if (operationQueue.size > 0) {
+                operationQueue.element().execute(mGatt!!)
             }
         }
 
@@ -200,7 +247,6 @@ class PerformanceMonitorBLEService : Service() {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d("LiveRowing", "Characteristic read successfully")
-                Log.d("LiveRowing", characteristic.value.toString())
             } else {
                 Log.e("LiveRowing", "Characteristic read unsuccessful, status: " + status)
                 // Trying to read from the Time Characteristic? It doesnt have the property or permissions
@@ -208,11 +254,9 @@ class PerformanceMonitorBLEService : Service() {
                 // disconnectGattServer();
             }
 
-            characteristicReadQueue.remove()
-            when {
-                descriptorWriteQueue.size > 0 -> mGatt!!.writeDescriptor(descriptorWriteQueue.element())
-                characteristicWriteQueue.size > 0 -> mGatt!!.writeCharacteristic(characteristicWriteQueue.element())
-                characteristicReadQueue.size > 0 -> mGatt!!.readCharacteristic(characteristicReadQueue.element())
+            operationQueue.remove()
+            if (operationQueue.size > 0) {
+                operationQueue.element().execute(mGatt!!)
             }
         }
 
@@ -221,45 +265,15 @@ class PerformanceMonitorBLEService : Service() {
             super.onCharacteristicChanged(gatt, characteristic)
 
             when (characteristic.uuid.toString()) {
-                "ce060031-43e5-11e4-916c-0800200c9a66" -> broadcast(RowingStatus.fromCharacteristic(characteristic))
-                "ce060032-43e5-11e4-916c-0800200c9a66" -> broadcast(AdditionalRowingStatus1.fromCharacteristic(characteristic))
-                "ce060033-43e5-11e4-916c-0800200c9a66" -> broadcast(AdditionalRowingStatus2.fromCharacteristic(characteristic))
-                "ce060035-43e5-11e4-916c-0800200c9a66" -> broadcast(StrokeData.fromCharacteristic(characteristic))
-                "ce060036-43e5-11e4-916c-0800200c9a66" -> broadcast(AdditionalStrokeData.fromCharacteristic(characteristic))
-                "ce060037-43e5-11e4-916c-0800200c9a66" -> broadcast(SplitIntervalData.fromCharacteristic(characteristic))
-                "ce060038-43e5-11e4-916c-0800200c9a66" -> broadcast(AdditionalSplitIntervalData.fromCharacteristic(characteristic))
-                "ce060039-43e5-11e4-916c-0800200c9a66" -> broadcast(WorkoutSummary.fromCharacteristic(characteristic))
-                "ce06003a-43e5-11e4-916c-0800200c9a66" -> broadcast(AdditionalWorkoutSummary.fromCharacteristic(characteristic))
-                else -> Log.d("LiveRowing", "Unknown UUID: " + characteristic.uuid.toString())
-            }
-        }
-
-        fun writeGattDescriptor(descriptor: BluetoothGattDescriptor) {
-            descriptorWriteQueue.add(descriptor)
-            if (descriptorWriteQueue.size == 1) {
-                mGatt!!.writeDescriptor(descriptor)
-            }
-        }
-
-        private fun broadcast(data: Parcelable) {
-            LocalBroadcastManager.getInstance(this@PerformanceMonitorBLEService)
-                    .sendBroadcast(Intent(BROADCAST_CHARACTERISTICS_CHANGED).apply {
-                        putExtra("characteristic", data::class.java.simpleName)
-                        putExtra("data", data)
-                    })
-        }
-
-        private fun enableCharacteristicNotification(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
-            val characteristicWriteSuccess = gatt.setCharacteristicNotification(characteristic, true)
-            if (characteristicWriteSuccess) {
-                Log.d("LiveRowing", "Characteristic notification set successfully for " + characteristic.uuid.toString())
-                if (characteristic.descriptors.size > 0) {
-                    val descriptor = characteristic.descriptors[0]
-                    descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                    writeGattDescriptor(descriptor)
-                }
-            } else {
-                Log.e("LiveRowing", "Characteristic notification set failure for " + characteristic.uuid.toString())
+                "ce060031-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(RowingStatus.fromCharacteristic(characteristic))
+                "ce060032-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(AdditionalRowingStatus1.fromCharacteristic(characteristic))
+                "ce060033-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(AdditionalRowingStatus2.fromCharacteristic(characteristic))
+                "ce060035-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(StrokeData.fromCharacteristic(characteristic))
+                "ce060036-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(AdditionalStrokeData.fromCharacteristic(characteristic))
+                "ce060037-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(SplitIntervalData.fromCharacteristic(characteristic))
+                "ce060038-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(AdditionalSplitIntervalData.fromCharacteristic(characteristic))
+                "ce060039-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(WorkoutSummary.fromCharacteristic(characteristic))
+                "ce06003a-43e5-11e4-916c-0800200c9a66" -> EventBus.getDefault().post(AdditionalWorkoutSummary.fromCharacteristic(characteristic))
             }
         }
     }

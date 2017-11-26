@@ -15,7 +15,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.Widget.Toolbar.Popup" />
+            app:popupTheme="@style/AppTheme.Widget.Toolbar.Popup">
+
+            <ProgressBar
+                android:id="@+id/a_device_scan_progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="#cccccc"
+                android:indeterminateTintMode="src_in"
+                android:indeterminate="true"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                />
+
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView

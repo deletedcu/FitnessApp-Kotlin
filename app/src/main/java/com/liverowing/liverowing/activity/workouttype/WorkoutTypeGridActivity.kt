@@ -28,6 +28,7 @@ import khronos.Duration
 import khronos.endOfDay
 import khronos.minus
 import kotlinx.android.synthetic.main.activity_workout_type_grid.*
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 fun Context.WorkoutTypeGridIntent(workoutCategory: Int): Intent {
@@ -63,9 +64,9 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
             layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
             adapter = DashboardWorkoutTypeAdapter(workouts, glide, cardWidth, cardHeight, { image, workoutType ->
                 run {
-                    Log.d("LiveRowing", "From grid: " + workoutType.image?.url)
+                    EventBus.getDefault().postSticky(workoutType)
                     val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@WorkoutTypeGridActivity, image, "image")
-                    this@WorkoutTypeGridActivity.startActivity(this@WorkoutTypeGridActivity.WorkoutTypeDetailIntent(workoutType), options.toBundle())
+                    this@WorkoutTypeGridActivity.startActivity(Intent(this@WorkoutTypeGridActivity, WorkoutTypeDetailActivity::class.java), options.toBundle())
                 }
             })
             addItemDecoration(SimpleItemDecorator(15))

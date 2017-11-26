@@ -9,9 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.RequestOptions
-import com.liverowing.liverowing.LiveRowing.Companion.eventBus
 import com.liverowing.liverowing.R
 import com.liverowing.liverowing.adapter.UserStatsAdapter
 import com.liverowing.liverowing.model.parse.User
@@ -20,22 +17,30 @@ import com.liverowing.liverowing.model.parse.WorkoutType
 import com.parse.FunctionCallback
 import com.parse.ParseCloud
 import com.parse.ParseUser
-import com.squareup.otto.Subscribe
-import kotlinx.android.synthetic.main.fragment_workout_type_details.*
 import kotlinx.android.synthetic.main.fragment_workout_type_leaders_and_stats.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
-private const val ARGUMENT_WORKOUT_TYPE = "workout_type"
 
 class WorkoutTypeLeadersAndStatsFragment : Fragment() {
     private val userStats = mutableListOf<UserStats>()
     private lateinit var workoutType: WorkoutType
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_workout_type_leaders_and_stats, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,11 +54,9 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
             })
             //addItemDecoration(SimpleItemDecorator(15))
         }
-
-        eventBus.register(this)
     }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     fun onReceiveWorkoutType(workoutType: WorkoutType) {
         val haveLeaderBoards = true
         if (haveLeaderBoards) {
@@ -76,20 +79,5 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
             )
         }
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        eventBus.unregister(this)
-    }
-
-    companion object {
-        fun newInstance(): WorkoutTypeLeadersAndStatsFragment {
-            return WorkoutTypeLeadersAndStatsFragment().apply {
-                arguments = Bundle().apply {
-                    //putParcelable(ARGUMENT_WORKOUT_TYPE, workoutType)
-                }
-            }
-        }
     }
 }
