@@ -4,7 +4,7 @@ package com.liverowing.liverowing.model.pm
  * Created by henrikmalmberg on 2017-11-03.
  */
 
-enum class ErgMachineType (val value: Int) {
+enum class PMErgMachineType(val value: Int) {
     STATIC_D(0),
     STATIC_C(1),
     STATIC_A(2),
@@ -21,7 +21,7 @@ enum class ErgMachineType (val value: Int) {
     STATIC_SKI(128);
 
     companion object {
-        private val map = ErgMachineType.values().associateBy(ErgMachineType::value)
+        private val map = PMErgMachineType.values().associateBy(PMErgMachineType::value)
         fun fromInt(type: Int) = map[type]!!
     }
 }

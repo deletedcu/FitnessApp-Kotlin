@@ -1,5 +1,6 @@
 package com.liverowing.liverowing.model.pm
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.liverowing.extensions.calcDistance
@@ -9,9 +10,10 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
+@SuppressLint("ParcelCreator")
 @Parcelize
-data class StrokeData(val elapsedTime: Float,
-                      val distance: Float,
+data class StrokeData(val elapsedTime: Double,
+                      val distance: Double,
                       val driveLength: Float,
                       val driveTime: Float,
                       val recoveryTime: Float,

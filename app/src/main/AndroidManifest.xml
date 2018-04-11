@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.liverowing.liverowing">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,8 +11,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <!--<uses-feature android:name="android.hardware.location.gps" />-->
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    <uses-feature android:name="android.hardware.bluetooth_le" />
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <application
         android:name=".LiveRowing"
@@ -22,12 +23,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+        <meta-data
             android:name="com.parse.SERVER_URL"
             android:value="http://10.0.2.2:1337" />
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="com.liverowing.android" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,26 +57,44 @@
         <activity
             android:name=".activity.login.LoginRegisterActivity"
             android:label="@string/title_activity_login_register"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <tools:validation testUrl="https://liverowing.com/logbook" />
+        </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/usb_device_filter" />
+
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"
+                android:resource="@xml/usb_device_filter" />
+        </activity>
+        <activity android:name=".activity.workouttype.WorkoutTypeGridActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
         <activity android:name=".activity.devicescan.DeviceScanActivity" />
         <activity
             android:name=".activity.race.RaceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_race"
-            android:theme="@style/AppTheme" />
-
-        <service
-            android:name=".service.PerformanceMonitorBLEService"
-            android:enabled="true"
-            android:exported="false" />
-
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+        <activity android:name=".RaceTestActivity" />
+        <activity android:name=".activity.login.AppAuthLogbook" />
+        <activity android:name=".activity.race.SetupRaceActivity"></activity>
     </application>
 
 </manifest>

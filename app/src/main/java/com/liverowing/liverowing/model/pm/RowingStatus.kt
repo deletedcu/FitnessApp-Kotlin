@@ -1,27 +1,28 @@
 package com.liverowing.liverowing.model.pm
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.liverowing.extensions.calcDistance
 import com.liverowing.liverowing.extensions.calcTime
 import com.liverowing.liverowing.extensions.calcWorkoutDurationDistance
 import kotlinx.android.parcel.Parcelize
+import kotlin.math.floor
 
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
-@Parcelize
-data class RowingStatus(val elapsedTime: Float,
-                        val distance: Float,
+data class RowingStatus(val elapsedTime: Double,
+                        val distance: Double,
                         val workoutType: WorkoutType,
                         val intervalType: IntervalType,
                         val workoutState: WorkoutState,
                         val rowingState: RowingState,
                         val strokeState: StrokeState,
-                        val workoutDuration: Float,
+                        val workoutDuration: Double,
                         val workoutDurationType: DurationType,
-                        val totalWorkDistance: Float,
+                        val totalWorkDistance: Double,
                         val dragFactor: Int
-) : Parcelable {
+) {
     companion object {
         fun fromCharacteristic(data: BluetoothGattCharacteristic) : RowingStatus {
             val uint8 = BluetoothGattCharacteristic.FORMAT_UINT8
@@ -42,6 +43,54 @@ data class RowingStatus(val elapsedTime: Float,
                     time, distance, workoutType, intervalType, workoutState, rowingState,
                     strokeState, workoutDuration, workoutDurationType, totalWorkDistance, dragFactor
             )
+        }
+    }
+
+    fun durationLeftOnSplit(splitSize: Int = 0): Double {
+        if (splitSize == 0) {
+            return when (intervalType) {
+                IntervalType.TIME,
+                IntervalType.TIMERESTUNDEFINED -> workoutDuration - elapsedTime
+
+                IntervalType.DIST,
+                IntervalType.DISTANCERESTUNDEFINED -> workoutDuration - distance
+
+                else -> 0.0
+            }
+        } else {
+            return when (intervalType) {
+                IntervalType.TIME,
+                IntervalType.TIMERESTUNDEFINED -> {
+                    val currentSplit = floor(elapsedTime / splitSize)
+                    (splitSize * (currentSplit+1)) - elapsedTime
+                }
+
+                IntervalType.DIST,
+                IntervalType.DISTANCERESTUNDEFINED -> {
+                    val currentSplit = floor(distance / splitSize)
+                    (splitSize * (currentSplit+1)) - distance
+                }
+
+                else -> 0.0
+            }
+        }
+    }
+
+    fun currentSplitSize(splitSize: Int = 0): Double {
+        return if (splitSize == 0) {
+            workoutDuration
+        } else {
+            val currentSplit: Double = when (intervalType) {
+                IntervalType.TIME,
+                IntervalType.TIMERESTUNDEFINED -> floor(elapsedTime / splitSize)
+
+                IntervalType.DIST,
+                IntervalType.DISTANCERESTUNDEFINED -> floor(distance / splitSize)
+
+                else -> 1.0
+            }
+
+            if (currentSplit * splitSize > workoutDuration) workoutDuration - (currentSplit * splitSize) else splitSize.toDouble()
         }
     }
 }

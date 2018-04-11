@@ -3,16 +3,14 @@ package com.liverowing.liverowing
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Resources
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
-import com.bumptech.glide.request.RequestOptions
+import java.text.DecimalFormat
 import java.util.regex.Pattern
 
 fun ViewGroup.inflate(layoutRes: Int): View {
@@ -31,9 +29,40 @@ fun View.gone() {
     visibility = View.GONE
 }
 
+
+
 fun Context.inflate(res: Int, parent: ViewGroup? = null): View {
     return LayoutInflater.from(this).inflate(res, parent, false)
 }
+
+fun Int.darker(): Int {
+    val ratio = 1.0f - 0.2f
+    val a = this shr 24 and 0xFF
+    val r = ((this shr 16 and 0xFF) * ratio).toInt()
+    val g = ((this shr 8 and 0xFF) * ratio).toInt()
+    val b = ((this and 0xFF) * ratio).toInt()
+
+    return a shl 24 or (r shl 16) or (g shl 8) or b
+}
+
+fun Int.dpToPx(): Int {
+    val metrics = Resources.getSystem().displayMetrics
+    val px = this * (metrics.densityDpi / 160f)
+    return Math.round(px)
+}
+
+fun Float.dpToPx(): Int {
+    val metrics = Resources.getSystem().displayMetrics
+    val px = this * (metrics.densityDpi / 160f)
+    return Math.round(px)
+}
+
+fun Int.pxToDp(): Int {
+    val metrics = Resources.getSystem().displayMetrics
+    val dp = this / (metrics.densityDpi / 160f)
+    return Math.round(dp)
+}
+
 
 inline fun Dialog.ifIsShowing(body: Dialog.() -> Unit) {
     if (isShowing) {
@@ -71,6 +100,18 @@ val EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-
 fun String.isValidEmail(): Boolean {
     val pattern = Pattern.compile(EMAIL_PATTERN)
     return pattern.matcher(this).matches()
+}
+
+fun Double.format(fracDigits: Int): String {
+    val df = DecimalFormat()
+    df.maximumFractionDigits = fracDigits
+    return df.format(this)
+}
+
+fun Float.format(fracDigits: Int): String {
+    val df = DecimalFormat()
+    df.maximumFractionDigits = fracDigits
+    return df.format(this)
 }
 
 fun Int.secondsToTimespan(milliSecondPrecision: Boolean = false) : String {

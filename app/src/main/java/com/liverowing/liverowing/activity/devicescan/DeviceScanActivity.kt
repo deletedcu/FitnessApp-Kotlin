@@ -3,13 +3,10 @@ package com.liverowing.liverowing.activity.devicescan
 import android.Manifest
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.*
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.*
 import android.support.design.widget.Snackbar
@@ -25,14 +22,12 @@ import com.liverowing.liverowing.extensions.snack
 import kotlinx.android.synthetic.main.activity_device_scan.*
 import java.util.*
 import android.support.v7.widget.LinearLayoutManager
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.View
 import com.liverowing.liverowing.R.id.action_scan
 import com.liverowing.liverowing.adapter.BLEDeviceAdapter
-import com.liverowing.liverowing.service.PerformanceMonitorBLEService
-import com.liverowing.liverowing.service.messages.BLEDeviceConnectRequest
-import com.liverowing.liverowing.service.messages.BLEDeviceConnected
+import com.liverowing.liverowing.service.messages.DeviceConnectRequest
+import com.liverowing.liverowing.service.messages.DeviceConnected
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -86,7 +81,7 @@ class DeviceScanActivity : AppCompatActivity() {
             }
             adapter = BLEDeviceAdapter(mScanResult, { result ->
                 run {
-                    EventBus.getDefault().post(BLEDeviceConnectRequest(result.device))
+                    EventBus.getDefault().post(DeviceConnectRequest(result.device))
                 }
             })
         }
@@ -106,8 +101,7 @@ class DeviceScanActivity : AppCompatActivity() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onBLEDeviceConnected(message: BLEDeviceConnected) {
-        Toast.makeText(this, "Connected to " + message.device.name, Toast.LENGTH_SHORT).show()
+    fun onDeviceConnected(message: DeviceConnected) {
         finish()
     }
 
@@ -247,7 +241,7 @@ class DeviceScanActivity : AppCompatActivity() {
     private fun requestBluetoothEnable() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-        Log.d("LiveRowing", "Requested that the  user enables Bluetooth.")
+        Log.d("LiveRowing", "Requested that the user enables Bluetooth.")
     }
 
     private fun hasLocationPermissions(): Boolean {

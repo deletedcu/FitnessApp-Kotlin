@@ -1,4 +1,4 @@
-<!--?xml version="1.0" encoding="UTF-8"?-->
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <color name="primaryColor">#497984</color>
     <color name="primaryLightColor">#78a8b4</color>
@@ -9,5 +9,39 @@
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#000000</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#99000000</color>
+
+    <!-- "Hat" colors (used by flag on race view) -->
+    <color name="hat_color1">#5c946e</color>
+    <color name="hat_color2">#98e5cf</color>
+    <color name="hat_color3">#62c6cf</color>
+    <color name="hat_color4">#5795b9</color>
+    <color name="hat_color5">#9c7a97</color>
+    <color name="hat_color6">#d25b5b</color>
+    <color name="hat_color7">#ef709d</color>
+    <color name="hat_color8">#f79523</color>
+    <color name="hat_color9">#f3d132</color>
+    <color name="hat_color10">#c98e53</color>
+    <color name="hat_color11">#efd092</color>
+    <color name="hat_color12">#545454</color>
+
+    <!-- Primary/gauge metric -->
+    <color name="gauge_neutral">#5cc6d1</color>
+    <color name="gauge_below_target">#e5cf3d</color>
+    <color name="gauge_at_target">#5cc6d1</color>
+    <color name="gauge_over_target">#ff0000</color>
+    <color name="gauge_secondary">#4b4c4d</color>
+
+    <!-- Split/Interval overview progress bar -->
+    <color name="overview_background">#4d4d4d</color>
+    <color name="overview_not_raced">#2e6368</color>
+    <color name="overview_raced">#5cc6d1</color>
+
+    <!-- User and opponent progress bar -->
+    <color name="progress_background">#151a1e</color>
+    <color name="progress_secondary_background">#2c343c</color>
+    <color name="progress_raced_background">#22272d</color>
+    <color name="progress_text_color">#ffffff</color>
+    <color name="progress_text_shadow">#000000</color>
+    <color name="progress_personal_best_flag">#ffa300</color>
 </resources>

@@ -11,12 +11,7 @@ import java.util.*
  */
 class GattWriteCharacteristicOperation(device: BluetoothDevice, private val serviceUUID: UUID, private val characteristicUUID: UUID, private val value: ByteArray) : GattOperation(device) {
     override fun execute(gatt: BluetoothGatt) {
-        val builder = StringBuilder()
-        for (b in value) {
-            builder.append(String.format("%02x", b))
-        }
-
-        Log.d("LiveRowing", "Should write: " + builder.toString())
+        Log.d("LiveRowing", "SEND > " + value.contentToString())
         val characteristic = gatt.getService(serviceUUID).getCharacteristic(characteristicUUID)
         characteristic.value = value
         gatt.writeCharacteristic(characteristic)

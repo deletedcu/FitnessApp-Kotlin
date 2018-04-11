@@ -28,8 +28,25 @@
     public *;
 }
 
+## Eventbus
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+# kotlinx serialization
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.SerializationKt
+-keep,includedescriptorclasses class com.liverowing.liverowing.**$$serializer { *; }
+-keepclassmembers class com.liverowing.liverowing.** {
+    *** Companion;
+}
+-keepclasseswithmembers class com.liverowing.liverowing.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}

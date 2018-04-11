@@ -1,5 +1,6 @@
 package com.liverowing.liverowing.model.pm
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.liverowing.extensions.calcSpeed
@@ -9,15 +10,16 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
+@SuppressLint("ParcelCreator")
 @Parcelize
-data class AdditionalRowingStatus1(val elapsedTime: Float,
-                                   val speed: Float,
+data class AdditionalRowingStatus1(val elapsedTime: Double,
+                                   val speed: Double,
                                    val strokeRate: Int,
                                    val heartRate: Int,
                                    val currentPace: Float,
                                    val avgPace: Float,
                                    val restDistance: Int,
-                                   val restTime: Float
+                                   val restTime: Double
 ) : Parcelable {
     companion object {
         fun fromCharacteristic(data: BluetoothGattCharacteristic): AdditionalRowingStatus1 {

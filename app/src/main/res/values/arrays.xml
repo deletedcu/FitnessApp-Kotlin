@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="mini_fab_background_colors">
-        <item>@color/primaryTextColor</item>
-        <item>@color/primaryLightColor</item>
-        <item>@color/primaryDarkColor</item>
+    <integer-array name="hat_colors">
+        <item>@color/hat_color1</item>
+        <item>@color/hat_color2</item>
+        <item>@color/hat_color3</item>
+        <item>@color/hat_color4</item>
+        <item>@color/hat_color5</item>
+        <item>@color/hat_color6</item>
+        <item>@color/hat_color7</item>
+        <item>@color/hat_color8</item>
+        <item>@color/hat_color9</item>
+        <item>@color/hat_color10</item>
+        <item>@color/hat_color11</item>
+        <item>@color/hat_color12</item>
     </integer-array>
 
     <string-array name="workout_categories">
@@ -11,5 +20,43 @@
         <item>Community</item>
         <item>Recent &amp; Liked</item>
         <item>Affiliate</item>
+    </string-array>
+
+    <string-array name="prefs_metric_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
+
+    <string-array name="prefs_metric">
+        <item>Power</item>
+        <item>Pace</item>
+        <item>Rate</item>
+        <item>Heart rate</item>
+        <item>Speed</item>
+        <item>Previous Rate</item>
+        <item>Previous Pace</item>
+        <item>Previous avg. Power</item>
+        <item>Stroke length</item>
+        <item>Stroke distance</item>
+        <item>Stroke count</item>
+        <item>Time</item>
+        <item>Distance</item>
+        <item>Total time</item>
+        <item>Split/Interval</item>
+        <item>Calorie count</item>
     </string-array>
 </resources>

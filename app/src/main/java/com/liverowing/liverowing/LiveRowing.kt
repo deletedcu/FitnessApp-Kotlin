@@ -1,12 +1,14 @@
 package com.liverowing.liverowing
 
 import android.app.Application
-import android.content.Intent
+import android.bluetooth.BluetoothDevice
+import android.content.*
 import android.util.Log
 import com.liverowing.liverowing.model.parse.*
-import com.liverowing.liverowing.service.PerformanceMonitorBLEService
-import com.liverowing.liverowing.service.messages.BLEDeviceConnected
-import com.liverowing.liverowing.service.messages.BLEDeviceDisconnected
+import com.liverowing.liverowing.model.pm.RowingStatus
+import com.liverowing.liverowing.model.pm.WorkoutState
+import com.liverowing.liverowing.service.device.BleDevice
+import com.liverowing.liverowing.service.device.Device
 import com.parse.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -16,7 +18,13 @@ import okio.Buffer
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.io.IOException
+import android.os.Build
+import android.net.*
+import com.liverowing.liverowing.service.messages.*
 
+val preferences: Preferences by lazy {
+    LiveRowing.preferences!!
+}
 
 /**
  * Created by henrikmalmberg on 2017-10-01.
@@ -24,6 +32,10 @@ import java.io.IOException
 class LiveRowing : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        preferences = Preferences(applicationContext)
+
+        EventBus.builder().addIndex(MyEventBusIndex()).installDefaultEventBus()
         EventBus.getDefault().register(this)
 
         ParseObject.registerSubclass(Affiliate::class.java)
@@ -40,35 +52,95 @@ class LiveRowing : Application() {
 
         val conf = Parse.Configuration.Builder(this)
                 .applicationId("ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo")
-                //.server("http://10.0.2.2:1337")
                 .server("https://api.liverowing.com")
                 .clientBuilder(clientBuilder)
                 .build()
         Parse.initialize(conf)
 
         ParseInstallation.getCurrentInstallation().saveInBackground()
-        ParseConfig.getInBackground(object: ConfigCallback {
-            override fun done(config: ParseConfig?, e: ParseException?) {
-                Log.d("LiveRowing", config.toString())
+        ParseConfig.getInBackground()
+        ParseUser.getCurrentUser()?.fetchInBackground<User>()
+
+        registerForNetworkChanges(applicationContext)
+
+        /*
+        val isoCountryCodes = Locale.getISOCountries()
+        for (countryCode in isoCountryCodes) {
+            val locale = Locale("", countryCode)
+            val countryName = locale.displayCountry
+
+            Log.d("LiveRowing", locale.country + ", " + locale.displayCountry + ", " + locale.language + ", " + locale.displayLanguage + ", " + locale.displayName + ", " + locale.displayScript + ", " + locale.displayVariant + ", " + locale.isO3Country  + ", " + locale.isO3Language + ", " + locale.script + ", " + locale.variant + ", " + locale.toLanguageTag())
+        }
+        */
+    }
+
+    private fun registerForNetworkChanges(context: Context) {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cm.registerNetworkCallback(NetworkRequest.Builder().build(), object: ConnectivityManager.NetworkCallback() {
+                override fun onLost(network: Network?) {
+                    super.onLost(network)
+                    EventBus.getDefault().postSticky(NetworkChange(false))
+                }
+
+                override fun onAvailable(network: Network?) {
+                    super.onAvailable(network)
+                    EventBus.getDefault().postSticky(NetworkChange(true))
+                }
+            })
+        } else {
+            registerReceiver(object: BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    Log.d("LiveRowing", "IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).onReceive")
+                }
+            }, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        }
+
+        val activeNetwork = cm.activeNetworkInfo
+        EventBus.getDefault().postSticky(NetworkChange(activeNetwork != null && activeNetwork.isConnected))
+    }
+
+    @Subscribe
+    fun onRowingStatus(data: RowingStatus) {
+        workoutState = data.workoutState
+    }
+
+    @Subscribe
+    fun onDeviceConnected(message: DeviceConnected) {
+        deviceConnected = true
+        device = message.device
+    }
+
+    @Subscribe
+    fun onDeviceDisconnected(message: DeviceDisconnected) {
+        deviceConnected = false
+        device = null
+    }
+
+    @Subscribe
+    fun onDeviceConnectRequest(message: DeviceConnectRequest) {
+        val device = message.device
+        if (device is BluetoothDevice) {
+            BleDevice(this@LiveRowing, device).apply {
+                connect()
             }
-        })
-
-        val intent = Intent(this, PerformanceMonitorBLEService::class.java)
-        startService(intent)
+        } else if (device is android.hardware.usb.UsbDevice) {
+            com.liverowing.liverowing.service.device.usb.UsbDevice(this@LiveRowing, device).apply {
+                connect()
+            }
+        }
     }
 
     @Subscribe
-    fun onBLEDeviceConnected(message: BLEDeviceConnected) {
-        BluetoothDeviceConnected = true
-    }
-
-    @Subscribe
-    fun onBLEDeviceDisconnected(message: BLEDeviceDisconnected) {
-        BluetoothDeviceConnected = false
+    fun onProgramWorkoutRequest(message: WorkoutProgramRequest) {
+        device?.setupWorkout(message.workoutType, message.targetPace)
     }
 
     companion object {
-        var BluetoothDeviceConnected = false
+        lateinit var preferences: Preferences
+        var device: Device? = null
+        var deviceConnected = false
+        var workoutState: WorkoutState? = null
     }
 }
 
@@ -108,6 +180,6 @@ class LoggingInterceptor : Interceptor {
     }
 
     companion object {
-        private val TAG = "LiveRowing"
+        private const val TAG = "LiveRowing"
     }
 }

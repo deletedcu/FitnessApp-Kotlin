@@ -57,9 +57,8 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
     }
 
     @Subscribe(sticky = true)
-    fun onReceiveWorkoutType(workoutType: WorkoutType) {
-        val haveLeaderBoards = true
-        if (haveLeaderBoards) {
+    fun onWorkoutType(workoutType: WorkoutType) {
+        if (workoutType.hasLeaderboards) {
             ParseCloud.callFunctionInBackground(
                     "query_userStats",
                     mapOf(
@@ -70,13 +69,15 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
                         if (e == null) {
                             userStats.clear()
                             userStats.addAll(stats)
-                            f_workout_type_leaders_and_stats_recyclerview.adapter.notifyDataSetChanged()
+                            f_workout_type_leaders_and_stats_recyclerview?.adapter?.notifyDataSetChanged()
                         } else {
                             Log.d("LiveRowing", e.message)
                             // TODO: Notify of error
                         }
                     }
             )
+        } else {
+            Log.d("LiveRowing", "No leaderboards for this workout :/")
         }
 
     }

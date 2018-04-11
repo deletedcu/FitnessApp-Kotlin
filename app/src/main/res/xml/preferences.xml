@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:summary="@string/settings_summary"
+    android:title="@string/settings" >
+
+    <PreferenceScreen
+        android:key="pref_config_settings"
+        android:summary="@string/pref_group_configure_summary"
+        android:title="@string/pref_group_configure" >
+        <PreferenceScreen
+            android:key="pref_appearance"
+            android:title="@string/pref_group_appearance" >
+            <EditTextPreference
+                android:key="pref_list_limit"
+                android:summary="@string/pref_summary_list_size"
+                android:title="@string/pref_list_limit" />
+
+            <ListPreference
+                android:defaultValue="@string/pref_color_theme_value"
+                android:dialogTitle="@string/pref_color_theme"
+                android:entries="@array/pref_color_theme_entries"
+                android:entryValues="@array/pref_color_theme_values"
+                android:key="pref_syncConnectionType"
+                android:title="@string/pref_color_theme" />
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="pref_admin_settings"
+            android:title="@string/pref_group_admin" >
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="perf_show_delete"
+                android:title="@string/pref_show_delete" />
+        </PreferenceScreen>
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:key="pref_support_settings"
+        android:summary="@string/pref_group_support_summary"
+        android:title="@string/pref_group_support" >
+        <PreferenceScreen
+            android:key="@string/pref_support_about"
+            android:title="@string/pref_support_about" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="perf_show_help"
+            android:title="@string/pref_support_show_help" />
+    </PreferenceScreen>
+
+</PreferenceScreen>

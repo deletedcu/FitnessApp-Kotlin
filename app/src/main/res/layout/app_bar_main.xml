@@ -2,14 +2,14 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/a_main_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.liverowing.liverowing.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -39,10 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:fabGravity="bottom_end"
-        app:fabMenu="@menu/activity_main_fab"
-        app:fabDrawable="@drawable/ic_play_arrow_black"
         app:fabBackgroundTint="#aaaaaa"
-        app:fabDrawableTint="#ffffff"/>
+        app:fabDrawable="@drawable/ic_play_arrow_black"
+        app:fabDrawableTint="#ffffff"
+        app:fabGravity="bottom_end"
+        app:fabMenu="@menu/activity_main_fab" />
 
 </android.support.design.widget.CoordinatorLayout>

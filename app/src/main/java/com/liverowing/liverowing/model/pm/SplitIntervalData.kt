@@ -1,5 +1,6 @@
 package com.liverowing.liverowing.model.pm
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.liverowing.extensions.*
@@ -8,12 +9,13 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
+@SuppressLint("ParcelCreator")
 @Parcelize
-data class SplitIntervalData(val elapsedTime: Float,
-                             val distance: Float,
-                             val splitTime: Float,
-                             val splitDistance: Float,
-                             val restTime: Float,
+data class SplitIntervalData(val elapsedTime: Double,
+                             val distance: Double,
+                             val splitTime: Double,
+                             val splitDistance: Double,
+                             val restTime: Double,
                              val restDistance: Int,
                              val intervalType: IntervalType,
                              val intervalNumber: Int

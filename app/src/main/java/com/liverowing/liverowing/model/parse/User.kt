@@ -1,6 +1,8 @@
 package com.liverowing.liverowing.model.parse
 
-
+import android.content.Context
+import android.content.res.Resources
+import com.liverowing.liverowing.R.array.hat_colors
 import com.parse.*
 import java.util.*
 
@@ -9,8 +11,8 @@ import java.util.*
  */
 class User : ParseUser() {
     var isMetric by ParseDelegate<Boolean?>()
-    var boatColor by ParseDelegate<Int?>()
-    var hatColor by ParseDelegate<Int?>()
+    var boatColor by ParseDelegate<Int>()
+    var hatColor by ParseDelegate<Int>()
     var gender by ParseDelegate<String?>()
     var height by ParseDelegate<Int?>()
     var dob by ParseDelegate<Date?>()
@@ -40,11 +42,21 @@ class User : ParseUser() {
     var maxHR by ParseDelegate<Int?>()
     var getFullAccessLinkLabel by ParseDelegate<String?>()
     var rotationRank by ParseDelegate<Int?>()
+
+    // Calculated fields
     val userClass: String
         get() {
             val gender = if (this.gender.isNullOrEmpty()) "male" else this.gender!!.toLowerCase()
             val heavyWeight = if (this.isHeavyweight == true) 1 else 0
             return gender + heavyWeight.toString()
+        }
+
+    fun getFlagColor(context: Context): Int {
+            val colors = context.resources.getIntArray(hat_colors)
+            if (hatColor in 0 until colors.size) {
+                return colors[hatColor]
+            }
+            return colors[0]
         }
 
     companion object {

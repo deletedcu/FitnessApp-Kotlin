@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.internal.NavigationMenu
 import android.support.design.widget.TabLayout
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -12,25 +13,25 @@ import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.activity.race.RaceActivity
+import com.liverowing.liverowing.activity.race.SetupRaceActivity
 import com.liverowing.liverowing.model.parse.WorkoutType
-import com.liverowing.liverowing.service.messages.ProgramWorkout
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
 import kotlinx.android.synthetic.main.activity_workout_type_detail.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.EventBus
 
-
-
 class WorkoutTypeDetailActivity : AppCompatActivity() {
     private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
+    private lateinit var mWorkoutType: WorkoutType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout_type_detail)
 
-        setSupportActionBar(a_workout_type_grid_toolbar)
+        setSupportActionBar(a_workout_type_detail_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        EventBus.getDefault().register(this)
 
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
         a_workout_type_detail_container.adapter = mSectionsPagerAdapter
@@ -39,25 +40,21 @@ class WorkoutTypeDetailActivity : AppCompatActivity() {
 
         a_workout_type_detail_fab.setMenuListener(object: SimpleMenuListenerAdapter() {
             override fun onPrepareMenu(navigationMenu: NavigationMenu?): Boolean {
-                startActivity(Intent(this@WorkoutTypeDetailActivity, RaceActivity::class.java))
+                startActivity(Intent(this@WorkoutTypeDetailActivity, SetupRaceActivity::class.java))
                 return true
             }
         })
 
     }
 
-    public override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    public override fun onStop() {
+    public override fun onDestroy() {
+        super.onDestroy()
         EventBus.getDefault().unregister(this)
-        super.onStop()
     }
 
     @Subscribe(sticky = true)
-    fun onReceiveWorkoutType(workoutType: WorkoutType) {
+    fun onWorkoutType(workoutType: WorkoutType) {
+        mWorkoutType = workoutType
         supportActionBar?.title = workoutType.name
         if (workoutType.image?.url != null) {
             Glide.with(this).load(workoutType.image?.url).into(a_workout_type_detail_image)
@@ -90,7 +87,7 @@ class WorkoutTypeDetailActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            return 2
+            return if (mWorkoutType.hasLeaderboards) 2 else 1
         }
     }
 

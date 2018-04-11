@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.liverowing.liverowing.R
-import com.liverowing.liverowing.activity.MainIntent
+import com.liverowing.liverowing.activity.MainActivity
 import com.parse.ParseException
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment : Fragment() {
+class LoginFragment : android.support.v4.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
@@ -35,7 +35,7 @@ class LoginFragment : Fragment() {
                         if (e !== null) {
                             Snackbar.make(view, e.message.toString(), Snackbar.LENGTH_LONG).show()
                         } else {
-                            val intent: Intent = activity!!.MainIntent()
+                            val intent = Intent(activity, MainActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(intent)
                             activity!!.finish()

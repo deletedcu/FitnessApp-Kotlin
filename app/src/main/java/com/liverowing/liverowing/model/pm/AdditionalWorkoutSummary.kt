@@ -1,5 +1,6 @@
 package com.liverowing.liverowing.model.pm
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.liverowing.extensions.calcLogEntryDateTime
@@ -9,6 +10,7 @@ import java.util.*
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
+@SuppressLint("ParcelCreator")
 @Parcelize
 data class AdditionalWorkoutSummary(val logDateTime: Date,
                                     val type: IntervalType,

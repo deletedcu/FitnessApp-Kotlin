@@ -30,6 +30,10 @@ import khronos.minus
 import kotlinx.android.synthetic.main.activity_workout_type_grid.*
 import org.greenrobot.eventbus.EventBus
 import java.util.*
+import android.support.v4.view.MenuItemCompat.getActionView
+import android.app.SearchManager
+import android.widget.SearchView
+
 
 fun Context.WorkoutTypeGridIntent(workoutCategory: Int): Intent {
     return Intent(this, WorkoutTypeGridActivity::class.java).apply {
@@ -73,7 +77,7 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
         }
         LinearSnapHelper().attachToRecyclerView(a_workout_type_grid_recyclerview)
 
-        a_workout_type_grid_categories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        a_workout_type_grid_categories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currentCategory = position
@@ -85,7 +89,7 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
             }
         }
 
-        a_workout_type_grid_tabbar.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        a_workout_type_grid_tabbar.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -111,24 +115,17 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
 
         if (workoutTypes.size > 0) query.whereContainedIn("valueType", workoutTypes)
         for (tag in workoutTags) {
-            query.whereEqualTo("filterTags." + tag, 1)
+            query.whereEqualTo("filterTags.$tag", 1)
         }
 
-        val calendar = Calendar.getInstance()
         when (currentTabIndex) {
-            1 -> {
-                query.whereGreaterThanOrEqualTo("createdAt", Dates.today.minus(Duration(Calendar.MONTH, 1)).endOfDay)
-            }
+            1 -> query.whereGreaterThanOrEqualTo("createdAt", Dates.today.minus(Duration(Calendar.MONTH, 1)).endOfDay)
             2 -> {
                 query.whereGreaterThanOrEqualTo("likes", 10)
                 query.orderByDescending("likes")
             }
-            3 -> {
-                query.whereMatchesKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
-            }
-            4 -> {
-                query.whereDoesNotMatchKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
-            }
+            3 -> query.whereMatchesKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
+            4 -> query.whereDoesNotMatchKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
         }
 
         query.findInBackground { objects, e ->
@@ -145,6 +142,11 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.activity_workouttype_grid, menu)
+        // Associate searchable configuration with the SearchView
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(app_bar_search).actionView as SearchView
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+
         return true
     }
 

@@ -1,12 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Declare custom theme attributes that allow changing which styles are
-         used for button bars depending on the API level.
-         ?android:attr/buttonBarStyle is new as of API 11 so this is
-         necessary to support previous API levels. -->
-    <declare-styleable name="ButtonBarContainerTheme">
-        <attr name="metaButtonBarStyle" format="reference" />
-        <attr name="metaButtonBarButtonStyle" format="reference" />
+    <declare-styleable name="TextMetricView">
+        <attr name="title" format="string" />
+        <attr name="value" format="string" />
+        <attr name="position" format="enum">
+            <enum name="left" value="8388611" />
+            <enum name="right" value="8388613" />
+            <enum name="center" value="1" />
+        </attr>
     </declare-styleable>
 
+    <declare-styleable name="RaceProgressView">
+        <attr name="cornerRadius" format="integer" />
+        <attr name="startColor" format="color" />
+        <attr name="endColor" format="color" />
+        <attr name="name" format="string" />
+        <attr name="progress" format="float" />
+        <attr name="image" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="GaugeView">
+
+    </declare-styleable>
 </resources>

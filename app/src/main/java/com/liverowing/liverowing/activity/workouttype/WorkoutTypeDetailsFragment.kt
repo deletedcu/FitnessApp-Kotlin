@@ -1,6 +1,5 @@
 package com.liverowing.liverowing.activity.workouttype
 
-
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -22,7 +21,6 @@ import android.animation.ObjectAnimator
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.EventBus
 
-
 class WorkoutTypeDetailsFragment : Fragment() {
     private lateinit var workoutType: WorkoutType
     private var segments = mutableListOf<Segment>()
@@ -37,9 +35,7 @@ class WorkoutTypeDetailsFragment : Fragment() {
         super.onStop()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_workout_type_details, container, false)
     }
 

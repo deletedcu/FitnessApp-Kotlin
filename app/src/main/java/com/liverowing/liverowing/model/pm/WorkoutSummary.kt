@@ -1,5 +1,6 @@
 package com.liverowing.liverowing.model.pm
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.liverowing.extensions.calcDistance
@@ -11,10 +12,11 @@ import java.util.*
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
+@SuppressLint("ParcelCreator")
 @Parcelize
 data class WorkoutSummary(val logDateTime: Date,
-                          val elapsedTime: Float,
-                          val distance: Float,
+                          val elapsedTime: Double,
+                          val distance: Double,
                           val averageSpm: Int,
                           val endHeartRate: Int,
                           val averageHeartRate: Int,
