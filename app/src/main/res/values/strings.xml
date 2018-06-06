@@ -1,8 +1,12 @@
 <resources>
+    <string name="facebook_app_id" translatable="false">644407955731400</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb644407955731400</string>
+
     <string name="app_name">LiveRowing</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_login_register">Login</string>
+
 
     <string-array name="countries_array">
         <item>Afghanistan</item>

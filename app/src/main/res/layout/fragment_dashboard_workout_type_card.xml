@@ -6,7 +6,7 @@
     android:minWidth="300dp"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp"
-    tools:context="com.liverowing.liverowing.activity.workouttype.WorkoutTypeCardFragment">
+    tools:context="com.liverowing.android.activity.workouttype.WorkoutTypeCardFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

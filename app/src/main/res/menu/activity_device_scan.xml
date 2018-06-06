@@ -3,7 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_scan"
-        android:title="Scan"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_scan_status"
+        android:checkable="true"
+        android:enabled="true"
+        android:title="Scanning"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_scan_switch"
+        android:checkable="true"
+        android:checked="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_bluetooth_black"
+        android:visible="true"
+        app:actionLayout="@layout/switch_item"
+        app:showAsAction="always" />
 </menu>

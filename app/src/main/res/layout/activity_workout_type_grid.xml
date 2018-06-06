@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.liverowing.liverowing.activity.workouttype.WorkoutTypeGridActivity">
+        tools:context="com.liverowing.android.activity.workouttype.WorkoutTypeGridActivity">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"

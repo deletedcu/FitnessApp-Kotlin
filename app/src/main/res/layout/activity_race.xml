@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.liverowing.liverowing.view.HighlightFirstWordTextView
+        <com.liverowing.android.view.HighlightFirstWordTextView
             android:id="@+id/a_race_overlay_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -44,4 +44,8 @@
     <color name="progress_text_color">#ffffff</color>
     <color name="progress_text_shadow">#000000</color>
     <color name="progress_personal_best_flag">#ffa300</color>
+
+    <!-- Stroke ratio bar -->
+    <color name="stroke_ratio_stroke">#58ba59</color>
+    <color name="stroke_ratio_recovery">#d05c5c</color>
 </resources>

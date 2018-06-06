@@ -43,10 +43,10 @@
 # kotlinx serialization
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.SerializationKt
--keep,includedescriptorclasses class com.liverowing.liverowing.**$$serializer { *; }
--keepclassmembers class com.liverowing.liverowing.** {
+-keep,includedescriptorclasses class com.liverowing.android.**$$serializer { *; }
+-keepclassmembers class com.liverowing.android.** {
     *** Companion;
 }
--keepclasseswithmembers class com.liverowing.liverowing.** {
+-keepclasseswithmembers class com.liverowing.android.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
