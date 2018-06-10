@@ -42,6 +42,7 @@ class DashboardFragment : Fragment() {
 
         f_dashboard_featured_title.setOnClickListener { this.onClickedWorkoutTypeHeader(it) }
         f_dashboard_liked_and_recent_title.setOnClickListener { this.onClickedWorkoutTypeHeader(it) }
+        f_dashboard_mycustom_title.setOnClickListener { this.onClickedWorkoutTypeHeader(it) }
     }
 
     private fun setupFeaturedWorkouts() {
@@ -130,10 +131,11 @@ class DashboardFragment : Fragment() {
     }
 
     private fun onClickedWorkoutTypeHeader(sender: View) {
-        var workoutCategory = 0
-        when (sender.id) {
-            R.id.f_dashboard_featured_title -> { workoutCategory = WORKOUT_CATEGORY_FEATURED }
-            R.id.f_dashboard_liked_and_recent_title -> { workoutCategory = WORKOUT_CATEGORY_RECENT_AND_LIKED }
+        val workoutCategory = when (sender.id) {
+            R.id.f_dashboard_featured_title -> WORKOUT_CATEGORY_FEATURED
+            R.id.f_dashboard_liked_and_recent_title -> WORKOUT_CATEGORY_RECENT_AND_LIKED
+            R.id.f_dashboard_mycustom_title -> WORKOUT_CATEGORY_CUSTOM
+            else -> WORKOUT_CATEGORY_FEATURED
         }
         startActivity(activity!!.WorkoutTypeGridIntent(workoutCategory))
     }

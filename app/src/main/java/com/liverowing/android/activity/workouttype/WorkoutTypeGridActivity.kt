@@ -34,6 +34,9 @@ import java.util.*
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.lapism.searchview.Search
 import com.lapism.searchview.Search.Version.MENU_ITEM
+import com.lapism.searchview.database.SearchHistoryTable
+import com.lapism.searchview.widget.SearchAdapter
+import com.lapism.searchview.widget.SearchItem
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.extensions.default
 import kotlinx.android.synthetic.main.search_view.view.*
@@ -49,7 +52,8 @@ private const val INTENT_WORKOUT_CATEGORY = "workoutCategory"
 const val WORKOUT_CATEGORY_FEATURED = 0
 const val WORKOUT_CATEGORY_COMMUNITY = 1
 const val WORKOUT_CATEGORY_RECENT_AND_LIKED = 2
-const val WORKOUT_CATEGORY_AFFILIATE = 3
+const val WORKOUT_CATEGORY_CUSTOM = 3
+const val WORKOUT_CATEGORY_AFFILIATE = 4
 
 class WorkoutTypeGridActivity : AppCompatActivity() {
     private lateinit var hud: KProgressHUD
@@ -109,6 +113,18 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
             }
         })
 
+        val mHistoryDatabase = SearchHistoryTable(this)
+        val searchAdapter = SearchAdapter(this)
+        searchAdapter.setOnSearchItemClickListener { _, title, _ ->
+            a_workout_type_grid_search.setQuery(title, true)
+
+            val item = SearchItem(this@WorkoutTypeGridActivity)
+            item.title = title
+
+            mHistoryDatabase.addItem(item)
+        }
+
+        a_workout_type_grid_search.adapter = searchAdapter
         a_workout_type_grid_search.setOnOpenCloseListener(object : Search.OnOpenCloseListener {
             override fun onOpen() {
                 a_workout_type_grid_search.apply {
@@ -126,6 +142,11 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
 
         a_workout_type_grid_search.setOnQueryTextListener(object : Search.OnQueryTextListener {
             override fun onQueryTextSubmit(query: CharSequence?): Boolean {
+                val item = SearchItem(this@WorkoutTypeGridActivity)
+                item.title = query
+
+                mHistoryDatabase.addItem(item)
+
                 currentQuery = query.toString()
                 runQueryAndPopulate()
 
@@ -144,10 +165,11 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
     private fun runQueryAndPopulate() {
         hud.show()
         val query = when (currentCategory) {
-            0 -> WorkoutType.featuredWorkouts()
-            1 -> WorkoutType.communityWorkouts()
-            2 -> WorkoutType.recentAndLikedWorkouts()
-            3 -> WorkoutType.affiliateWorkouts()
+            WORKOUT_CATEGORY_FEATURED -> WorkoutType.featuredWorkouts()
+            WORKOUT_CATEGORY_COMMUNITY -> WorkoutType.communityWorkouts()
+            WORKOUT_CATEGORY_RECENT_AND_LIKED -> WorkoutType.recentAndLikedWorkouts()
+            WORKOUT_CATEGORY_CUSTOM -> WorkoutType.myCustomWorkouts()
+            WORKOUT_CATEGORY_AFFILIATE -> WorkoutType.affiliateWorkouts()
             else -> WorkoutType.featuredWorkouts()
         }
 

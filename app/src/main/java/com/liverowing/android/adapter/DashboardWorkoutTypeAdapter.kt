@@ -33,6 +33,8 @@ class DashboardWorkoutTypeAdapter(val items: List<WorkoutType>, val glide: Reque
                 glide
                     .load(item.image?.url)
                     .into(f_dashboard_workouttype_card_image)
+            } else {
+                glide.clear(f_dashboard_workouttype_card_image)
             }
 
             if (item.createdBy !== null && item.createdBy!!.image !== null) {
@@ -40,7 +42,10 @@ class DashboardWorkoutTypeAdapter(val items: List<WorkoutType>, val glide: Reque
                         .load(item.createdBy?.image?.url)
                         .apply(RequestOptions.bitmapTransform(CircleCrop()))
                         .into(f_dashboard_workouttype_card_createdby_image)
+            } else {
+                glide.clear(f_dashboard_workouttype_card_createdby_image)
             }
+
             f_dashboard_workouttype_card_workouttype_name.text = item.name
             f_dashboard_workouttype_card_createdby_name.text = "By | ${item.createdBy?.displayName ?: item.createdBy?.username}"
             setOnClickListener { listener(f_dashboard_workouttype_card_image, item) }

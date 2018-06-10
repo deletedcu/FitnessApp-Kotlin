@@ -19,44 +19,7 @@
         <item>Featured</item>
         <item>Community</item>
         <item>Recent &amp; Liked</item>
+        <item>My Custom</item>
         <item>Affiliate</item>
-    </string-array>
-
-    <string-array name="prefs_metric_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-    </string-array>
-
-    <string-array name="prefs_metric">
-        <item>Power</item>
-        <item>Pace</item>
-        <item>Rate</item>
-        <item>Heart rate</item>
-        <item>Speed</item>
-        <item>Previous Rate</item>
-        <item>Previous Pace</item>
-        <item>Previous avg. Power</item>
-        <item>Stroke length</item>
-        <item>Stroke distance</item>
-        <item>Stroke count</item>
-        <item>Time</item>
-        <item>Distance</item>
-        <item>Total time</item>
-        <item>Split/Interval</item>
-        <item>Calorie count</item>
     </string-array>
 </resources>
