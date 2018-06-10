@@ -10,6 +10,7 @@ import android.support.v4.content.res.ResourcesCompat
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.liverowing.android.R
 import kotlin.math.PI
+import kotlin.math.roundToInt
 
 
 class SplitIntervalOverviewView : View {
@@ -60,27 +61,22 @@ class SplitIntervalOverviewView : View {
 
     fun addDistanceWithSetSplitLength(distance: Int, splitLength: Int) {
         for (split in 1..(distance / splitLength)+1) {
-            val splitDistance = if (split.times(splitLength) > distance) {
-                distance.rem(splitLength)
-            } else {
-                splitLength
-            }
-
+            val splitDistance = if (split.times(splitLength) > distance) distance.rem(splitLength) else splitLength
             progressBars.add(SplitInterval(SplitIntervalType.SplitIntervalDistance, splitDistance, 0f))
         }
         invalidate()
     }
 
-    fun addTimeWithSetSplitSize(time: Int, splitSize: Int) {
-        val splitTime = time / splitSize
-        for (split in 1..splitSize) {
-            progressBars.add(SplitInterval(SplitIntervalType.SplitIntervalTime, (splitTime * MULTIPLIER).toInt(), 0f))
+    fun addTimeWithSetSplitSize(time: Int, splitLength: Int) {
+        for (split in 1..(time / splitLength)+1) {
+            val splitTime = if (split.times(splitLength) > time) time.rem(splitLength) else splitLength
+            progressBars.add(SplitInterval(SplitIntervalType.SplitIntervalTime, splitTime.times(MULTIPLIER).roundToInt(), 0f))
         }
         invalidate()
     }
 
     fun addInterval(type: SplitIntervalType, value: Int) {
-        progressBars.add(SplitInterval(type, if (type == SplitIntervalType.SplitIntervalTime) (value * MULTIPLIER).toInt() else value))
+        progressBars.add(SplitInterval(type, if (type == SplitIntervalType.SplitIntervalTime) (value.times(MULTIPLIER)).roundToInt() else value))
         invalidate()
     }
 

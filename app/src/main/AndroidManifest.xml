@@ -11,9 +11,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
     <uses-feature android:name="android.hardware.usb.host" />
-
 
     <application
         android:name=".LiveRowing"
@@ -24,30 +25,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <!-- FACEBOOK -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
         <!-- FACEBOOK -->
-
-
-
-
 
         <meta-data
             android:name="android.app.searchable"
@@ -103,23 +102,17 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"
                 android:resource="@xml/usb_device_filter" />
         </activity>
-        <activity android:name=".activity.workouttype.WorkoutTypeGridActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
         <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
         <activity android:name=".activity.devicescan.DeviceScanActivity" />
         <activity
             android:name=".activity.race.RaceActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="sensorLandscape"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_race"
+            android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />
         <activity android:name=".RaceTestActivity" />
         <activity android:name=".activity.login.AppAuthLogbook" />
-        <activity android:name=".activity.race.SetupRaceActivity" />
         <activity
             android:name=".activity.login.LoginActivity"
             android:theme="@style/AppTheme.LoginRegister" />

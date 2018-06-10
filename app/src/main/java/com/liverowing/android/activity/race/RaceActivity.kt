@@ -34,13 +34,16 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.WindowManager
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.Preferences.Companion.customPrefs
 import com.liverowing.android.dpToPx
+import com.liverowing.android.extensions.default
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.WorkoutType.Companion.VALUE_TYPE_CUSTOM
 import com.liverowing.android.view.GaugeView
@@ -52,6 +55,7 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
     private lateinit var prefs: SharedPreferences
     private lateinit var mWorkoutType: WorkoutType
     private lateinit var mWorkoutRecorder: WorkoutRecorder
+    private lateinit var hud: KProgressHUD
     private var mTargetPace: Int? = null
     private var mWorkoutProgrammed = false
     private var mProgrammingWorkout = false
@@ -63,9 +67,15 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_race)
 
+        hud = KProgressHUD(this@RaceActivity).default()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         prefs = customPrefs(this@RaceActivity, "LiveRowing")
+
+        a_race_setup_button.setOnClickListener {
+            val dialog = RaceOptionsDialog()
+            dialog.show(supportFragmentManager, RaceOptionsDialog::class.toString())
+        }
 
         transitionTo(a_race_group_waiting, true)
         EventBus.getDefault().register(this)
@@ -117,6 +127,14 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onWorkoutSetup(setup: WorkoutSetup) {
+        Log.d("LiveRowing", "onWorkoutSetup")
+
+
+        if (!setup.workoutType.isDataAvailable) {
+            hud.setLabel("Loading workout..")
+            setup.workoutType.fetch<WorkoutType>()
+        }
+
         mWorkoutType = setup.workoutType
         mTargetPace = setup.targetPace
         mWorkoutRecorder = WorkoutRecorder(mWorkoutType, setup.personalBest, setup.opponent, null)
@@ -128,11 +146,14 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
 
         // Opponent
         if (setup.opponent is Workout) {
+            Log.d("LiveRowing", "Loading opponent workout")
+            hud.setLabel("Loading opponent workout..")
             mOpponent = setup.opponent
+            mOpponent!!.loadForPlayback()
             race_racing_opponent_progress.apply {
                 visibility = View.VISIBLE
-                name = setup.opponent.createdBy?.username
-                flagColor = setup.opponent.createdBy?.getFlagColor(this@RaceActivity)
+                name = setup.opponent!!.createdBy?.username
+                flagColor = setup.opponent!!.createdBy?.getFlagColor(this@RaceActivity)
             }
         } else {
             race_racing_opponent_progress.visibility = View.GONE
@@ -153,7 +174,9 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
 
         // Racing personal best?
         if (setup.personalBest is Workout) {
+            hud.setLabel("Loading personal best workout..")
             mPersonalBest = setup.personalBest
+            mPersonalBest!!.loadForPlayback()
             race_racing_me_progress.hasPersonalBest = true
         }
 
@@ -168,7 +191,7 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
             }
         } else {
             when (mWorkoutType.valueType) {
-                VALUE_TYPE_TIMED -> race_racing_overview_progress.addTimeWithSetSplitSize(mWorkoutType.value, mWorkoutType.calculatedSplitNum)
+                VALUE_TYPE_TIMED -> race_racing_overview_progress.addTimeWithSetSplitSize(mWorkoutType.value, mWorkoutType.calculatedSplitLength)
                 VALUE_TYPE_DISTANCE -> race_racing_overview_progress.addDistanceWithSetSplitLength(mWorkoutType.value, mWorkoutType.calculatedSplitLength)
             }
         }
@@ -203,6 +226,8 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
         race_racing_metric_right.setOnClickListener(secondaryMetricClickListener)
 
         updateMetrics(false, true)
+
+        hud.dismiss()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

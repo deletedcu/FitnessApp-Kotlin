@@ -5,7 +5,7 @@ import com.liverowing.android.model.parse.WorkoutType
 
 data class WorkoutSetup(
         val workoutType: WorkoutType,
-        val opponent: Workout? = null,
-        val personalBest: Workout? = null,
-        val targetPace: Int? = null
+        var opponent: Workout? = null,
+        var personalBest: Workout? = null,
+        var targetPace: Int? = null
 )

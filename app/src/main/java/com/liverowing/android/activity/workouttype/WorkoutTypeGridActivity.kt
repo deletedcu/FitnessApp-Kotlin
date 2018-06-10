@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.liverowing.android.R
@@ -30,12 +31,12 @@ import khronos.minus
 import kotlinx.android.synthetic.main.activity_workout_type_grid.*
 import org.greenrobot.eventbus.EventBus
 import java.util.*
-import android.support.v4.view.MenuItemCompat.getActionView
-import android.app.SearchManager
-import android.widget.SearchView
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.lapism.searchview.Search
+import com.lapism.searchview.Search.Version.MENU_ITEM
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.extensions.default
+import kotlinx.android.synthetic.main.search_view.view.*
 
 
 fun Context.WorkoutTypeGridIntent(workoutCategory: Int): Intent {
@@ -57,6 +58,8 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
     private val workoutTags = mutableListOf<Int>()
     private var currentTabIndex: Int = 0
     private var currentCategory: Int = 0
+    private var currentCategoryText = ""
+    private var currentQuery = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +89,8 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
         a_workout_type_grid_categories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Log.d("LiveRowing", "Item is selected! ${parent?.getItemAtPosition(position).toString()}")
+                currentCategoryText = parent?.getItemAtPosition(position).toString()
                 currentCategory = position
 
                 invalidateOptionsMenu()
@@ -104,6 +109,32 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
             }
         })
 
+        a_workout_type_grid_search.setOnOpenCloseListener(object : Search.OnOpenCloseListener {
+            override fun onOpen() {
+                a_workout_type_grid_search.apply {
+                    setHint("Search ${currentCategoryText.toLowerCase()} workouts..")
+                    setQuery(currentQuery, false)
+                    showKeyboard()
+                }
+            }
+
+            override fun onClose() {
+                a_workout_type_grid_search.visibility = View.GONE
+            }
+
+        })
+
+        a_workout_type_grid_search.setOnQueryTextListener(object : Search.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: CharSequence?): Boolean {
+                currentQuery = query.toString()
+                runQueryAndPopulate()
+
+                a_workout_type_grid_search.close()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: CharSequence?) {}
+        })
 
         val workoutCategory = intent.getIntExtra(INTENT_WORKOUT_CATEGORY, 0)
         a_workout_type_grid_categories.setSelection(workoutCategory, true)
@@ -135,6 +166,10 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
             4 -> query.whereDoesNotMatchKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
         }
 
+        if (currentQuery.isNotEmpty()) {
+            query.whereMatches("name", currentQuery, "i")
+        }
+
         query.findInBackground { objects, e ->
             if (e != null) {
                 LiveRowing.globalParseExceptionHandler(this@WorkoutTypeGridActivity, e)
@@ -148,13 +183,7 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.activity_workouttype_grid, menu)
-        // Associate searchable configuration with the SearchView
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(app_bar_search).actionView as SearchView
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-
         return true
     }
 
@@ -204,6 +233,13 @@ class WorkoutTypeGridActivity : AppCompatActivity() {
                 runQueryAndPopulate()
                 return true
             }
+
+            app_bar_search -> {
+                a_workout_type_grid_search.visibility = View.VISIBLE
+                a_workout_type_grid_search.open(item)
+                return true
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
     }

@@ -50,7 +50,7 @@ class DeviceScanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_scan)
 
-        hud = KProgressHUD.create(this@DeviceScanActivity).default()
+        hud = KProgressHUD(this@DeviceScanActivity).default()
 
         setSupportActionBar(a_device_scan_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
