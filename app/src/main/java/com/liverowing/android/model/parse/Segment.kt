@@ -1,10 +1,9 @@
 package com.liverowing.android.model.parse
 
-import com.liverowing.android.secondsToTimespan
+import com.liverowing.android.extensions.secondsToTimespan
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
-import khronos.second
 
 /**
  * Created by henrikmalmberg on 2017-10-01.

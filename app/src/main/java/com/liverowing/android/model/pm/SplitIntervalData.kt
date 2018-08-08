@@ -1,16 +1,12 @@
 package com.liverowing.android.model.pm
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Parcelable
 import com.liverowing.android.extensions.*
-import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
 data class SplitIntervalData(val elapsedTime: Double,
                              val distance: Double,
                              val splitTime: Double,
@@ -20,7 +16,7 @@ data class SplitIntervalData(val elapsedTime: Double,
                              val intervalType: IntervalType,
                              val intervalNumber: Int
 
-) : Parcelable {
+) {
     companion object {
         fun fromCharacteristic(data: BluetoothGattCharacteristic): SplitIntervalData {
             val elapsedTime = data.calcTime(0)

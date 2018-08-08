@@ -1,15 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#497984</color>
-    <color name="primaryLightColor">#78a8b4</color>
-    <color name="primaryDarkColor">#1a4d57</color>
-    <color name="secondaryColor">#d8d8d8</color>
-    <color name="secondaryLightColor">#ffffff</color>
+    <color name="colorPrimary">#497984</color>
+    <color name="colorPrimaryDark">#1a4d57</color>
     <color name="secondaryDarkColor">#a7a7a7</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
-    <color name="backgroundOverlayColor">#fcfcfc</color>
-    <color name="black_overlay">#99000000</color>
+    <color name="textColorDark">#666666</color>
+    <color name="textColor">#a7a7a7</color>
 
     <!-- "Hat" colors (used by flag on race view) -->
     <color name="hat_color1">#5c946e</color>
@@ -24,28 +19,4 @@
     <color name="hat_color10">#c98e53</color>
     <color name="hat_color11">#efd092</color>
     <color name="hat_color12">#545454</color>
-
-    <!-- Primary/gauge metric -->
-    <color name="gauge_neutral">#5cc6d1</color>
-    <color name="gauge_below_target">#e5cf3d</color>
-    <color name="gauge_at_target">#5cc6d1</color>
-    <color name="gauge_over_target">#ff0000</color>
-    <color name="gauge_secondary">#4b4c4d</color>
-
-    <!-- Split/Interval overview progress bar -->
-    <color name="overview_background">#4d4d4d</color>
-    <color name="overview_not_raced">#2e6368</color>
-    <color name="overview_raced">#5cc6d1</color>
-
-    <!-- User and opponent progress bar -->
-    <color name="progress_background">#151a1e</color>
-    <color name="progress_secondary_background">#2c343c</color>
-    <color name="progress_raced_background">#22272d</color>
-    <color name="progress_text_color">#ffffff</color>
-    <color name="progress_text_shadow">#000000</color>
-    <color name="progress_personal_best_flag">#ffa300</color>
-
-    <!-- Stroke ratio bar -->
-    <color name="stroke_ratio_stroke">#58ba59</color>
-    <color name="stroke_ratio_recovery">#d05c5c</color>
 </resources>

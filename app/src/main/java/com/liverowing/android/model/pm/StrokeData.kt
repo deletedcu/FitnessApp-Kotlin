@@ -1,17 +1,12 @@
 package com.liverowing.android.model.pm
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
-import android.os.Parcelable
 import com.liverowing.android.extensions.calcDistance
 import com.liverowing.android.extensions.calcTime
-import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
 data class StrokeData(val elapsedTime: Double,
                       val distance: Double,
                       val driveLength: Float,
@@ -23,7 +18,7 @@ data class StrokeData(val elapsedTime: Double,
                       val workPerStroke: Float,
                       val strokeCount: Int
 
-) : Parcelable {
+) {
     companion object {
         fun fromCharacteristic(data: BluetoothGattCharacteristic): StrokeData {
             val elapsedTime = data.calcTime(0)

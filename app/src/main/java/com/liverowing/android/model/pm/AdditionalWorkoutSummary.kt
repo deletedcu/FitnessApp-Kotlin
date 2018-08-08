@@ -1,10 +1,7 @@
 package com.liverowing.android.model.pm
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
-import android.os.Parcelable
 import com.liverowing.android.extensions.calcLogEntryDateTime
-import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**

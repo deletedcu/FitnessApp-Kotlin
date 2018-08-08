@@ -1,12 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'androidx.navigation.safeargs'
+
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     repositories {
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
@@ -14,69 +19,67 @@ android {
     defaultConfig {
         applicationId "com.liverowing.android"
         minSdkVersion 21
-        targetSdkVersion 27
+        buildToolsVersion "28.0.1"
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-        manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.liverowing.auth'
-        ]
-    }
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-        exclude 'META-INF/main.kotlin_module'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation "com.android.support:support-compat:27.1.1"
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:preference-v7:27.1.1'
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    def parseVersion = '1.17.3'
+    def nav_version = "1.0.0-alpha04"
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
-    implementation 'com.parse:parse-android:1.17.3'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'io.github.yavski:fab-speed-dial:1.0.6'
-    implementation 'com.github.hotchemi:khronos:0.9.0'
-    implementation 'org.greenrobot:eventbus:3.1.1'
-    kapt 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    // use -ktx for Kotlin
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version" // use -ktx for Kotlin
+
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation 'net.openid:appauth:0.7.0'
-    implementation 'com.facebook.android:facebook-android-sdk:4.32.0'
-    implementation 'com.kaopiz:kprogresshud:1.1.0'
+
+    implementation('com.hannesdorfmann.mosby3:mvp-lce:3.1.0') {
+        exclude group: 'com.hannesdorfmann.mosby3', module: 'utils-fragment'
+    }
+    implementation 'com.hannesdorfmann.mosby3:mvp-queuing-presenter:3.1.0'
+    implementation('com.hannesdorfmann.mosby3:viewstate:3.1.0') {
+        exclude group: 'com.hannesdorfmann.mosby3', module: 'utils-fragment'
+    }
+
+    implementation "com.parse:parse-android:$parseVersion"
+    implementation "com.parse:parse-fcm-android:$parseVersion"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    // for logging API calls to LogCat
+
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
     implementation 'com.lapism:searchview:27.1.1.0.0'
 
-
-}
-
-kapt {
-    arguments {
-        arg('eventBusIndex', 'MyEventBusIndex')
-    }
+    implementation 'no.nordicsemi.android:ble:1.2.0'
+    implementation 'no.nordicsemi.android.support.v18:scanner:1.1.0'
 }

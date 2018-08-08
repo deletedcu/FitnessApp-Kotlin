@@ -1,17 +1,12 @@
 package com.liverowing.android.model.pm
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
-import android.os.Parcelable
 import com.liverowing.android.extensions.calcDistance
 import com.liverowing.android.extensions.calcTime
-import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
 data class AdditionalRowingStatus2(val elapsedTime: Double,
                                    val intervalCount: Int,
                                    val avgPower: Int,
@@ -21,7 +16,7 @@ data class AdditionalRowingStatus2(val elapsedTime: Double,
                                    val splitIntAvgCals: Int,
                                    val lastSplitTime: Double,
                                    val lastSplitDistance: Double
-) : Parcelable {
+) {
     companion object {
         fun fromCharacteristic(data: BluetoothGattCharacteristic): AdditionalRowingStatus2 {
             val elapsedTime = data.calcTime(0)

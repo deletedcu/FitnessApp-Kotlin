@@ -1,19 +1,14 @@
 package com.liverowing.android.model.pm
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
-import android.os.Parcelable
 import com.liverowing.android.extensions.calcDistance
 import com.liverowing.android.extensions.calcLogEntryDateTime
 import com.liverowing.android.extensions.calcTime
-import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
 data class WorkoutSummary(val logDateTime: Date,
                           val elapsedTime: Double,
                           val distance: Double,
@@ -26,7 +21,7 @@ data class WorkoutSummary(val logDateTime: Date,
                           val recoveryHeartRate: Int,
                           val workoutType: WorkoutType,
                           val averagePace: Float
-) : Parcelable {
+) {
     companion object {
         fun fromCharacteristic(data: BluetoothGattCharacteristic) : WorkoutSummary {
             val logEntryDateTime = data.calcLogEntryDateTime(0)

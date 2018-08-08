@@ -2,15 +2,13 @@ package com.liverowing.android.model.parse
 
 import android.util.Base64
 import com.liverowing.android.model.pm.WorkoutState
-import com.parse.ParseClassName
-import com.parse.ParseFile
-import com.parse.ParseObject
-import com.parse.ParseQuery
+import com.parse.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.internal.StringSerializer
 import kotlinx.serialization.json.JSON
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 import java.util.*
 import kotlin.collections.Map
 
@@ -26,7 +24,7 @@ class Workout : ParseObject() {
     var startTime by ParseDelegate<Date?>()
     var averageWatts by ParseDelegate<Int?>()
     var duration by ParseDelegate<Double?>()
-    var averageSplitTime by ParseDelegate<Float?>()
+    var averageSplitTime by ParseDelegate<Number?>()
     var isDone by ParseDelegate<Boolean?>()
     var averageHeartRate by ParseDelegate<Int?>()
     var meters by ParseDelegate<Int?>()
@@ -37,7 +35,7 @@ class Workout : ParseObject() {
     var isChallenge by ParseDelegate<Boolean?>()
     var dataPoints by ParseDelegate<ParseFile?>()
     var totalStrokeCount by ParseDelegate<Int?>()
-    var totalTime by ParseDelegate<Int?>()
+    var totalTime by ParseDelegate<Number?>()
     var affiliate by ParseDelegate<Affiliate?>()
     var dragFactor by ParseDelegate<Int?>()
     var reGrown by ParseDelegate<Int?>()
@@ -51,6 +49,19 @@ class Workout : ParseObject() {
             val search = ParseQuery.getQuery(Workout::class.java)
             search.include("createdBy")
             return search.get(objectId)
+        }
+
+        fun forUser(user: ParseUser, workoutTypes: Set<Int>, start: Int = 0): ParseQuery<Workout> {
+            val userWorkouts = ParseQuery.getQuery(Workout::class.java)
+            userWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
+            userWorkouts.whereEqualTo("createdBy", user)
+            if (workoutTypes.isNotEmpty()) {
+                userWorkouts.whereContainedIn("workoutType.type", workoutTypes)
+            }
+            userWorkouts.include("workoutType.createdBy")
+            userWorkouts.addDescendingOrder("createdAt")
+
+            return userWorkouts
         }
     }
 

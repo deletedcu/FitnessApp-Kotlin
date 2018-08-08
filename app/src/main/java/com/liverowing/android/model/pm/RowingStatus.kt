@@ -1,11 +1,8 @@
 package com.liverowing.android.model.pm
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
-import android.os.Parcelable
 import com.liverowing.android.extensions.calcDistance
 import com.liverowing.android.extensions.calcTime
 import com.liverowing.android.extensions.calcWorkoutDurationDistance
-import kotlinx.android.parcel.Parcelize
 import kotlin.math.floor
 
 /**

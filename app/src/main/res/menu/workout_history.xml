@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/ic_filter"
+        android:title="Filter"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:enabled="false"
+                android:title="WORKOUT TYPE" />
+            <group android:checkableBehavior="all">
+                <item
+                    android:id="@+id/action_single_distance"
+                    android:title="Single distance" />
+                <item
+                    android:id="@+id/action_single_time"
+                    android:title="Single time" />
+                <item
+                    android:id="@+id/action_intervals"
+                    android:title="Intervals" />
+            </group>
+        </menu>
+    </item>
+</menu>

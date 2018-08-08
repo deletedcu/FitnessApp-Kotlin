@@ -15,11 +15,7 @@
         <item>@color/hat_color12</item>
     </integer-array>
 
-    <string-array name="workout_categories">
-        <item>Featured</item>
-        <item>Community</item>
-        <item>Recent &amp; Liked</item>
-        <item>My Custom</item>
-        <item>Affiliate</item>
+    <string-array name="split_comparisons">
+        <item>Personal best</item>
     </string-array>
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="false" android:state_pressed="false">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:top="-5dp" android:left="-5dp" android:right="-5dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#ffffff" />
+                    <stroke android:color="@color/secondaryDarkColor" android:width="2dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.liverowing.android.dashboard.DashboardFragment"
+        android:label="Dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_workoutBrowserDetailActivity"
+            app:destination="@+id/workoutBrowserDetailActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_workoutBrowserFragment"
+            app:destination="@id/workoutBrowserFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/calculatorsFragment"
+        android:name="com.liverowing.android.calculators.CalculatorsFragment"
+        android:label="Calculators"
+        tools:layout="@layout/fragment_calculators" />
+    <fragment
+        android:id="@+id/workoutHistoryFragment"
+        android:name="com.liverowing.android.workouthistory.WorkoutHistoryFragment"
+        android:label="Workout History"
+        tools:layout="@layout/fragment_workout_history">
+        <action
+            android:id="@+id/action_workoutHistoryFragment_to_workoutHistoryDetailActivity"
+            app:destination="@id/workoutHistoryDetailActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <activity
+        android:id="@+id/workoutHistoryDetailActivity"
+        android:name="com.liverowing.android.workouthistory.detail.WorkoutHistoryDetailActivity"
+        android:label="activity_workout_history_detail"
+        tools:layout="@layout/activity_workout_history_detail" >
+        <deepLink app:uri="liverowing.com/workout/{workoutId}"  />
+    </activity>
+    <activity
+        android:id="@+id/workoutBrowserDetailActivity"
+        android:name="com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailActivity"
+        android:label="activity_workout_browser_detail"
+        tools:layout="@layout/activity_workout_browser_detail" />
+    <fragment
+        android:id="@+id/workoutBrowserFragment"
+        android:name="com.liverowing.android.workoutbrowser.WorkoutBrowserFragment"
+        android:label="Workout Browser" >
+        <action
+            android:id="@+id/action_workoutBrowserFragment_to_workoutBrowserDetailActivity"
+            app:destination="@id/workoutBrowserDetailActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceScanFragment"
+        android:name="com.liverowing.android.devicescan.DeviceScanFragment"
+        android:label="activity_device_scan"
+        tools:layout="@layout/fragment_device_scan" />
+</navigation>
