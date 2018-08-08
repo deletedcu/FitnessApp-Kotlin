@@ -47,11 +47,11 @@ class WorkoutTypeLeadersAndStatsFragment : Fragment() {
 
         f_workout_type_leaders_and_stats_recyclerview.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            adapter = UserStatsAdapter(userStats, Glide.with(this), { image, userStats ->
+            adapter = UserStatsAdapter(userStats, Glide.with(this)) { image, userStats ->
                 run {
                     Log.d("LiveRowing", "Clicked UserStats row")
                 }
-            })
+            }
             //addItemDecoration(SimpleItemDecorator(15))
         }
     }
