@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundOverlayColor"
+    tools:context=".activity.login.SignupActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:background="@color/com_facebook_blue"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_with_email"
+                android:textSize="@dimen/text_size_13"
+                android:textColor="@color/black_overlay"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
+
+            <FrameLayout
+                android:id="@+id/layout_signup_page"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.liverowing.android.view.StepBarView
+                android:id="@+id/a_signup_stepbar"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="32dp">
+
+                <Button
+                    android:id="@+id/btn_fuck_this"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/fuck_this"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/btn_next"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/hat_color3"
+                    android:text="@string/next"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/primaryTextColor"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -8,7 +8,7 @@
     <color name="secondaryDarkColor">#a7a7a7</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#000000</color>
-
+    <color name="backgroundOverlayColor">#fcfcfc</color>
     <color name="black_overlay">#99000000</color>
 
     <!-- "Hat" colors (used by flag on race view) -->

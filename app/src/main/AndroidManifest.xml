@@ -116,6 +116,10 @@
         <activity
             android:name=".activity.login.LoginActivity"
             android:theme="@style/AppTheme.LoginRegister" />
+        <activity
+            android:name=".activity.login.SignupActivity"
+            android:theme="@style/AppTheme.LoginRegister"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

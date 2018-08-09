@@ -105,7 +105,10 @@ class LoginActivity : AppCompatActivity() {
             false
         })
 
-        a_login_signup_button.setOnClickListener {  }
+        a_login_signup_button.setOnClickListener {
+            var intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+        }
 
         /*
         val intent = Intent(activity, MainActivity::class.java)
