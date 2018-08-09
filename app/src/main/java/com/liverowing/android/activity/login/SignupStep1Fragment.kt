@@ -32,14 +32,14 @@ class SignupStep1Fragment: Fragment() {
 
     private fun checkValidation() : Boolean {
         if (username.isEmpty()) {
-            a_signup_username.editText.error = "Username is empty!"
+            a_signup_username.editText!!.error = "Username is empty!"
             return false
         }
         if (email.isEmpty()) {
-            a_signup_email.editText.error = "Email is empty!"
+            a_signup_email.editText!!.error = "Email is empty!"
             return false
         } else if (!email.isValidEmail()) {
-            a_signup_email.editText.error = "Invalid email!"
+            a_signup_email.editText!!.error = "Invalid email!"
             return false
         }
         return true
