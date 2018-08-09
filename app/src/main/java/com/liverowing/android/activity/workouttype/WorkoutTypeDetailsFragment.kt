@@ -84,10 +84,12 @@ class WorkoutTypeDetailsFragment : Fragment() {
         }
 
         if (workoutType.createdBy!!.image != null && workoutType.createdBy!!.image?.url != null) {
-            Glide.with(activity)
-                    .load(workoutType.createdBy?.image?.url)
-                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                    .into(f_workout_type_details_createdby_image)
+            activity?.let {
+                Glide.with(it)
+                        .load(workoutType.createdBy?.image?.url)
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .into(f_workout_type_details_createdby_image)
+            }
         }
     }
 }

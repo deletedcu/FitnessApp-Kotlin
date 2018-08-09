@@ -167,7 +167,7 @@ class RaceActivity : AppCompatActivity(), WorkoutRecorder.Callback {
                 .load(me.image?.url)
                 .apply(RequestOptions().transform(RoundedCorners(12)))
                 .into(object : SimpleTarget<Bitmap>(60.dpToPx() - 12, 60.dpToPx() - 12) {
-                    override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         race_racing_me_progress.image = resource
                     }
                 })
