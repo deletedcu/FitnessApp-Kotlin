@@ -68,6 +68,8 @@ dependencies {
     implementation "com.parse:parse-android:$parseVersion"
     implementation "com.parse:parse-fcm-android:$parseVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+
+    implementation 'com.kaopiz:kprogresshud:1.1.0'
     // for logging API calls to LogCat
 
 

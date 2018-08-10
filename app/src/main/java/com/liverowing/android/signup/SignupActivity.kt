@@ -1,24 +1,38 @@
 package com.liverowing.android.signup
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
+import com.kaopiz.kprogresshud.KProgressHUD
+import com.liverowing.android.LiveRowing
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.activity.login.SignupStep1Fragment
 import com.liverowing.android.activity.login.SignupStep2Fragment
 import com.liverowing.android.activity.login.SignupStep3Fragment
 import com.liverowing.android.activity.login.SignupStep4Fragment
+import com.liverowing.android.model.parse.User
 import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
+import com.parse.ParseException
+import com.parse.ParseUser
 import kotlinx.android.synthetic.main.activity_signup.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, ResultListener {
 
     var currentStep: Int = 1
     var currentFragment: BaseStepFragment? = null
+
+    var newUser: User = User()
+    var password: String = ""
+
+    private lateinit var hud: KProgressHUD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +40,7 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
         window.statusBarColor = Color.TRANSPARENT
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
+        hud = KProgressHUD.create(this)
         setupUI()
     }
 
@@ -35,15 +50,7 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
         }
 
         btn_next.setOnClickListener {
-
             currentFragment!!.checkValidation()
-//            if (currentStep < 4) {
-//                currentStep ++
-//                a_signup_stepbar.currentStep = currentStep
-//                updateFragment()
-//            } else {
-//                finish()
-//            }
         }
 
         currentStep = 1
@@ -61,6 +68,10 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
             else -> null
         }
 
+        if (currentStep == 4) {
+            (currentFragment as SignupStep4Fragment).userName = newUser.username
+        }
+
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
@@ -72,11 +83,66 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
 
     override fun createPresenter() = SignupPresenter()
 
-    override fun showError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onResultListener(state: Boolean, data: HashMap<String, String>) {
+        if (state) {
+            when (currentStep) {
+                1 -> {
+                    newUser.username = data.get("username")
+                    newUser.email = data.get("email")
+                    currentStep ++
+                    a_signup_stepbar.currentStep = currentStep
+                    updateFragment()
+                }
+                2 -> {
+                    newUser.setPassword(data.get("password"))
+                    password = data.get("password")!!
+                    currentStep ++
+                    a_signup_stepbar.currentStep = currentStep
+                    updateFragment()
+                }
+                3 -> {
+                    newUser.weight = data.get("weight")!!.toInt()
+                    newUser.height = data.get("height")!!.toInt()
+                    newUser.isMetric = data.get("isMetric")!!.toBoolean()
+                    currentStep ++
+                    a_signup_stepbar.currentStep = currentStep
+                    updateFragment()
+                }
+                4 -> {
+                    val birthday = data.get("birthday")
+                    val pattern = "MM/dd/yyyy"
+                    var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
+                    newUser.dob = simpleDateFormat.parse(birthday)
+
+//                    presenter.signup(newUser, password)
+                }
+                else -> {}
+            }
+        }
     }
 
-    override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
-        Log.d("OnResultListener", data.toString())
+    override fun showLoading() {
+        hud.show()
     }
+
+    override fun showError(e: ParseException) {
+        hud.dismiss()
+        val message = when(e.code) {
+            ParseException.USERNAME_MISSING -> "Username/email is required"
+            ParseException.PASSWORD_MISSING -> "Password is required"
+            ParseException.OBJECT_NOT_FOUND -> "Invalid credentials"
+            else -> LiveRowing.parseErrorMessageFromException(e)
+        }
+
+        if (message.isNotEmpty()) {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun signupuccessful(user: ParseUser) {
+        hud.dismiss()
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
 }

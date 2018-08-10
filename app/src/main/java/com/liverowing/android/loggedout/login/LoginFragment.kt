@@ -1,6 +1,7 @@
 package com.liverowing.android.loggedout.login
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,6 +21,9 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.OnClickListener {
+
+    private val REQUEST_SIGNUP_CODE = 1001
+
     override fun createPresenter() = LoginPresenter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,7 +54,7 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
 
             R.id.f_login_signin_signup -> {
                 val intent = Intent(activity, SignupActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, REQUEST_SIGNUP_CODE)
             }
 
             R.id.f_login_login_button -> login()
@@ -84,5 +88,16 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
         activity?.supportFinishAfterTransition()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_SIGNUP_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
+                activity?.supportFinishAfterTransition()
+            }
+        }
     }
 }

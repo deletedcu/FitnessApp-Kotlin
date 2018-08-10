@@ -27,28 +27,23 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        
     }
 
     override fun checkValidation() {
         if (username.isEmpty()) {
-            a_signup_username.editText!!.error = "Username is empty!"
-            listener!!.onResultListener(false, null)
-            return
-        }
-        if (email.isEmpty()) {
-            a_signup_email.editText!!.error = "Email is empty!"
-            listener!!.onResultListener(false, null)
-            return
+            a_signup_username_text.requestFocus()
+            a_signup_username_text.error = "Username is empty!"
+        } else if (email.isEmpty()) {
+            a_signup_email_text.requestFocus()
+            a_signup_email_text.error = "Email is empty!"
         } else if (!email.isValidEmail()) {
-            a_signup_email.editText!!.error = "Invalid email!"
-            listener!!.onResultListener(false, null)
-            return
+            a_signup_email_text.requestFocus()
+            a_signup_email_text.error = "Invalid email!"
+        } else {
+            var map = HashMap<String, String>()
+            map.put("username", username)
+            map.put("email", email)
+            listener!!.onResultListener(true, map)
         }
-        var map = HashMap<String, String>()
-        map.put("username", username)
-        map.put("email", email)
-        listener!!.onResultListener(true, map)
     }
 }

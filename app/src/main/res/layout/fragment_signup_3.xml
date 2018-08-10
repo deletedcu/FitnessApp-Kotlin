@@ -29,7 +29,7 @@
             android:layout_marginTop="@dimen/margin_16">
 
             <RadioButton
-                android:id="@+id/radio_system_standard"
+                android:id="@+id/a_signup_system_standard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/standard_system"
@@ -45,7 +45,7 @@
                 android:layout_marginStart="@dimen/margin_32"/>
 
             <RadioButton
-                android:id="@+id/radio_system_metric"
+                android:id="@+id/a_signup_system_metric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/metric_system"
@@ -83,19 +83,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:textColorHint="@color/textColor"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/a_signup_height_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="cm"
                     android:gravity="right"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/textColorDark"
-                    android:imeOptions="actionNext"/>
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:maxLength="3"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,19 +107,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:textColorHint="@color/textColor"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/a_signup_weight_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="kilos"
                     android:gravity="right"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/textColorDark"
-                    android:imeOptions="actionDone"/>
+                    android:inputType="number"
+                    android:imeOptions="actionDone"
+                    android:maxLength="3"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

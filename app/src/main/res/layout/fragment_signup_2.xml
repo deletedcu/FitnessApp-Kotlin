@@ -32,10 +32,10 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/a_signup_password_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/textColorDark"
                 android:hint="@string/password"
                 android:imeOptions="actionNext"/>
 
@@ -62,10 +62,10 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/a_signup_password_confirm_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/textColorDark"
                 android:hint="@string/password"
                 android:imeOptions="actionDone"/>
 
