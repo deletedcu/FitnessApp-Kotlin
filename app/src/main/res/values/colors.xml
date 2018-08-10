@@ -19,4 +19,7 @@
     <color name="hat_color10">#c98e53</color>
     <color name="hat_color11">#efd092</color>
     <color name="hat_color12">#545454</color>
+
+    <color name="backgroundOverlayColor">#fcfcfc</color>
+
 </resources>

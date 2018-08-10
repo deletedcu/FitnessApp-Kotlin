@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.liverowing.android.LiveRowing
 import java.util.*
+import java.util.regex.Pattern
 
 val Context.application: LiveRowing
     get() = applicationContext as LiveRowing
@@ -57,7 +58,13 @@ fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
     return sb.toString()
 }
 
+val EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$"
 
+// used for validate if the current String is an email
+fun String.isValidEmail(): Boolean {
+    val pattern = Pattern.compile(EMAIL_PATTERN)
+    return pattern.matcher(this).matches()
+}
 
 fun BluetoothGattCharacteristic.calcLogEntryDateTime(offset: Int): Date {
     return Date()

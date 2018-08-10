@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.appcompat.widget.FitWindowsFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundOverlayColor"
-    tools:context=".activity.login.SignupActivity">
+    tools:context=".signup.SignupActivity">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="@dimen/margin_32">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -23,21 +23,29 @@
             android:layout_marginStart="@dimen/margin_16">
 
             <ImageView
-                android:layout_width="188dp"
-                android:layout_height="20dp"
-                app:srcCompat="@drawable/liverowing" />
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:paddingStart="@dimen/margin_8"
+                android:scaleType="fitStart"
+                android:src="@drawable/liverowing"
+                android:transitionName="logo"
+                app:layout_constraintDimensionRatio=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/liverowing" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/signup_with_email"
-                android:textSize="@dimen/text_size_13"
-                android:textColor="@color/black_overlay"
-                android:layout_marginTop="@dimen/margin_8"/>
+                android:layout_marginTop="@dimen/margin_8"
+                android:paddingStart="@dimen/margin_8"
+                android:text="Sign up with email"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -53,14 +61,14 @@
 
             </FrameLayout>
 
-        </android.support.v7.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.liverowing.android.view.StepBarView
+            <com.liverowing.android.signup.StepBarView
                 android:id="@+id/a_signup_stepbar"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -68,7 +76,7 @@
                 android:layout_marginLeft="72dp"
                 android:layout_marginRight="72dp"/>
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -83,7 +91,7 @@
                     android:layout_height="48dp"
                     android:background="@android:color/transparent"
                     android:text="@string/fuck_this"
-                    android:textColor="@color/black_overlay"/>
+                    android:textColor="@color/textColorDark"/>
 
                 <Button
                     android:id="@+id/btn_next"
@@ -92,12 +100,12 @@
                     android:backgroundTint="@color/hat_color3"
                     android:text="@string/next"
                     android:layout_marginLeft="16dp"
-                    android:textColor="@color/primaryTextColor"/>
+                    android:textColor="@android:color/white"/>
 
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-</FrameLayout>
+</androidx.appcompat.widget.FitWindowsFrameLayout>

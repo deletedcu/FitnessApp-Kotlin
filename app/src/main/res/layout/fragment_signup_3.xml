@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,9 +18,9 @@
             android:text="@string/system_description"
             android:textSize="@dimen/text_size_12"
             android:textStyle="bold"
-            android:textColor="@color/black_overlay"
+            android:textColor="@color/textColorDark"
             android:layout_marginTop="@dimen/margin_16"
-            android:layout_marginLeft="@dimen/margin_4"/>
+            android:layout_marginStart="@dimen/margin_4"/>
 
         <RadioGroup
             android:id="@+id/radio_system"
@@ -32,31 +33,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/standard_system"
-                android:textColor="@color/black_overlay"
+                android:textColor="@color/textColorDark"
                 android:checked="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/standard_system_description"
-                android:textColor="@color/secondaryDarkColor"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/text_size_10"
-                android:layout_marginLeft="@dimen/margin_32"/>
+                android:layout_marginStart="@dimen/margin_32"/>
 
             <RadioButton
                 android:id="@+id/radio_system_metric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/metric_system"
-                android:textColor="@color/black_overlay"/>
+                android:textColor="@color/textColorDark"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/metric_system_description"
-                android:textColor="@color/secondaryDarkColor"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/text_size_10"
-                android:layout_marginLeft="@dimen/margin_32"/>
+                android:layout_marginStart="@dimen/margin_32"/>
 
         </RadioGroup>
 
@@ -66,63 +67,67 @@
             android:maxLines="2"
             android:text="@string/height_description"
             android:textSize="@dimen/text_size_12"
-            android:textColor="@color/black_overlay"
+            android:textColor="@color/textColorDark"
             android:textStyle="bold"
             android:layout_marginTop="@dimen/margin_16"
-            android:layout_marginLeft="@dimen/margin_4"/>
+            android:layout_marginStart="@dimen/margin_4"/>
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/margin_16">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/a_signup_height"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:textColorHint="@color/secondaryDarkColor">
+                android:textColorHint="@color/textColor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="cm"
                     android:gravity="right"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/black_overlay"
-                    android:maxLines="1"
+                    android:textColor="@color/textColorDark"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/a_signup_weight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:textColorHint="@color/secondaryDarkColor">
+                android:textColorHint="@color/textColor"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="kilos"
                     android:gravity="right"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/black_overlay"
-                    android:maxLines="1"
+                    android:textColor="@color/textColorDark"
                     android:imeOptions="actionDone"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-    </android.support.v7.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

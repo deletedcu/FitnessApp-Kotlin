@@ -13,6 +13,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
+import com.liverowing.android.signup.SignupActivity
 import com.parse.ParseException
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -48,8 +49,8 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
             }
 
             R.id.f_login_signin_signup -> {
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, f_login_logo, "logo")
-                view?.findNavController()?.navigate(R.id.action_loginFragment_to_signupFragment, options.toBundle())
+                val intent = Intent(activity, SignupActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.f_login_login_button -> login()
