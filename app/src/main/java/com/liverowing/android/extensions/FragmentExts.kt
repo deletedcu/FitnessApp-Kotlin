@@ -3,6 +3,7 @@ package com.liverowing.android.extensions
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.liverowing.android.signup.fragments.ResultListener
 
 fun Fragment.isPermissionGranted(permission: String) =
         ActivityCompat.checkSelfPermission(activity!!, permission) == PackageManager.PERMISSION_GRANTED

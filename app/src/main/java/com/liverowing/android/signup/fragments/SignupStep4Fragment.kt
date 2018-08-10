@@ -7,11 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.liverowing.android.R
+import com.liverowing.android.signup.fragments.BaseStepFragment
+import com.liverowing.android.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_4.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SignupStep4Fragment: Fragment() {
+class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragment() {
+    override fun checkValidation() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun checkValidation(listener: ResultListener) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     var myCalendar: Calendar = Calendar.getInstance()
 

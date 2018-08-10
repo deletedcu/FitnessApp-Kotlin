@@ -2,20 +2,23 @@ package com.liverowing.android.signup
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.liverowing.android.R
 import com.liverowing.android.activity.login.SignupStep1Fragment
 import com.liverowing.android.activity.login.SignupStep2Fragment
 import com.liverowing.android.activity.login.SignupStep3Fragment
 import com.liverowing.android.activity.login.SignupStep4Fragment
+import com.liverowing.android.signup.fragments.BaseStepFragment
+import com.liverowing.android.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.activity_signup.*
 
-class SignupActivity: AppCompatActivity() {
+class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, ResultListener {
 
     var currentStep: Int = 1
-    var currentFragment: Fragment? = null
+    var currentFragment: BaseStepFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,13 +35,15 @@ class SignupActivity: AppCompatActivity() {
         }
 
         btn_next.setOnClickListener {
-            if (currentStep < 4) {
-                currentStep ++
-                a_signup_stepbar.currentStep = currentStep
-                updateFragment()
-            } else {
-                finish()
-            }
+
+            currentFragment!!.checkValidation()
+//            if (currentStep < 4) {
+//                currentStep ++
+//                a_signup_stepbar.currentStep = currentStep
+//                updateFragment()
+//            } else {
+//                finish()
+//            }
         }
 
         currentStep = 1
@@ -49,11 +54,11 @@ class SignupActivity: AppCompatActivity() {
 
     fun updateFragment() {
         currentFragment = when (currentStep) {
-            1 -> SignupStep1Fragment()
-            2 -> SignupStep2Fragment()
-            3 -> SignupStep3Fragment()
-            4 -> SignupStep4Fragment()
-            else -> Fragment()
+            1 -> SignupStep1Fragment(this)
+            2 -> SignupStep2Fragment(this)
+            3 -> SignupStep3Fragment(this)
+            4 -> SignupStep4Fragment(this)
+            else -> null
         }
 
         supportFragmentManager
@@ -63,5 +68,15 @@ class SignupActivity: AppCompatActivity() {
                 .commit()
 
 
+    }
+
+    override fun createPresenter() = SignupPresenter()
+
+    override fun showError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
+        Log.d("OnResultListener", data.toString())
     }
 }

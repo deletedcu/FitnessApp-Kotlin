@@ -4,20 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.liverowing.android.R
 import com.liverowing.android.extensions.isValidEmail
+import com.liverowing.android.signup.fragments.BaseStepFragment
+import com.liverowing.android.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_1.*
 
-class SignupStep1Fragment: Fragment() {
+class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragment() {
 
     var username: String = ""
         get() {
-            return a_signup_username.editText!!.text.toString()
+            return a_signup_username_text.text.toString()
         }
     var email: String = ""
         get() {
-            return a_signup_email.editText!!.text.toString()
+            return a_signup_email_text.text.toString()
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,18 +31,24 @@ class SignupStep1Fragment: Fragment() {
         
     }
 
-    private fun checkValidation() : Boolean {
+    override fun checkValidation() {
         if (username.isEmpty()) {
             a_signup_username.editText!!.error = "Username is empty!"
-            return false
+            listener!!.onResultListener(false, null)
+            return
         }
         if (email.isEmpty()) {
             a_signup_email.editText!!.error = "Email is empty!"
-            return false
+            listener!!.onResultListener(false, null)
+            return
         } else if (!email.isValidEmail()) {
             a_signup_email.editText!!.error = "Invalid email!"
-            return false
+            listener!!.onResultListener(false, null)
+            return
         }
-        return true
+        var map = HashMap<String, String>()
+        map.put("username", username)
+        map.put("email", email)
+        listener!!.onResultListener(true, map)
     }
 }
