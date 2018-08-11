@@ -38,7 +38,8 @@
                 android:textColor="@color/textColorDark"
                 android:hint="@string/username"
                 android:inputType="textPersonName"
-                android:imeOptions="actionNext"/>
+                android:imeOptions="actionNext"
+                android:ems="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

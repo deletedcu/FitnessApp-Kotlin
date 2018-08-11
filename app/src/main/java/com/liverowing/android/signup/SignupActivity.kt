@@ -9,7 +9,6 @@ import android.widget.Toast
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
-import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.activity.login.SignupStep1Fragment
 import com.liverowing.android.activity.login.SignupStep2Fragment
@@ -68,9 +67,6 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
             else -> null
         }
 
-        if (currentStep == 4) {
-            (currentFragment as SignupStep4Fragment).userName = newUser.username
-        }
 
         supportFragmentManager
                 .beginTransaction()
@@ -78,6 +74,9 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
                 .replace(R.id.layout_signup_page, currentFragment!!)
                 .commit()
 
+        if (currentStep == 4) {
+            (currentFragment as SignupStep4Fragment).userName = newUser.username
+        }
 
     }
 

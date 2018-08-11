@@ -66,6 +66,11 @@ fun String.isValidEmail(): Boolean {
     return pattern.matcher(this).matches()
 }
 
+fun String.isValidUserName(): Boolean {
+    val pattern = Pattern.compile("[a-z]")
+    return pattern.matcher(this).matches()
+}
+
 fun BluetoothGattCharacteristic.calcLogEntryDateTime(offset: Int): Date {
     return Date()
 }
