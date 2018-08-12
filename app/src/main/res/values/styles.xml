@@ -83,4 +83,15 @@
         <item name="android:textColor">@color/textColor</item>
     </style>
 
+    <style name="TextDescriptionSmall">
+        <item name="android:textSize">10dp</item>
+        <item name="android:textColor">@color/textColorDark</item>
+    </style>
+
+    <style name="TextDescriptionSmallBold">
+        <item name="android:textSize">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textColorDark</item>
+    </style>
+
 </resources>

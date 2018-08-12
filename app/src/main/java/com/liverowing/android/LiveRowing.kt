@@ -11,7 +11,6 @@ import timber.log.Timber
 import com.squareup.leakcanary.RefWatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import androidx.multidex.MultiDex
 
 class LiveRowing : Application() {
     companion object {
@@ -69,11 +68,6 @@ class LiveRowing : Application() {
 
         Parse.initialize(conf)
         //ParseUser.logOut()
-    }
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(base)
-        MultiDex.install(base)
     }
 
 }

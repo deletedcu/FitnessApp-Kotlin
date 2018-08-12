@@ -23,7 +23,7 @@
             android:layout_marginStart="@dimen/margin_4"/>
 
         <RadioGroup
-            android:id="@+id/radio_system"
+            android:id="@+id/a_signup_radio_system"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_16">
@@ -78,51 +78,79 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/margin_16">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/a_signup_height"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/a_signup_height_text"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/a_signup_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="cm"
-                    android:gravity="right"
-                    android:inputType="number"
-                    android:imeOptions="actionNext"
-                    android:maxLength="3"/>
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/a_signup_height_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:inputType="number"
+                        android:imeOptions="actionNext"
+                        android:focusableInTouchMode="false"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/a_signup_height_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextDescriptionSmall"
+                    android:gravity="right"
+                    android:layout_marginEnd="@dimen/margin_4"/>
+
+            </LinearLayout>
+
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/a_signup_weight"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/a_signup_weight_text"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/a_signup_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="kilos"
-                    android:gravity="right"
-                    android:inputType="number"
-                    android:imeOptions="actionDone"
-                    android:maxLength="3"/>
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/a_signup_weight_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:inputType="number"
+                        android:imeOptions="actionDone"
+                        android:maxLength="3"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/a_signup_weight_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextDescriptionSmall"
+                    android:gravity="right"
+                    android:layout_marginEnd="@dimen/margin_4"/>
+
+            </LinearLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

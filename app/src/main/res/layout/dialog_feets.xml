@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="250dp"
+    android:layout_height="350dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feet on the left, Inch on the right"
+        android:layout_margin="@dimen/margin_8"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <com.liverowing.android.signup.views.MyNumberPicker
+            android:id="@+id/numberpicker_feet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            min="3"
+            max="9"
+            val="5"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="'"
+            android:textSize="@dimen/text_size_15"
+            android:layout_margin="@dimen/margin_4"/>
+
+        <com.liverowing.android.signup.views.MyNumberPicker
+            android:id="@+id/numberpicker_inch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            min="0"
+            max="11"
+            val="6"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="″"
+            android:textSize="@dimen/text_size_15"
+            android:layout_margin="@dimen/margin_4"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/a_dialog_feets_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"/>
+
+        <Button
+            android:id="@+id/a_dialog_feets_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="OK"/>
+
+    </LinearLayout>
+
+</LinearLayout>
