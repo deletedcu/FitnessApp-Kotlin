@@ -37,8 +37,8 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
 
         fragmentAdapter = WorkoutHistoryDetailAdapter(childFragmentManager)
         contentView.adapter = fragmentAdapter
-        contentView.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(a_workout_history_detail_tabs))
-        a_workout_history_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
+        contentView.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(f_workout_history_detail_tabs))
+        f_workout_history_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
 
         loadData(false)
     }

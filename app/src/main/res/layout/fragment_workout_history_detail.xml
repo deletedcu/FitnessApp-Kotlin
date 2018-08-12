@@ -15,7 +15,7 @@
         <include layout="@layout/workout_detail_collapsing_toolbar" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/a_workout_history_detail_tabs"
+            android:id="@+id/f_workout_history_detail_tabs"
             style="@style/AppTheme.Widget.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

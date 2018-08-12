@@ -9,7 +9,6 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -27,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_device_scan.*
 import timber.log.Timber
 
 
-
 class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<BluetoothDeviceAndStatus>, DeviceScanView, DeviceScanPresenter>(), DeviceScanView, SwipeRefreshLayout.OnRefreshListener {
     companion object {
         const val REQUEST_ENABLE_BT = 1
@@ -41,9 +39,7 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
 
     private val dataSet = mutableListOf<BluetoothDeviceAndStatus>()
 
-    override fun createPresenter(): DeviceScanPresenter {
-        return DeviceScanPresenter(activity!!)
-    }
+    override fun createPresenter() = DeviceScanPresenter(activity!!)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_device_scan, container, false)
@@ -82,7 +78,7 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
         }
 
         contentView.setOnRefreshListener(this@DeviceScanFragment)
-        recyclerView = a_device_scan_recyclerview.apply {
+        recyclerView = f_device_scan_recyclerview.apply {
             setHasFixedSize(true)
             addItemDecoration(viewDividerItemDecoration)
             layoutManager = viewManager
@@ -93,12 +89,6 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
     override fun onDestroy() {
         super.onDestroy()
         presenter.stopScanning()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
