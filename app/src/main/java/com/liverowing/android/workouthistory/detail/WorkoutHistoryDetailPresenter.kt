@@ -1,16 +1,19 @@
 package com.liverowing.android.workouthistory.detail
 
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
+import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.model.parse.Workout
 import com.parse.ParseQuery
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
-// TODO: Should refactor out EventBus from here eventually..
-class WorkoutHistoryDetailPresenter : MvpBasePresenter<WorkoutHistoryDetailView>() {
-    fun getWorkout(workoutId: String? = null) {
-        Timber.d("** getWorkout ($workoutId)")
-        if (workoutId !== null) {
+class WorkoutHistoryDetailPresenter : EventBusPresenter<WorkoutHistoryDetailView>() {
+    fun getWorkout(workoutId: String) {
+        if (workoutId.isEmpty()) {
+            eventBus.register(this)
+        } else {
+
             ifViewAttached { it.showLoading(false) }
 
             val query = ParseQuery.getQuery(Workout::class.java)
@@ -19,22 +22,20 @@ class WorkoutHistoryDetailPresenter : MvpBasePresenter<WorkoutHistoryDetailView>
                 if (e !== null) {
                     ifViewAttached { it.showError(e, false) }
                 } else {
-                    ifViewAttached {
-                        EventBus.getDefault().postSticky(workout)
-                        it.setData(workout)
-                        it.showContent()
-                    }
+                    EventBus.getDefault().postSticky(workout)
                 }
-            }
-
-        } else {
-            val workout = EventBus.getDefault().getStickyEvent(Workout::class.java)
-
-            ifViewAttached {
-                it.setData(workout)
-                it.showContent()
             }
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onWorkoutMainThread(workout: Workout) {
+        Timber.d("*** onWorkoutMainThread")
+        ifViewAttached {
+            Timber.d("*** onWorkoutMainThread - setData")
+            it.setData(workout)
+            Timber.d("*** onWorkoutMainThread - showContent")
+            it.showContent()
+        }
+    }
 }

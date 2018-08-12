@@ -2,9 +2,7 @@ package com.liverowing.android.dashboard
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,20 +18,27 @@ import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.greenrobot.eventbus.EventBus
 
+
 class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView {
     private lateinit var itemDecoration: GridSpanDecoration
 
-    private val featuredWorkouts = arrayListOf<WorkoutType>()
+    private val featuredWorkouts = mutableListOf<WorkoutType>()
     private lateinit var featuredWorkoutsViewManager: RecyclerView.LayoutManager
     private lateinit var featuredWorkoutsRecyclerView: RecyclerView
     private lateinit var featuredWorkoutsViewAdapter: RecyclerView.Adapter<*>
 
-    private val recentAndLikedWorkouts = arrayListOf<WorkoutType>()
+    private val recentAndLikedWorkouts = mutableListOf<WorkoutType>()
     private lateinit var recentAndLikedWorkoutsViewManager: RecyclerView.LayoutManager
     private lateinit var recentAndLikedWorkoutsRecyclerView: RecyclerView
     private lateinit var recentAndLikedWorkoutsViewAdapter: RecyclerView.Adapter<*>
 
     override fun createPresenter() = DashboardPresenter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        retainInstance = true
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
@@ -42,7 +47,20 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).setupToolbar(f_dashboard_toolbar)
+
         setupDashboard(view)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        if (savedInstanceState == null && featuredWorkouts.size == 0) {
+            presenter.loadDashboard()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.fragment_dashboard, menu)
     }
 
     private fun setupDashboard(view: View) {
@@ -66,6 +84,8 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         featuredWorkoutsRecyclerView = f_dashboard_featured_workouts_recyclerview.apply {
             addItemDecoration(itemDecoration)
             layoutManager = featuredWorkoutsViewManager
+
+
             adapter = featuredWorkoutsViewAdapter
         }
 
@@ -80,14 +100,6 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             addItemDecoration(itemDecoration)
             layoutManager = recentAndLikedWorkoutsViewManager
             adapter = recentAndLikedWorkoutsViewAdapter
-        }
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        if (savedInstanceState === null) {
-            presenter.loadDashboard()
         }
     }
 
@@ -149,9 +161,19 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     private fun showFabMenu() {
         mFabOpen = true
-        f_dashboard_fab_just_row.visibility = View.VISIBLE
-        f_dashboard_fab_single_distance.visibility = View.VISIBLE
-        f_dashboard_fab_single_time.visibility = View.VISIBLE
+        f_dashboard_fab_just_row.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+        }
+        f_dashboard_fab_single_distance.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+        }
+
+        f_dashboard_fab_single_time.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+        }
 
         f_dashboard_fab_background.apply {
             alpha = 0f
@@ -159,18 +181,19 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             animate().alpha(1f)
         }
 
-        f_dashboard_fab_single_time.animate().translationY((-65f).dpToPx())
-        f_dashboard_fab_single_distance.animate().translationY((-120f).dpToPx())
-        f_dashboard_fab_just_row.animate().translationY((-175f).dpToPx())
+        f_dashboard_fab_single_time.animate().alpha(1f).translationY((-65f).dpToPx())
+        f_dashboard_fab_single_distance.animate().alpha(1f).translationY((-120f).dpToPx())
+        f_dashboard_fab_just_row.animate().alpha(1f).translationY((-175f).dpToPx())
     }
+
 
     private fun closeFabMenu() {
         mFabOpen = false
 
         f_dashboard_fab_background.animate().alpha(0f).withEndAction { f_dashboard_fab_background.visibility = View.GONE }
-        f_dashboard_fab_single_time.animate().translationY(0f)
-        f_dashboard_fab_single_distance.animate().translationY(0f)
-        f_dashboard_fab_just_row.animate().translationY(0f).withEndAction {
+        f_dashboard_fab_single_time.animate().alpha(0f).translationY(0f)
+        f_dashboard_fab_single_distance.animate().alpha(0f).translationY(0f)
+        f_dashboard_fab_just_row.animate().alpha(0f).translationY(0f).withEndAction {
             f_dashboard_fab_single_time.visibility = View.GONE
             f_dashboard_fab_single_distance.visibility = View.GONE
             f_dashboard_fab_just_row.visibility = View.GONE

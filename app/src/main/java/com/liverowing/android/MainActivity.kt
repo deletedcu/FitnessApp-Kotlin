@@ -9,7 +9,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -30,8 +29,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setupToolbar(toolbar: Toolbar, collapsingToolbarLayout: CollapsingToolbarLayout? = null) {
-        Timber.i("Setting up toolbar, $toolbar, $collapsingToolbarLayout")
-
         setSupportActionBar(toolbar)
 
         // TODO: This will likely cause a memory leak and should be refactored so we control listeners and not NavigationUI

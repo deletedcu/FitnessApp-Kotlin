@@ -22,17 +22,26 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
     private var workoutType: WorkoutType? = null
 
     override fun createPresenter(): WorkoutHistoryDetailPresenter {
+        Timber.d("**** createPresenter")
         return WorkoutHistoryDetailPresenter()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("**** onCreate")
         setHasOptionsMenu(true)
+        retainInstance = true
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Timber.d("**** onCreateView")
         return inflater.inflate(R.layout.fragment_workout_history_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.d("**** onViewCreated1")
         super.onViewCreated(view, savedInstanceState)
-
+        Timber.d("**** onViewCreated2")
         (activity as MainActivity).setupToolbar(workout_detail_toolbar, workout_detail_collapsing_toolbar)
 
         fragmentAdapter = WorkoutHistoryDetailAdapter(childFragmentManager)
@@ -41,6 +50,7 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
         f_workout_history_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
 
         loadData(false)
+        Timber.d("**** onViewCreated3")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -48,7 +58,6 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
     }
 
     override fun setData(data: Workout?) {
-        Timber.d("** setData")
         workout = data
         workoutType = workout?.workoutType
 
@@ -69,12 +78,10 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        Timber.d("** loadData")
-        presenter.getWorkout()
+
     }
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
-        Timber.d("** getErrorMessage")
         return e?.message!!
     }
 }
