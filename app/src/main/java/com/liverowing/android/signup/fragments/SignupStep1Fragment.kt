@@ -1,6 +1,7 @@
 package com.liverowing.android.activity.login
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.liverowing.android.extensions.isValidEmail
 import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_1.*
+import android.text.Spanned
 
 class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragment() {
 
@@ -27,6 +29,12 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        a_signup_username_text.filters = arrayOf<InputFilter>(object : InputFilter.AllCaps() {
+            override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence {
+                return source.toString().toLowerCase().replace(" ", "")
+            }
+        })
     }
 
     override fun checkValidation() {
