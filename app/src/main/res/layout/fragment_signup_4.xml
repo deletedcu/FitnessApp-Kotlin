@@ -39,6 +39,32 @@
             android:textColor="@color/textColorDark"
             android:layout_margin="@dimen/margin_4"/>
 
+        <RadioGroup
+            android:id="@+id/radio_system"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/a_signup_gender_male"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/male"
+                android:textColor="@color/textColorDark"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/a_signup_gender_female"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="@string/female"
+                android:textColor="@color/textColorDark"/>
+
+        </RadioGroup>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

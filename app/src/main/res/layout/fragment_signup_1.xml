@@ -37,9 +37,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/textColorDark"
                 android:hint="@string/username"
-                android:inputType="textPersonName"
-                android:imeOptions="actionNext"
-                android:ems="10"/>
+                android:digits="abcdefghijklmnopqrstuvwxyz"
+                android:maxLines="1"
+                android:maxLength="12"
+                android:imeOptions="actionDone"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

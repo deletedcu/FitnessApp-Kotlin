@@ -1,7 +1,6 @@
 package com.liverowing.android.signup
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
@@ -17,7 +16,9 @@ import com.liverowing.android.activity.login.SignupStep4Fragment
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
+import com.liverowing.android.util.Utils
 import com.parse.ParseException
+import com.parse.ParseFile
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.text.SimpleDateFormat
@@ -45,7 +46,14 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
 
     fun setupUI() {
         btn_fuck_this.setOnClickListener {
-            finish()
+            if (currentStep > 1) {
+                supportFragmentManager.popBackStack()
+                currentStep --
+                currentFragment = supportFragmentManager.findFragmentByTag(currentStep.toString()) as BaseStepFragment?
+                a_signup_stepbar.currentStep = currentStep
+            } else {
+                finish()
+            }
         }
 
         btn_next.setOnClickListener {
@@ -67,11 +75,11 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
             else -> null
         }
 
-
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.layout_signup_page, currentFragment!!)
+                .replace(R.id.layout_signup_page, currentFragment!!, currentStep.toString())
+                .addToBackStack(null)
                 .commit()
 
         if (currentStep == 4) {
@@ -112,8 +120,16 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
                     val pattern = "MM/dd/yyyy"
                     var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
                     newUser.dob = simpleDateFormat.parse(birthday)
+                    newUser.gender = data.get("gender")
 
-//                    presenter.signup(newUser, password)
+//                    if (data.containsKey("image")) {
+//                        val encodeString = data.get("image")
+//                        val byteArray = Utils.StringToBytes(encodeString!!)
+//                        if (byteArray != null)
+//                            newUser.image = ParseFile(byteArray)
+//                    }
+
+                    presenter.signup(newUser, password)
                 }
                 else -> {}
             }

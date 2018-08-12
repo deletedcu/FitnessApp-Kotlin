@@ -27,6 +27,7 @@ import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.extensions.rotateImageIfRequired
 import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
+import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_4.*
 import java.io.File
 import java.io.IOException
@@ -44,10 +45,18 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     private val REQUEST_PHOTO = 1001
 
     var myBitmap: Bitmap? = null
-    var picUri: Uri? = null
 
     var birthday: String = ""
         get() = a_signup_birthday.text.toString()
+
+    var gender: String = "male"
+        get() {
+            if (a_signup_gender_male.isChecked) {
+                return "male"
+            } else {
+                return "female"
+            }
+        }
 
     var myCalendar: Calendar = Calendar.getInstance()
 
@@ -66,7 +75,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         }
 
         a_signup_birthday.setOnClickListener {
-            DatePickerDialog(activity, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(this!!.activity, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
         a_signup_username_textview.text = userName
@@ -83,7 +92,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         }
 
         btn_signup_profile_picture.setOnClickListener {
-//            startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+            startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
         }
     }
 
@@ -100,6 +109,13 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         } else {
             var data = HashMap<String, String>()
             data.put("birthday", birthday)
+            data.put("gender", gender)
+            if (myBitmap != null) {
+                val encodeString = Utils.BitmapToString(myBitmap!!)
+                if (encodeString != null) {
+                    data.put("image", encodeString)
+                }
+            }
             listener.onResultListener(true, data)
         }
     }
@@ -118,7 +134,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         val packageManager = activity!!.packageManager;
 
         // collect all camera intents
-        val captureIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         val listCam = packageManager.queryIntentActivities(captureIntent, 0);
         for (res in listCam) {
             val intent = Intent(captureIntent);
@@ -169,7 +185,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         var outputFileUri: Uri? = null
         val file = getOutputMediaFile(activity!!.resources.getString(R.string.app_name) + File.separator + "profile")
         if (file != null) {
-            val outputUri = FileProvider.getUriForFile(activity!!, BuildConfig.APPLICATION_ID + ".provider", file)
+            val outputUri = FileProvider.getUriForFile(activity!!, BuildConfig.APPLICATION_ID + ".fileprovider", file)
             return outputUri
         } else {
             return null
@@ -272,11 +288,11 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         when (requestCode) {
             REQUEST_PHOTO -> {
                 if (resultCode === Activity.RESULT_OK) {
-                    if (getPickImageResultUri(data) != null) {
-                        picUri = getPickImageResultUri(data)
+                    val picUri = getPickImageResultUri(data)
+                    if (picUri != null) {
                         try {
                             var tempBitmap = MediaStore.Images.Media.getBitmap(activity!!.getContentResolver(), picUri)
-                            tempBitmap = tempBitmap.rotateImageIfRequired(picUri!!)
+                            tempBitmap = tempBitmap.rotateImageIfRequired(activity!!, picUri!!)
                             myBitmap = tempBitmap.getResizedBitmap(500)
 
                             btn_signup_profile_picture.background = BitmapDrawable(activity!!.resources, myBitmap)

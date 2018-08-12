@@ -1,17 +1,23 @@
 package com.liverowing.android.extensions
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import java.io.IOException
-
+import android.os.Build
 
 @Throws(IOException::class)
-fun Bitmap.rotateImageIfRequired(selectedImage: Uri): Bitmap {
+fun Bitmap.rotateImageIfRequired(context: Context, uri: Uri): Bitmap {
 
-    val ei = ExifInterface(selectedImage.getPath())
-    val orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+    val input = context.getContentResolver().openInputStream(uri)
+    val ei: ExifInterface
+    if (Build.VERSION.SDK_INT > 23)
+        ei = ExifInterface(input)
+    else
+        ei = ExifInterface(uri.getPath())
+    val orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
 
     when (orientation) {
         ExifInterface.ORIENTATION_ROTATE_90 -> return this.rotateImage(90F)
