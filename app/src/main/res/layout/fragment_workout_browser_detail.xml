@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".workoutbrowser.detail.WorkoutBrowserDetailActivity">
+    tools:context=".workoutbrowser.detail.WorkoutBrowserDetailFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <include layout="@layout/workout_detail_collapsing_toolbar" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/a_workout_browser_detail_tabs"
+            android:id="@+id/f_workout_browser_detail_tabs"
             style="@style/AppTheme.Widget.TabLayout"
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
@@ -40,7 +40,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/a_workout_browser_detail_container"
+        android:id="@+id/f_workout_browser_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

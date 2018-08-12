@@ -9,8 +9,8 @@ apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion 28
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
     repositories {
         jcenter()
@@ -24,7 +24,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -32,30 +31,32 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '28.0.1'
 }
 
 dependencies {
     def parseVersion = '1.17.3'
-    def nav_version = "1.0.0-alpha04"
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    def nav_version = "1.0.0-alpha05"
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:support-compat:28.0.0-rc01'
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
-    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-rc01'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     // use -ktx for Kotlin
-    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
-    // use -ktx for Kotlin
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version" // use -ktx for Kotlin
+
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
+
     implementation('com.hannesdorfmann.mosby3:mvp-lce:3.1.0') {
         exclude group: 'com.hannesdorfmann.mosby3', module: 'utils-fragment'
     }
@@ -63,16 +64,22 @@ dependencies {
     implementation('com.hannesdorfmann.mosby3:viewstate:3.1.0') {
         exclude group: 'com.hannesdorfmann.mosby3', module: 'utils-fragment'
     }
+
     implementation "com.parse:parse-android:$parseVersion"
     implementation "com.parse:parse-fcm-android:$parseVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-    implementation 'com.kaopiz:kprogresshud:1.1.0'
     // for logging API calls to LogCat
+
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
     implementation 'org.greenrobot:eventbus:3.1.1'
+
     implementation 'com.lapism:searchview:27.1.1.0.0'
+
     implementation 'no.nordicsemi.android:ble:1.2.0'
     implementation 'no.nordicsemi.android.support.v18:scanner:1.1.0'
 }

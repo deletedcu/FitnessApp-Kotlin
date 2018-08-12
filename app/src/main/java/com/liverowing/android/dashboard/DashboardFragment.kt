@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,6 +15,7 @@ import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
 import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.greenrobot.eventbus.EventBus
@@ -56,11 +58,10 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         itemDecoration = GridSpanDecoration(8.dpToPx())
 
         featuredWorkoutsViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
-        featuredWorkoutsViewAdapter = DashboardAdapter(580, featuredWorkouts, Glide.with(this), onClick = { _, workoutType ->
+        featuredWorkoutsViewAdapter = DashboardAdapter(580, featuredWorkouts, Glide.with(this)) { _, workoutType ->
             EventBus.getDefault().postSticky(workoutType)
-            //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
-            //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
-        })
+            view.findNavController().navigate(R.id.workoutBrowserDetailAction)
+        }
 
         featuredWorkoutsRecyclerView = f_dashboard_featured_workouts_recyclerview.apply {
             addItemDecoration(itemDecoration)
@@ -70,11 +71,10 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
 
         recentAndLikedWorkoutsViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
-        recentAndLikedWorkoutsViewAdapter = DashboardAdapter(400, recentAndLikedWorkouts, Glide.with(this), onClick = { _, workoutType ->
+        recentAndLikedWorkoutsViewAdapter = DashboardAdapter(400, recentAndLikedWorkouts, Glide.with(this)) { _, workoutType ->
             EventBus.getDefault().postSticky(workoutType)
-            //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
-            //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
-        })
+            view.findNavController().navigate(R.id.workoutBrowserDetailAction)
+        }
 
         recentAndLikedWorkoutsRecyclerView = f_dashboard_recent_and_liked_workouts_recyclerview.apply {
             addItemDecoration(itemDecoration)
@@ -131,6 +131,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
+
     private var mFabOpen: Boolean = false
     private fun fabOnClick(v: View) {
         when (v.id) {
@@ -163,7 +164,6 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         f_dashboard_fab_just_row.animate().translationY((-175f).dpToPx())
     }
 
-
     private fun closeFabMenu() {
         mFabOpen = false
 
@@ -178,6 +178,14 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     }
 
     private fun titleOnClick(v: View) {
+        val category = when (v.id) {
+            R.id.f_dashboard_featured_workouts_title -> WorkoutBrowserFragment.CATEGORY_FEATURED
+            R.id.f_dashboard_recent_and_liked_workouts_title -> WorkoutBrowserFragment.CATEGORY_RECENT_AND_LIKED
+            else -> WorkoutBrowserFragment.CATEGORY_FEATURED
+        }
 
+        val action = DashboardFragmentDirections.workoutBrowserAction()
+        action.setCategory(category)
+        v.findNavController().navigate(action)
     }
 }

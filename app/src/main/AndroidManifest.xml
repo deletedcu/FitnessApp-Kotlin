@@ -38,8 +38,8 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".workouthistory.detail.WorkoutHistoryDetailActivity" />
-        <activity android:name=".workoutbrowser.detail.WorkoutBrowserDetailActivity" />
+        <activity android:name=".workouthistory.detail.WorkoutHistoryDetailFragment" />
+        <activity android:name=".workoutbrowser.detail.WorkoutBrowserDetailFragment" />
         <activity android:name=".loggedout.LoggedOutActivity" />
         <activity android:name=".signup.SignupActivity" />
 

@@ -2,6 +2,7 @@ package com.liverowing.android.workoutbrowser
 
 import android.os.Bundle
 import android.view.*
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,6 +21,11 @@ import org.greenrobot.eventbus.EventBus
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener {
+    companion object {
+        const val CATEGORY_FEATURED = 1
+        const val CATEGORY_RECENT_AND_LIKED = 2
+    }
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: GridLayoutManager
@@ -49,12 +55,15 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         (activity as MainActivity).setupToolbar(f_workout_browser_toolbar)
 
+        val category = WorkoutBrowserFragmentArgs.fromBundle(arguments).category
+
+
         viewManager = GridLayoutManager(activity!!, 2)
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
-        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(this), onClick = { _, workout ->
+        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(this)) { _, workout ->
             EventBus.getDefault().postSticky(workout)
-            //view.findNavController().navigate(R.id.action_workoutBrowserFragment_to_workoutBrowserDetailActivity)
-        })
+            view.findNavController().navigate(R.id.workoutBrowserDetailAction)
+        }
 
         contentView.setOnRefreshListener(this@WorkoutBrowserFragment)
         recyclerView = f_workout_browser_recyclerview.apply {

@@ -9,6 +9,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -24,12 +25,16 @@ class MainActivity : AppCompatActivity() {
         if (a_main_drawer_layout.isDrawerOpen(GravityCompat.START)) {
             a_main_drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            a_main_drawer_layout.openDrawer(GravityCompat.START)
+            super.onBackPressed()
         }
     }
 
     fun setupToolbar(toolbar: Toolbar, collapsingToolbarLayout: CollapsingToolbarLayout? = null) {
+        Timber.i("Setting up toolbar, $toolbar, $collapsingToolbarLayout")
+
         setSupportActionBar(toolbar)
+
+        // TODO: This will likely cause a memory leak and should be refactored so we control listeners and not NavigationUI
         if (collapsingToolbarLayout != null) {
             NavigationUI.setupWithNavController(collapsingToolbarLayout, toolbar, navController, a_main_drawer_layout)
         } else {

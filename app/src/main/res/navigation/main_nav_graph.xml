@@ -7,14 +7,80 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.liverowing.android.dashboard.DashboardFragment" />
+        android:name="com.liverowing.android.dashboard.DashboardFragment">
+        <action
+            android:id="@+id/deviceScanAction"
+            app:destination="@id/deviceScanFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/workoutBrowserAction"
+            app:destination="@id/workoutBrowserFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="category"
+                android:defaultValue="1" />
+        </action>
+        <action
+            android:id="@+id/workoutBrowserDetailAction"
+            app:destination="@id/workoutBrowserDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/calculatorsAction"
+            app:destination="@id/calculatorsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/workoutHistoryAction"
+            app:destination="@id/workoutHistoryFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_enter_anim" />
+    </fragment>
     <fragment
         android:id="@+id/workoutBrowserFragment"
         android:name="com.liverowing.android.workoutbrowser.WorkoutBrowserFragment"
-        android:label="Workout browser" />
+        android:label="Workout browser">
+        <argument
+            android:name="category"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/workoutBrowserDetailAction"
+            app:destination="@id/workoutBrowserDetail"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/calculatorsFragment"
         android:name="com.liverowing.android.calculators.CalculatorsFragment"
         android:label="Calculators"
         tools:layout="@layout/fragment_calculators" />
+    <fragment
+        android:id="@+id/deviceScanFragment"
+        android:name="com.liverowing.android.devicescan.DeviceScanFragment"
+        android:label="Device scan"
+        tools:layout="@layout/fragment_device_scan" />
+    <fragment
+        android:id="@+id/workoutBrowserDetail"
+        android:name="com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragment"
+        android:label="WorkoutBrowserDetail"
+        tools:layout="@layout/fragment_workout_browser_detail" />
+    <fragment
+        android:id="@+id/workoutHistoryFragment"
+        android:name="com.liverowing.android.workouthistory.WorkoutHistoryFragment"
+        android:label="fragment_workout_history"
+        tools:layout="@layout/fragment_workout_history">
+        <action
+            android:id="@+id/workoutHistoryDetailAction"
+            app:destination="@id/workoutHistoryDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/workoutHistoryDetailFragment"
+        android:name="com.liverowing.android.workouthistory.detail.WorkoutHistoryDetailFragment"
+        android:label="fragment_workout_history_detail"
+        tools:layout="@layout/fragment_workout_history_detail" />
 </navigation>

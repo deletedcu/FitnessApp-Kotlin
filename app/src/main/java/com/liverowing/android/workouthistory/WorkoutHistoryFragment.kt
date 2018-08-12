@@ -3,6 +3,7 @@ package com.liverowing.android.workouthistory
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +13,12 @@ import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
 import com.liverowing.android.LiveRowing
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.R.id.*
 import com.liverowing.android.model.parse.Workout
 import kotlinx.android.synthetic.main.fragment_workout_history.*
 import org.greenrobot.eventbus.EventBus
-import timber.log.Timber
 
 class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>(), WorkoutHistoryView, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var recyclerView: RecyclerView
@@ -53,12 +54,13 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).setupToolbar(f_workout_history_toolbar)
+
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
         viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(this), onClick = { _, workout ->
-            Timber.d("Clicked a workout row: %s", workout)
             EventBus.getDefault().postSticky(workout)
-            //view.findNavController().navigate(R.id.action_workoutHistoryFragment_to_workoutHistoryDetailActivity)
+            view.findNavController().navigate(R.id.workoutHistoryDetailAction)
         }, onOptionsClick = { v, workout ->
             showOptionsMenu(v, workout)
         })

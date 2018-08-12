@@ -11,7 +11,7 @@
     app:expandedTitleMarginBottom="50dp"
     app:expandedTitleMarginStart="90dp"
     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-    tools:showIn="@layout/activity_workout_browser_detail">
+    tools:showIn="@layout/fragment_workout_browser_detail">
 
     <ImageView
         android:id="@+id/workout_detail_image"
