@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.LiveRowing
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import kotlinx.android.synthetic.main.fragment_calculators.*
-
 
 
 class CalculatorsFragment : MvpFragment<CalculatorsView, CalculatorsPresenter>(), CalculatorsView {
@@ -21,7 +21,6 @@ class CalculatorsFragment : MvpFragment<CalculatorsView, CalculatorsPresenter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onDestroy() {
@@ -35,6 +34,8 @@ class CalculatorsFragment : MvpFragment<CalculatorsView, CalculatorsPresenter>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).setupToolbar(f_calculators_toolbar)
 
         calculatorsAdapter = CalculatorsAdapter(childFragmentManager)
         f_calculators_container.adapter = calculatorsAdapter

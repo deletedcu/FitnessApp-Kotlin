@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".workouthistory.WorkoutHistoryFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/f_workout_browser_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -17,44 +26,45 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/f_workout_browser_category_tabs"
-            style="@style/AppTheme.Widget.Toolbar.TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="scrollable">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_category_tab_featured"
-                android:layout_width="wrap_content"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/f_workout_browser_category_tabs"
+                style="@style/AppTheme.Widget.Toolbar.TabLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Featured" />
+                app:tabMode="scrollable">
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_category_tab_community"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Community" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_browser_category_tab_featured"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Featured" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_category_tab_recent_and_liked"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recent &amp; Liked" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_browser_category_tab_community"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Community" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_category_tab_my_custom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Custom" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_browser_category_tab_recent_and_liked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recent &amp; Liked" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_category_tab_affiliate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Affiliate" />
-        </com.google.android.material.tabs.TabLayout>
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_browser_category_tab_my_custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Custom" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_browser_category_tab_affiliate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Affiliate" />
+            </com.google.android.material.tabs.TabLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/f_workout_browser_filter_tabs"
             style="@style/AppTheme.Widget.TabLayout"
@@ -95,8 +105,9 @@
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/loading_view"/>
-    <include layout="@layout/error_view"/>
+    <include layout="@layout/loading_view" />
+
+    <include layout="@layout/error_view" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/contentView"
@@ -104,10 +115,10 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/f_workout_browser_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/f_workout_browser_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

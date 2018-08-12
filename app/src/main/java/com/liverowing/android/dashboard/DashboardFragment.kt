@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
@@ -17,9 +17,8 @@ import com.liverowing.android.util.GridSpanDecoration
 import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.greenrobot.eventbus.EventBus
-import timber.log.Timber
 
-class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, View.OnClickListener {
+class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView {
     private lateinit var itemDecoration: GridSpanDecoration
 
     private val featuredWorkouts = arrayListOf<WorkoutType>()
@@ -40,12 +39,18 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).setupToolbar(f_dashboard_toolbar)
         setupDashboard(view)
     }
 
     private fun setupDashboard(view: View) {
-        f_dashboard_featured_workouts_title.setOnClickListener(this@DashboardFragment)
-        f_dashboard_recent_and_liked_workouts_title.setOnClickListener(this@DashboardFragment)
+        f_dashboard_fab.setOnClickListener { v -> fabOnClick(v) }
+        f_dashboard_fab_just_row.setOnClickListener { v -> fabOnClick(v) }
+        f_dashboard_fab_single_distance.setOnClickListener { v -> fabOnClick(v) }
+        f_dashboard_fab_single_time.setOnClickListener { v -> fabOnClick(v) }
+        f_dashboard_fab_background.setOnClickListener { v -> fabOnClick(v) }
+        f_dashboard_featured_workouts_title.setOnClickListener { v -> titleOnClick(v); }
+        f_dashboard_recent_and_liked_workouts_title.setOnClickListener { v -> titleOnClick(v); }
 
 
         itemDecoration = GridSpanDecoration(8.dpToPx())
@@ -54,7 +59,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         featuredWorkoutsViewAdapter = DashboardAdapter(580, featuredWorkouts, Glide.with(this), onClick = { _, workoutType ->
             EventBus.getDefault().postSticky(workoutType)
             //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
-            view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
+            //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
         })
 
         featuredWorkoutsRecyclerView = f_dashboard_featured_workouts_recyclerview.apply {
@@ -68,7 +73,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         recentAndLikedWorkoutsViewAdapter = DashboardAdapter(400, recentAndLikedWorkouts, Glide.with(this), onClick = { _, workoutType ->
             EventBus.getDefault().postSticky(workoutType)
             //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
-            view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
+            //view.findNavController().navigate(R.id.action_dashboardFragment_to_workoutBrowserDetailActivity)
         })
 
         recentAndLikedWorkoutsRecyclerView = f_dashboard_recent_and_liked_workouts_recyclerview.apply {
@@ -126,16 +131,53 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
-    override fun onClick(p0: View?) {
-        /*val category = when (p0?.id) {
-            R.id.f_dashboard_featured_workouts_title -> WORKOUT_CATEGORY_FEATURED
-            R.id.f_dashboard_recent_and_liked_workouts_title -> WORKOUT_CATEGORY_RECENT_AND_LIKED
-            else -> WORKOUT_CATEGORY_FEATURED
-        }*/
+    private var mFabOpen: Boolean = false
+    private fun fabOnClick(v: View) {
+        when (v.id) {
+            R.id.f_dashboard_fab_background,
+            R.id.f_dashboard_fab -> if (mFabOpen) closeFabMenu() else showFabMenu()
 
-        val bundle = Bundle().apply {
-            //putInt(WorkoutBrowserFragment.INTENT_WORKOUT_CATEGORY, category)
+            R.id.f_dashboard_fab_just_row -> {
+            }
+            R.id.f_dashboard_fab_single_distance -> {
+            }
+            R.id.action_single_time -> {
+            }
         }
-        view?.findNavController()?.navigate(R.id.action_dashboardFragment_to_workoutBrowserFragment, bundle)
+    }
+
+    private fun showFabMenu() {
+        mFabOpen = true
+        f_dashboard_fab_just_row.visibility = View.VISIBLE
+        f_dashboard_fab_single_distance.visibility = View.VISIBLE
+        f_dashboard_fab_single_time.visibility = View.VISIBLE
+
+        f_dashboard_fab_background.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate().alpha(1f)
+        }
+
+        f_dashboard_fab_single_time.animate().translationY((-65f).dpToPx())
+        f_dashboard_fab_single_distance.animate().translationY((-120f).dpToPx())
+        f_dashboard_fab_just_row.animate().translationY((-175f).dpToPx())
+    }
+
+
+    private fun closeFabMenu() {
+        mFabOpen = false
+
+        f_dashboard_fab_background.animate().alpha(0f).withEndAction { f_dashboard_fab_background.visibility = View.GONE }
+        f_dashboard_fab_single_time.animate().translationY(0f)
+        f_dashboard_fab_single_distance.animate().translationY(0f)
+        f_dashboard_fab_just_row.animate().translationY(0f).withEndAction {
+            f_dashboard_fab_single_time.visibility = View.GONE
+            f_dashboard_fab_single_distance.visibility = View.GONE
+            f_dashboard_fab_just_row.visibility = View.GONE
+        }
+    }
+
+    private fun titleOnClick(v: View) {
+
     }
 }

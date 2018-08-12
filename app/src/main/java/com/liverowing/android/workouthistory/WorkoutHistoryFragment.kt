@@ -3,7 +3,6 @@ package com.liverowing.android.workouthistory
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,14 +10,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
+import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
+import com.liverowing.android.LiveRowing
 import com.liverowing.android.R
 import com.liverowing.android.R.id.*
 import com.liverowing.android.model.parse.Workout
 import kotlinx.android.synthetic.main.fragment_workout_history.*
-import timber.log.Timber
-import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
-import com.liverowing.android.LiveRowing
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 
 class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>(), WorkoutHistoryView, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var recyclerView: RecyclerView
@@ -59,7 +58,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(this), onClick = { _, workout ->
             Timber.d("Clicked a workout row: %s", workout)
             EventBus.getDefault().postSticky(workout)
-            view.findNavController().navigate(R.id.action_workoutHistoryFragment_to_workoutHistoryDetailActivity)
+            //view.findNavController().navigate(R.id.action_workoutHistoryFragment_to_workoutHistoryDetailActivity)
         }, onOptionsClick = { v, workout ->
             showOptionsMenu(v, workout)
         })

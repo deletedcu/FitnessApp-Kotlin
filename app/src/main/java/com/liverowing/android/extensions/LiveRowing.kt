@@ -25,6 +25,18 @@ fun Int.dpToPx(): Int {
     return Math.round(px)
 }
 
+fun Float.pxToDp(): Float {
+    val metrics = Resources.getSystem().displayMetrics
+    val dp = this / (metrics.densityDpi / 160f)
+    return dp
+}
+
+fun Float.dpToPx(): Float {
+    val metrics = Resources.getSystem().displayMetrics
+    val px = this * (metrics.densityDpi / 160f)
+    return px
+}
+
 fun ViewGroup.inflate(layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
