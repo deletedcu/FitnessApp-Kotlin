@@ -23,7 +23,7 @@ class LiveRowing : Application() {
                 ParseException.CACHE_MISS -> ""
                 ParseException.CONNECTION_FAILED -> "Connection to LiveRowing servers failed."
                 ParseException.TIMEOUT -> "Connection to LiveRowing servers timed out."
-                else -> "Unknown error with code ${e.code}"
+                else -> "Unknown error with code ${e.code} - ${e.localizedMessage}"
             }
         }
     }

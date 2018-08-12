@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
@@ -24,6 +25,8 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
 
     private val REQUEST_SIGNUP_CODE = 1001
 
+    private lateinit var hud: KProgressHUD
+
     override fun createPresenter() = LoginPresenter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,13 +39,23 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
         f_login_forgot_password.setOnClickListener(this@LoginFragment)
         f_login_signin_signup.setOnClickListener(this@LoginFragment)
         f_login_login_button.setOnClickListener(this@LoginFragment)
+        hud = KProgressHUD.create(this.context)
     }
 
     private fun login() {
         val username = f_login_username_text.text.toString()
         val password = f_login_password_text.text.toString()
 
-        presenter.login(username, password)
+        if (username.isEmpty()) {
+            f_login_username_text.error = "Empty username!"
+            f_login_username_text.requestFocus()
+        } else if (password.isEmpty()) {
+            f_login_password_text.error = "Empty password!"
+            f_login_password_text.requestFocus()
+        } else {
+            hud.show()
+            presenter.login(username, password)
+        }
     }
 
     override fun onClick(v: View) {
@@ -71,6 +84,7 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
     }
 
     override fun showError(e: ParseException) {
+        hud.dismiss()
         f_login_login_button.isEnabled = true
         val message = when(e.code) {
             ParseException.USERNAME_MISSING -> "Username/email is required"
@@ -85,6 +99,7 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
     }
 
     override fun loginSuccessful(user: ParseUser) {
+        hud.dismiss()
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
         activity?.supportFinishAfterTransition()
