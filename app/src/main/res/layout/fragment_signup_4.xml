@@ -9,24 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/margin_16">
+        android:padding="@dimen/activity_vertical_margin">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:text="@string/birthday_description"
-            android:textSize="@dimen/text_size_12"
-            android:textStyle="bold"
-            android:textColor="@color/textColorDark"
-            android:layout_marginTop="@dimen/margin_16"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/margin_4"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/a_signup_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_8"
             android:editable="false"
             android:clickable="true"
             android:textColor="@color/textColorDark"/>
@@ -35,15 +33,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/birthday"
-            android:textSize="@dimen/text_size_10"
-            android:textColor="@color/textColorDark"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
             android:layout_margin="@dimen/margin_4"/>
 
         <RadioGroup
             android:id="@+id/radio_system"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:orientation="horizontal">
 
             <RadioButton
@@ -70,17 +67,15 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:text="@string/choose_profile_pic"
-            android:textSize="@dimen/text_size_12"
-            android:textColor="@color/textColorDark"
-            android:textStyle="bold"
-            android:layout_marginTop="@dimen/margin_16"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/margin_4"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_16">
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <ImageButton
                 android:id="@+id/btn_signup_profile_picture"
@@ -99,18 +94,16 @@
                     android:id="@+id/a_signup_username_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_4"
+                    android:layout_marginTop="8dp"
                     android:text="{username}"
-                    android:textSize="@dimen/text_size_15"
-                    android:textColor="@color/textColorDark"/>
+                    android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="@string/cant_wait"
-                    android:textSize="@dimen/text_size_10"
-                    android:textColor="@color/textColorDark"/>
+                    android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

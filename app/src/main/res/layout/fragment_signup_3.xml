@@ -9,24 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/margin_16">
+        android:padding="@dimen/activity_vertical_margin">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:text="@string/system_description"
-            android:textSize="@dimen/text_size_12"
-            android:textStyle="bold"
-            android:textColor="@color/textColorDark"
-            android:layout_marginTop="@dimen/margin_16"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/margin_4"/>
 
         <RadioGroup
             android:id="@+id/a_signup_radio_system"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_16">
+            android:layout_marginTop="@dimen/margin_8">
 
             <RadioButton
                 android:id="@+id/a_signup_system_standard"
@@ -40,8 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/standard_system_description"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/text_size_10"
+                android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
                 android:layout_marginStart="@dimen/margin_32"/>
 
             <RadioButton
@@ -55,8 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/metric_system_description"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/text_size_10"
+                android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
                 android:layout_marginStart="@dimen/margin_32"/>
 
         </RadioGroup>
@@ -66,17 +62,15 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:text="@string/height_description"
-            android:textSize="@dimen/text_size_12"
-            android:textColor="@color/textColorDark"
-            android:textStyle="bold"
-            android:layout_marginTop="@dimen/margin_16"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/margin_4"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_16">
+            android:layout_marginTop="@dimen/margin_8">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -105,7 +99,7 @@
                     android:id="@+id/a_signup_height_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextDescriptionSmall"
+                    android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
                     android:gravity="right"
                     android:layout_marginEnd="@dimen/margin_4"/>
 
@@ -144,7 +138,7 @@
                     android:id="@+id/a_signup_weight_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextDescriptionSmall"
+                    android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
                     android:gravity="right"
                     android:layout_marginEnd="@dimen/margin_4"/>
 

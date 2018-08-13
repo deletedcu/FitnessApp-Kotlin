@@ -79,18 +79,24 @@
         <item name="android:textColor">#000000</item>
     </style>
 
+    <style name="AppTheme.Widget.Button.Transparent">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
     <style name="AppTheme.TextAppearance.AppCompat.Title.Small" parent="TextAppearance.MaterialComponents.Overline">
         <item name="android:textColor">@color/textColor</item>
     </style>
 
-    <style name="TextDescriptionSmall">
-        <item name="android:textSize">10dp</item>
+    <style name="AppTheme.TextAppearance.AppCompat.Title.Description.Small" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/textColorDark</item>
     </style>
 
-    <style name="TextDescriptionSmallBold">
-        <item name="android:textSize">10dp</item>
-        <item name="android:textStyle">bold</item>
+    <style name="AppTheme.TextAppearance.AppCompat.Title.Description.Medium" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/textColorDark</item>
     </style>
 
