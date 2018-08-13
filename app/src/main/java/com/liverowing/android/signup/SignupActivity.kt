@@ -1,6 +1,5 @@
 package com.liverowing.android.signup
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
@@ -43,7 +42,7 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
     }
 
     fun setupUI() {
-        btn_fuck_this.setOnClickListener {
+        btn_back.setOnClickListener {
             if (currentStep > 1) {
                 supportFragmentManager.popBackStack()
                 currentStep --

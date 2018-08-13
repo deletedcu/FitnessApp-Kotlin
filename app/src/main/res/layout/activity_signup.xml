@@ -86,10 +86,10 @@
                 android:layout_marginRight="32dp">
 
                 <Button
-                    android:id="@+id/btn_fuck_this"
+                    android:id="@+id/btn_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fuck_this"
+                    android:text="@string/back"
                     style="@style/AppTheme.Widget.Button.Transparent"/>
 
                 <Button
