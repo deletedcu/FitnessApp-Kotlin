@@ -18,14 +18,14 @@
             android:text="@string/password_description"
             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/margin_4"/>
+            android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/a_signup_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginTop="@dimen/activity_vertical_margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -46,14 +46,14 @@
             android:text="@string/password_confirm_description"
             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/margin_4"/>
+            android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/a_signup_password_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginTop="@dimen/activity_vertical_margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 

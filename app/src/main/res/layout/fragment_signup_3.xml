@@ -18,13 +18,13 @@
             android:text="@string/system_description"
             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/margin_4"/>
+            android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
         <RadioGroup
             android:id="@+id/a_signup_radio_system"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_8">
+            android:layout_marginTop="@dimen/activity_vertical_margin_medium">
 
             <RadioButton
                 android:id="@+id/a_signup_system_standard"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/standard_system_description"
                 android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
-                android:layout_marginStart="@dimen/margin_32"/>
+                android:layout_marginStart="32dp"/>
 
             <RadioButton
                 android:id="@+id/a_signup_system_metric"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/metric_system_description"
                 android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
-                android:layout_marginStart="@dimen/margin_32"/>
+                android:layout_marginStart="32dp"/>
 
         </RadioGroup>
 
@@ -64,13 +64,13 @@
             android:text="@string/height_description"
             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/margin_4"/>
+            android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_8">
+            android:layout_marginTop="@dimen/activity_vertical_margin_medium">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
                     android:gravity="right"
-                    android:layout_marginEnd="@dimen/margin_4"/>
+                    android:layout_marginEnd="@dimen/activity_vertical_margin_small"/>
 
             </LinearLayout>
 
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
                     android:gravity="right"
-                    android:layout_marginEnd="@dimen/margin_4"/>
+                    android:layout_marginEnd="@dimen/activity_vertical_margin_small"/>
 
             </LinearLayout>
 

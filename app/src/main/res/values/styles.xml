@@ -98,6 +98,7 @@
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/textColorDark</item>
+        <item name="android:letterSpacing">0.0125</item>
     </style>
 
 </resources>

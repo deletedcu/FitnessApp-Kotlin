@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="250dp"
+    android:layout_width="300dp"
     android:layout_height="350dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Feet on the left, Inch on the right"
-        android:layout_margin="@dimen/margin_8"/>
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,8 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="'"
-            android:textSize="@dimen/text_size_15"
-            android:layout_margin="@dimen/margin_4"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_margin="@dimen/activity_vertical_margin_small"/>
 
         <com.liverowing.android.signup.views.MyNumberPicker
             android:id="@+id/numberpicker_inch"
@@ -44,8 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="″"
-            android:textSize="@dimen/text_size_15"
-            android:layout_margin="@dimen/margin_4"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_margin="@dimen/activity_vertical_margin_small"/>
 
     </LinearLayout>
 
@@ -59,14 +60,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            style="@style/AppTheme.Widget.Button.White"/>
 
         <Button
             android:id="@+id/a_dialog_feets_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="OK"/>
+            android:text="OK"
+            style="@style/AppTheme.Widget.Button.White"/>
 
     </LinearLayout>
 
