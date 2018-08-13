@@ -3,8 +3,8 @@ package com.liverowing.android.workouthistory.detail
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.liverowing.android.workouthistory.detail.details.WorkoutHistoryDetailsFragment
 import com.liverowing.android.workouthistory.detail.summary.WorkoutHistoryChartsFragment
-import com.liverowing.android.workouthistory.detail.summary.WorkoutHistoryDetailsFragment
 import com.liverowing.android.workouthistory.detail.summary.WorkoutHistorySplitsFragment
 import com.liverowing.android.workoutshared.leaderboards.WorkoutLeaderBoardsFragment
 

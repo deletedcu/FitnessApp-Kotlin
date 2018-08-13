@@ -1,5 +1,6 @@
 package com.liverowing.android.workoutbrowser.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import com.bumptech.glide.Glide
@@ -10,6 +11,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.race.RaceActivity
 import kotlinx.android.synthetic.main.fragment_workout_browser_detail.*
 import kotlinx.android.synthetic.main.workout_detail_collapsing_toolbar.*
 import org.greenrobot.eventbus.EventBus
@@ -37,6 +39,11 @@ class WorkoutBrowserDetailFragment : MvpFragment<WorkoutBrowserDetailView, Worko
         f_workout_browser_detail_container.adapter = fragmentAdapter
         f_workout_browser_detail_container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(f_workout_browser_detail_tabs))
         f_workout_browser_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(f_workout_browser_detail_container))
+
+        f_workout_browser_detail_fab.setOnClickListener {
+            val intent = Intent(activity, RaceActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
