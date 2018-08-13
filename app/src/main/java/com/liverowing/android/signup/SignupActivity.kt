@@ -1,6 +1,7 @@
 package com.liverowing.android.signup
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
@@ -21,6 +22,7 @@ import com.parse.ParseException
 import com.parse.ParseFile
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -124,9 +126,16 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
 
 //                    if (data.containsKey("image")) {
 //                        val encodeString = data.get("image")
-//                        val byteArray = Utils.StringToBytes(encodeString!!)
-//                        if (byteArray != null)
-//                            newUser.image = ParseFile(byteArray)
+//                        if (encodeString != null) {
+//                            val bitmap = Utils.StringToBitmap(encodeString)
+//                            val baos = ByteArrayOutputStream()
+//                            if (bitmap != null) {
+//                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+//                                val bytes= baos.toByteArray()
+//                                val parseFile = ParseFile("profilePicture.png", bytes)
+//                                newUser.image = parseFile
+//                            }
+//                        }
 //                    }
 
                     presenter.signup(newUser, password)

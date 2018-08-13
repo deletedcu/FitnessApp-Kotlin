@@ -13,7 +13,6 @@ class SignupPresenter: MvpBasePresenter<SignupView>() {
             if (e != null) {
                 ifViewAttached { it.showError(e) }
             } else {
-                newUser.saveInBackground()
                 login(newUser, password)
             }
         }
@@ -26,13 +25,33 @@ class SignupPresenter: MvpBasePresenter<SignupView>() {
             if (e != null) {
                 ifViewAttached { it.showError(e) }
             } else {
-                ParseUser.logInInBackground(newUser.username, password) { user, e ->
+                // Save user information
+                saveUser(realUser, newUser)
+
+                // Login with new user
+                ParseUser.logInInBackground(realUser.username, password) { user, e ->
                     if (e != null) {
                         ifViewAttached { it.showError(e) }
                     } else {
                         ifViewAttached { it.signupuccessful(user) }
                     }
                 }
+            }
+        }
+    }
+
+    fun saveUser(realUser: ParseUser, newUser: User) {
+        val user: User = realUser as User
+        user.isMetric = newUser.isMetric
+        user.gender = newUser.gender
+        user.weight = newUser.weight
+        user.height = newUser.height
+        user.dob = newUser.dob
+        user.image = newUser.image
+
+        user.saveInBackground {e: ParseException? ->
+            if (e != null) {
+                ifViewAttached { it.showError(e) }
             }
         }
     }
