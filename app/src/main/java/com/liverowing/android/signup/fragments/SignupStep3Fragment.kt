@@ -51,19 +51,19 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
     fun updateUI() {
         Utils.hideKeyboard(activity!!)
         if (isMetric) {
-            a_signup_height.hint = "cm"
-            a_signup_weight.hint = "kilos"
-            a_signup_height_description.text = getString(R.string.height_cm_description)
-            a_signup_weight_description.text = getString(R.string.weight_kg_description)
+            a_signup_height_text.hint = "165 cm"
+            a_signup_weight_text.hint = "80 kg"
+            a_signup_height.helperText = "HEIGHT(cm)"
+            a_signup_weight.helperText = "WEIGHT(kg)"
             a_signup_height_text.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(3))
             a_signup_height_text.isFocusableInTouchMode = true
             a_signup_height_text.setText(Utils.convertFeetToCM(height), TextView.BufferType.EDITABLE)
             a_signup_weight_text.setText(Utils.convertPoundToKg(weight), TextView.BufferType.EDITABLE)
         } else {
-            a_signup_height.hint = "fts."
-            a_signup_weight.hint = "lbs."
-            a_signup_height_description.text = getString(R.string.height_feet_description)
-            a_signup_weight_description.text = getString(R.string.weight_lbs_description)
+            a_signup_height_text.hint = "5'6″ ft"
+            a_signup_weight_text.hint = "156 lbs"
+            a_signup_height.helperText = "HEIGHT(ft)"
+            a_signup_weight.helperText = "WEIGHT(lbs)"
             a_signup_height_text.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(6))
             a_signup_height_text.isFocusableInTouchMode = false
             a_signup_height_text.setText(Utils.convertCMToFeet(height), TextView.BufferType.EDITABLE)

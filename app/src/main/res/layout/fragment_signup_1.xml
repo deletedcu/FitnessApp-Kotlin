@@ -35,8 +35,6 @@
                 android:id="@+id/a_signup_username_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColorDark"
-                android:hint="joerow84"
                 android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
                 android:maxLines="1"
                 android:maxLength="12"
@@ -69,8 +67,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/textColorDark"
-                android:hint="test@gmail.com"
                 android:imeOptions="actionDone"/>
 
         </com.google.android.material.textfield.TextInputLayout>

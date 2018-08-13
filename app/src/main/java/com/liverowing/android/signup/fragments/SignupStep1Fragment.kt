@@ -35,6 +35,9 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
                 return source.toString().toLowerCase().replace(" ", "")
             }
         })
+
+        a_signup_username_text.hint = "joerow84"
+        a_signup_email_text.hint = "test@gmail.com"
     }
 
     override fun checkValidation() {
