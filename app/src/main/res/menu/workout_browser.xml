@@ -12,7 +12,7 @@
     -->
     <item
         android:id="@+id/action_filter"
-        android:icon="@drawable/ic_filter"
+        android:icon="@drawable/ic_filter_list"
         android:orderInCategory="100"
         android:title="Filter"
         app:showAsAction="ifRoom">

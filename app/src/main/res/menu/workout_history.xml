@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:icon="@drawable/ic_filter"
+        android:icon="@drawable/ic_filter_list"
         android:title="Filter"
         app:showAsAction="always">
         <menu>
