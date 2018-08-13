@@ -60,6 +60,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
         viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(this), onClick = { _, workout ->
             EventBus.getDefault().postSticky(workout)
+            EventBus.getDefault().postSticky(workout.workoutType)
             view.findNavController().navigate(R.id.workoutHistoryDetailAction)
         }, onOptionsClick = { v, workout ->
             showOptionsMenu(v, workout)

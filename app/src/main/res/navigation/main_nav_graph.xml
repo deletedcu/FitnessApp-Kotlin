@@ -65,12 +65,11 @@
     <fragment
         android:id="@+id/workoutBrowserDetail"
         android:name="com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragment"
-        android:label="WorkoutBrowserDetail"
         tools:layout="@layout/fragment_workout_browser_detail" />
     <fragment
         android:id="@+id/workoutHistoryFragment"
         android:name="com.liverowing.android.workouthistory.WorkoutHistoryFragment"
-        android:label="fragment_workout_history"
+        android:label="Workout history"
         tools:layout="@layout/fragment_workout_history">
         <action
             android:id="@+id/workoutHistoryDetailAction"
@@ -81,6 +80,5 @@
     <fragment
         android:id="@+id/workoutHistoryDetailFragment"
         android:name="com.liverowing.android.workouthistory.detail.WorkoutHistoryDetailFragment"
-        android:label="fragment_workout_history_detail"
         tools:layout="@layout/fragment_workout_history_detail" />
 </navigation>

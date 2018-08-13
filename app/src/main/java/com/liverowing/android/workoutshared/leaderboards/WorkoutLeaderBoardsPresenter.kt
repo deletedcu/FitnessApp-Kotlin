@@ -1,4 +1,4 @@
-package com.liverowing.android.workoutbrowser.detail.leadersandstats
+package com.liverowing.android.workoutshared.leaderboards
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.liverowing.android.model.parse.User
@@ -6,7 +6,7 @@ import com.liverowing.android.model.parse.UserStats
 import com.liverowing.android.model.parse.WorkoutType
 import com.parse.ParseCloud
 
-class WorkoutBrowserDetailLeadersAndStatsPresenter : MvpBasePresenter<WorkoutBrowserDetailLeadersAndStatsView>() {
+class WorkoutLeaderBoardsPresenter : MvpBasePresenter<WorkoutLeaderBoardsView>() {
     fun loadUserStats(pullToRefresh: Boolean, workoutType: WorkoutType, user: User) {
         ifViewAttached {  it.showLoading(pullToRefresh) }
         val arguments = hashMapOf(

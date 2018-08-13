@@ -1,4 +1,4 @@
-package com.liverowing.android.workoutshared.workoutdetails
+package com.liverowing.android.workoutshared.details
 
 import android.view.View
 import android.view.ViewGroup

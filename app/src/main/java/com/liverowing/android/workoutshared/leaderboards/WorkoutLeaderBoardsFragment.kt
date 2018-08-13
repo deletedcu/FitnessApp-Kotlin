@@ -1,9 +1,7 @@
-package com.liverowing.android.workoutbrowser.detail.leadersandstats
+package com.liverowing.android.workoutshared.leaderboards
 
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,11 +20,11 @@ import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.UserStats
 import com.liverowing.android.model.parse.WorkoutType
 import com.parse.ParseUser
-import kotlinx.android.synthetic.main.fragment_workout_browser_detail_leaders_and_stats.*
+import kotlinx.android.synthetic.main.fragment_workout_leaderboards.*
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
-class WorkoutBrowserDetailLeadersAndStatsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<UserStats>, WorkoutBrowserDetailLeadersAndStatsView, WorkoutBrowserDetailLeadersAndStatsPresenter>(), WorkoutBrowserDetailLeadersAndStatsView, SwipeRefreshLayout.OnRefreshListener {
+class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<UserStats>, WorkoutLeaderBoardsView, WorkoutLeaderBoardsPresenter>(), WorkoutLeaderBoardsView, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -35,8 +33,8 @@ class WorkoutBrowserDetailLeadersAndStatsFragment : MvpLceViewStateFragment<Swip
 
     private lateinit var workoutType: WorkoutType
 
-    override fun createPresenter(): WorkoutBrowserDetailLeadersAndStatsPresenter {
-        return WorkoutBrowserDetailLeadersAndStatsPresenter()
+    override fun createPresenter(): WorkoutLeaderBoardsPresenter {
+        return WorkoutLeaderBoardsPresenter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +50,7 @@ class WorkoutBrowserDetailLeadersAndStatsFragment : MvpLceViewStateFragment<Swip
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workout_browser_detail_leaders_and_stats, container, false)
+        return inflater.inflate(R.layout.fragment_workout_leaderboards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,11 +58,11 @@ class WorkoutBrowserDetailLeadersAndStatsFragment : MvpLceViewStateFragment<Swip
 
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutBrowserDetailLeadersAndStatsAdapter(dataSet, Glide.with(this)) { _, workout ->
+        viewAdapter = WorkoutLeaderBoardsAdapter(dataSet, Glide.with(this)) { _, workout ->
             Timber.d("Clicked a userstats row: %s", workout)
         }
 
-        contentView.setOnRefreshListener(this@WorkoutBrowserDetailLeadersAndStatsFragment)
+        contentView.setOnRefreshListener(this@WorkoutLeaderBoardsFragment)
         recyclerView = f_workout_browser_detail_leaders_and_stats_recyclerview.apply {
             setHasFixedSize(true)
             addItemDecoration(viewDividerItemDecoration)
@@ -102,8 +100,8 @@ class WorkoutBrowserDetailLeadersAndStatsFragment : MvpLceViewStateFragment<Swip
         contentView.isRefreshing = pullToRefresh
     }
 
-    override fun createViewState(): LceViewState<List<UserStats>, WorkoutBrowserDetailLeadersAndStatsView> {
-        return RetainingLceViewState<List<UserStats>, WorkoutBrowserDetailLeadersAndStatsView>()
+    override fun createViewState(): LceViewState<List<UserStats>, WorkoutLeaderBoardsView> {
+        return RetainingLceViewState<List<UserStats>, WorkoutLeaderBoardsView>()
     }
 
     override fun getData(): List<UserStats> {

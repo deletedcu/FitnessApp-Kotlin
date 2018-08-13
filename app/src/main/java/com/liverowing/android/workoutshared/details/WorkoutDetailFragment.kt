@@ -1,4 +1,4 @@
-package com.liverowing.android.workoutshared.workoutdetails
+package com.liverowing.android.workoutshared.details
 
 
 import android.os.Bundle
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_workout_details.*
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
-class WorkoutBrowserDetail : Fragment() {
+class WorkoutDetailFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager

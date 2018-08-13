@@ -1,4 +1,4 @@
-package com.liverowing.android.workoutshared.workoutdetails
+package com.liverowing.android.workoutshared.details
 
 
 import android.os.Bundle
@@ -11,7 +11,7 @@ import com.liverowing.android.R
 import com.liverowing.android.model.parse.WorkoutType
 import org.greenrobot.eventbus.EventBus
 
-class WorkoutBrowserDetailWorkoutHistoryFragment : Fragment() {
+class WorkoutHistoryFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         LiveRowing.refWatcher(this.activity).watch(this)

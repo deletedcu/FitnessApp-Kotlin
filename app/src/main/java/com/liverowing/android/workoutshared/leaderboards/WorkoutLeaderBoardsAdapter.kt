@@ -1,4 +1,4 @@
-package com.liverowing.android.workoutbrowser.detail.leadersandstats
+package com.liverowing.android.workoutshared.leaderboards
 
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import com.liverowing.android.extensions.inflate
 import com.liverowing.android.model.parse.UserStats
 import kotlinx.android.synthetic.main.fragment_workout_browser_detail_leaders_and_stats_item.view.*
 
-class WorkoutBrowserDetailLeadersAndStatsAdapter(private val items: List<UserStats>, private val glide: RequestManager, private val onClick: (View, UserStats) -> Unit) : RecyclerView.Adapter<WorkoutBrowserDetailLeadersAndStatsAdapter.ViewHolder>() {
+class WorkoutLeaderBoardsAdapter(private val items: List<UserStats>, private val glide: RequestManager, private val onClick: (View, UserStats) -> Unit) : RecyclerView.Adapter<WorkoutLeaderBoardsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.fragment_workout_browser_detail_leaders_and_stats_item), glide)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { holder.bind(items[position], onClick) }
     override fun getItemCount() = items.size

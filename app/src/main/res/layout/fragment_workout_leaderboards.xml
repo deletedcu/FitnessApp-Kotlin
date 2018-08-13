@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".workoutbrowser.detail.leadersandstats.WorkoutBrowserDetailLeadersAndStatsFragment">
+    tools:context=".workoutshared.leaderboards.WorkoutLeaderBoardsFragment">
 
     <include layout="@layout/loading_view"/>
     <include layout="@layout/error_view"/>
