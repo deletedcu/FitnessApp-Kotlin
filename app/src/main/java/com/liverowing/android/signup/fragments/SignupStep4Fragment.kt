@@ -46,7 +46,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     var myBitmap: Bitmap? = null
 
     var birthday: String = ""
-        get() = a_signup_birthday.text.toString()
+        get() = a_signup_birthday_text.text.toString()
 
     var gender: String = "male"
         get() {
@@ -68,12 +68,14 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        a_signup_birthday_text.hint = "08/15/1986"
+
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             myCalendar.set(year, month, dayOfMonth)
             updateBirthday()
         }
 
-        a_signup_birthday.setOnClickListener {
+        a_signup_birthday_text.setOnClickListener {
             DatePickerDialog(this!!.activity, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
@@ -102,13 +104,13 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     private fun updateBirthday() {
         val pattern = "MM/dd/yyyy"
         var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
-        a_signup_birthday.setText(simpleDateFormat.format(myCalendar.time))
+        a_signup_birthday_text.setText(simpleDateFormat.format(myCalendar.time))
     }
 
     override fun checkValidation() {
         if (birthday.isEmpty()) {
-            a_signup_birthday.requestFocus()
-            a_signup_birthday.error = "Empty birthday!"
+            a_signup_birthday_text.requestFocus()
+            a_signup_birthday_text.error = "Empty birthday!"
         } else {
             var data = HashMap<String, String>()
             data.put("birthday", birthday)

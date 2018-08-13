@@ -20,21 +20,24 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/a_signup_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
-            android:editable="false"
-            android:clickable="true"
-            android:textColor="@color/textColorDark"/>
+            app:helperTextEnabled="true"
+            app:helperText="@string/birthday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/birthday"
-            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"
-            android:layout_margin="@dimen/activity_vertical_margin_small"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/a_signup_birthday_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
             android:id="@+id/radio_system"
