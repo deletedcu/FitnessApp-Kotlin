@@ -76,12 +76,12 @@
 
     <style name="AppTheme.Widget.Button.White">
         <item name="android:backgroundTint">#ffffffff</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.Widget.Button.Transparent">
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.TextAppearance.AppCompat.Title.Small" parent="TextAppearance.MaterialComponents.Overline">
