@@ -11,6 +11,8 @@ import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_1.*
 import android.text.Spanned
+import com.kaopiz.kprogresshud.KProgressHUD
+import com.parse.ParseUser
 
 class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragment() {
 
@@ -23,12 +25,16 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
             return a_signup_email_text.text.toString()
         }
 
+    private lateinit var hud: KProgressHUD
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_signup_1, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        hud = KProgressHUD(context)
 
         a_signup_username_text.filters = arrayOf<InputFilter>(object : InputFilter.AllCaps() {
             override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence {
@@ -51,10 +57,60 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
             a_signup_email_text.requestFocus()
             a_signup_email_text.error = "Invalid email!"
         } else {
-            var map = HashMap<String, String>()
-            map.put("username", username)
-            map.put("email", email)
-            listener!!.onResultListener(true, map)
+            hud.show()
+            isValidUserName(username, object: ResultListener {
+                override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
+                    if (state) {
+                        isValidEmail(email, object: ResultListener {
+                            override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
+                                hud.dismiss()
+                                if (state) {
+                                    next()
+                                } else {
+                                    a_signup_email_text.requestFocus()
+                                    a_signup_email_text.error = "The email address you have entered is already registered."
+                                }
+                            }
+                        })
+                    } else {
+                        hud.dismiss()
+                        a_signup_username_text.requestFocus()
+                        a_signup_username_text.error = "The username you have entered is already registered."
+                    }
+                }
+            })
         }
     }
+
+    private fun next() {
+        var map = HashMap<String, String>()
+        map.put("username", username)
+        map.put("email", email)
+        listener!!.onResultListener(true, map)
+    }
+
+    private fun isValidUserName(username: String, listener: ResultListener) {
+        val query = ParseUser.getQuery()
+        query.whereEqualTo("username", username)
+        query.countInBackground { count, e ->
+            if (e == null && count == 0) {
+                listener.onResultListener(true, null)
+            } else {
+                listener.onResultListener(false, null)
+            }
+        }
+    }
+
+    private fun isValidEmail(email: String, listener: ResultListener) {
+        val query = ParseUser.getQuery()
+        query.whereEqualTo("email", email)
+        query.countInBackground { count, e ->
+            if (e == null && count == 0) {
+                listener.onResultListener(true, null)
+            } else {
+                listener.onResultListener(false, null)
+            }
+        }
+    }
+
 }

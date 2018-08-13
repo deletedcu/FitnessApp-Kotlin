@@ -20,6 +20,7 @@ import com.parse.ParseException
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, ResultListener {
 
@@ -87,37 +88,37 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
 
     override fun createPresenter() = SignupPresenter()
 
-    override fun onResultListener(state: Boolean, data: HashMap<String, String>) {
+    override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
         if (state) {
             when (currentStep) {
                 1 -> {
-                    newUser.username = data.get("username")
-                    newUser.email = data.get("email")
+                    newUser.username = data!!.get("username")
+                    newUser.email = data!!.get("email")
                     currentStep ++
                     a_signup_stepbar.currentStep = currentStep
                     updateFragment()
                 }
                 2 -> {
-                    newUser.setPassword(data.get("password"))
-                    password = data.get("password")!!
+                    newUser.setPassword(data!!.get("password"))
+                    password = data!!.get("password")!!
                     currentStep ++
                     a_signup_stepbar.currentStep = currentStep
                     updateFragment()
                 }
                 3 -> {
-                    newUser.weight = data.get("weight")!!.toInt()
-                    newUser.height = data.get("height")!!.toInt()
-                    newUser.isMetric = data.get("isMetric")!!.toBoolean()
+                    newUser.weight = data!!.get("weight")!!.toInt()
+                    newUser.height = data!!.get("height")!!.toInt()
+                    newUser.isMetric = data!!.get("isMetric")!!.toBoolean()
                     currentStep ++
                     a_signup_stepbar.currentStep = currentStep
                     updateFragment()
                 }
                 4 -> {
-                    val birthday = data.get("birthday")
+                    val birthday = data!!.get("birthday")
                     val pattern = "MM/dd/yyyy"
                     var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
                     newUser.dob = simpleDateFormat.parse(birthday)
-                    newUser.gender = data.get("gender")
+                    newUser.gender = data!!.get("gender")
                     val bitmap = (currentFragment as SignupStep4Fragment).myBitmap
                     presenter.signup(newUser, password, bitmap)
                 }
