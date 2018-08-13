@@ -26,6 +26,8 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
+            app:helperTextEnabled="true"
+            app:helperText="@string/username"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -34,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/textColorDark"
-                android:hint="@string/username"
+                android:hint="joerow84"
                 android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
                 android:maxLines="1"
                 android:maxLength="12"
@@ -57,6 +59,8 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
+            app:helperTextEnabled="true"
+            app:helperText="@string/email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -66,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/textColorDark"
-                android:hint="@string/email"
+                android:hint="test@gmail.com"
                 android:imeOptions="actionDone"/>
 
         </com.google.android.material.textfield.TextInputLayout>
