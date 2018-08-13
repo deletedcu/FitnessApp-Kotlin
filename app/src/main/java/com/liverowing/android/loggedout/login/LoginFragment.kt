@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.OnClickListener {
 
-    private val REQUEST_SIGNUP_CODE = 1001
-
     private lateinit var hud: KProgressHUD
 
     override fun createPresenter() = LoginPresenter()
@@ -67,7 +65,7 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
 
             R.id.f_login_signin_signup -> {
                 val intent = Intent(activity, SignupActivity::class.java)
-                startActivityForResult(intent, REQUEST_SIGNUP_CODE)
+                startActivity(intent)
             }
 
             R.id.f_login_login_button -> login()
@@ -105,14 +103,4 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
         activity?.supportFinishAfterTransition()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_SIGNUP_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val intent = Intent(activity, MainActivity::class.java)
-                startActivity(intent)
-                activity?.supportFinishAfterTransition()
-            }
-        }
-    }
 }

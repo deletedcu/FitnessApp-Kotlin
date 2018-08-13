@@ -27,7 +27,6 @@ import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.extensions.rotateImageIfRequired
 import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
-import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_4.*
 import java.io.File
 import java.io.IOException
@@ -110,12 +109,6 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
             var data = HashMap<String, String>()
             data.put("birthday", birthday)
             data.put("gender", gender)
-            if (myBitmap != null) {
-                val encodeString = Utils.BitmapToString(myBitmap!!)
-                if (encodeString != null) {
-                    data.put("image", encodeString)
-                }
-            }
             listener.onResultListener(true, data)
         }
     }

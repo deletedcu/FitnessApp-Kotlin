@@ -1,11 +1,10 @@
 package com.liverowing.android.signup
 
-import android.app.Activity
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
@@ -17,12 +16,8 @@ import com.liverowing.android.activity.login.SignupStep4Fragment
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.signup.fragments.BaseStepFragment
 import com.liverowing.android.signup.fragments.ResultListener
-import com.liverowing.android.util.Utils
 import com.parse.ParseException
-import com.parse.ParseFile
-import com.parse.ParseUser
 import kotlinx.android.synthetic.main.activity_signup.*
-import kotlinx.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -123,22 +118,8 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
                     var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
                     newUser.dob = simpleDateFormat.parse(birthday)
                     newUser.gender = data.get("gender")
-
-//                    if (data.containsKey("image")) {
-//                        val encodeString = data.get("image")
-//                        if (encodeString != null) {
-//                            val bitmap = Utils.StringToBitmap(encodeString)
-//                            val baos = ByteArrayOutputStream()
-//                            if (bitmap != null) {
-//                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-//                                val bytes= baos.toByteArray()
-//                                val parseFile = ParseFile("profilePicture.png", bytes)
-//                                newUser.image = parseFile
-//                            }
-//                        }
-//                    }
-
-                    presenter.signup(newUser, password)
+                    val bitmap = (currentFragment as SignupStep4Fragment).myBitmap
+                    presenter.signup(newUser, password, bitmap)
                 }
                 else -> {}
             }
@@ -163,10 +144,15 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
         }
     }
 
-    override fun signupuccessful(user: ParseUser) {
+    override fun signupuccessful() {
         hud.dismiss()
-        setResult(Activity.RESULT_OK)
-        finish()
+        AlertDialog.Builder(this)
+                .setMessage("Please verify your email to login.")
+                .setPositiveButton("OK") { dialogInterface, which ->
+                    finish()
+                }
+                .create()
+                .show()
     }
 
 }
