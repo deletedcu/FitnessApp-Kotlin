@@ -84,8 +84,6 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         featuredWorkoutsRecyclerView = f_dashboard_featured_workouts_recyclerview.apply {
             addItemDecoration(itemDecoration)
             layoutManager = featuredWorkoutsViewManager
-
-
             adapter = featuredWorkoutsViewAdapter
         }
 

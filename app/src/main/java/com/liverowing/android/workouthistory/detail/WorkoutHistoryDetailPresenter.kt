@@ -6,7 +6,6 @@ import com.parse.ParseQuery
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import timber.log.Timber
 
 class WorkoutHistoryDetailPresenter : EventBusPresenter<WorkoutHistoryDetailView>() {
     fun getWorkout(workoutId: String) {
@@ -30,11 +29,8 @@ class WorkoutHistoryDetailPresenter : EventBusPresenter<WorkoutHistoryDetailView
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onWorkoutMainThread(workout: Workout) {
-        Timber.d("*** onWorkoutMainThread")
         ifViewAttached {
-            Timber.d("*** onWorkoutMainThread - setData")
             it.setData(workout)
-            Timber.d("*** onWorkoutMainThread - showContent")
             it.showContent()
         }
     }
