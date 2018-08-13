@@ -1,5 +1,6 @@
 package com.liverowing.android.signup
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
@@ -151,6 +152,7 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
                 .setTitle("Signup successful!")
                 .setMessage("You have successfully signed up with LiveRowing and are now signed in.")
                 .setPositiveButton("OK") { dialogInterface, which ->
+                    setResult(Activity.RESULT_OK)
                     finish()
                 }
                 .create()
