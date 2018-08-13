@@ -81,17 +81,21 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
 
         permissions.add(Manifest.permission.CAMERA)
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        permissionsToRequest = findUnAskedPermissions(permissions)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionsToRequest.size > 0) {
-                val array = arrayOfNulls<String>(permissionsToRequest.size)
-                permissionsToRequest.toArray(array)
-                requestPermissions(array, ALL_PERMISSIONS_RESULT);
-            }
-        }
 
         btn_signup_profile_picture.setOnClickListener {
-            startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+            permissionsToRequest = findUnAskedPermissions(permissions)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (permissionsToRequest.size > 0) {
+                    val array = arrayOfNulls<String>(permissionsToRequest.size)
+                    permissionsToRequest.toArray(array)
+                    requestPermissions(array, ALL_PERMISSIONS_RESULT);
+                } else {
+                    startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+                }
+            } else {
+                startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+            }
+
         }
     }
 
@@ -247,6 +251,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        permissionsRejected.clear()
         when (requestCode) {
             ALL_PERMISSIONS_RESULT -> {
                 for (perms in permissionsToRequest) {
@@ -270,6 +275,8 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
                         }
                     }
 
+                } else {
+                    startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
                 }
             }
         }
