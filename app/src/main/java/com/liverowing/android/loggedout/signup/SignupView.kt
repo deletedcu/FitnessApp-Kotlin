@@ -1,4 +1,4 @@
-package com.liverowing.android.signup
+package com.liverowing.android.loggedout.signup
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import com.parse.ParseException

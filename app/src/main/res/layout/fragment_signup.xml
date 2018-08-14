@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundOverlayColor"
-    tools:context=".signup.SignupActivity">
+    tools:context=".loggedout.signup.SignupFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.liverowing.android.signup.views.StepBarView
+            <com.liverowing.android.loggedout.signup.views.StepBarView
                 android:id="@+id/a_signup_stepbar"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"

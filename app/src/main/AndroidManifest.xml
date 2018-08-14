@@ -7,6 +7,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera2" android:required="true" />
 
     <application
         android:name=".LiveRowing"
@@ -22,29 +27,35 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+        <activity android:name=".SplashActivity" android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".workouthistory.detail.WorkoutHistoryDetailFragment" />
-        <activity android:name=".workoutbrowser.detail.WorkoutBrowserDetailFragment" />
-        <activity android:name=".loggedout.LoggedOutActivity" />
-        <activity android:name=".signup.SignupActivity" />
+        <activity android:name=".loggedout.LoggedOutActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".race.RaceActivity"></activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
     </application>
 
 </manifest>

@@ -1,29 +1,32 @@
-package com.liverowing.android.signup
+package com.liverowing.android.loggedout.signup
 
-import android.app.Activity
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.hannesdorfmann.mosby3.mvp.MvpActivity
+import androidx.navigation.findNavController
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.activity.login.SignupStep1Fragment
 import com.liverowing.android.activity.login.SignupStep2Fragment
 import com.liverowing.android.activity.login.SignupStep3Fragment
 import com.liverowing.android.activity.login.SignupStep4Fragment
+import com.liverowing.android.BaseMvpFragment
 import com.liverowing.android.model.parse.User
-import com.liverowing.android.signup.fragments.BaseStepFragment
-import com.liverowing.android.signup.fragments.ResultListener
+import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
+import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.parse.ParseException
-import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.android.synthetic.main.fragment_signup.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, ResultListener {
+class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView, ResultListener {
 
     var currentStep: Int = 1
     var currentFragment: BaseStepFragment? = null
@@ -33,26 +36,25 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
 
     private lateinit var hud: KProgressHUD
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signup)
-        window.statusBarColor = Color.TRANSPARENT
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    override fun createPresenter() = SignupPresenter()
 
-        hud = KProgressHUD.create(this)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_signup, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        hud = KProgressHUD.create(this.context)
         setupUI()
+    }
+
+    override fun onBackPressed() {
+        back()
     }
 
     fun setupUI() {
         btn_back.setOnClickListener {
-            if (currentStep > 1) {
-                supportFragmentManager.popBackStack()
-                currentStep --
-                currentFragment = supportFragmentManager.findFragmentByTag(currentStep.toString()) as BaseStepFragment?
-                a_signup_stepbar.currentStep = currentStep
-            } else {
-                finish()
-            }
+            back()
         }
 
         btn_next.setOnClickListener {
@@ -74,7 +76,7 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
             else -> null
         }
 
-        supportFragmentManager
+        fragmentManager!!
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                 .replace(R.id.layout_signup_page, currentFragment!!, currentStep.toString())
@@ -87,7 +89,16 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
 
     }
 
-    override fun createPresenter() = SignupPresenter()
+    private fun back() {
+        if (currentStep > 1) {
+            fragmentManager!!.popBackStack()
+            currentStep --
+            currentFragment = fragmentManager!!.findFragmentByTag(currentStep.toString()) as BaseStepFragment?
+            a_signup_stepbar.currentStep = currentStep
+        } else {
+            view!!.findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
+        }
+    }
 
     override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
         if (state) {
@@ -142,21 +153,26 @@ class SignupActivity: MvpActivity<SignupView, SignupPresenter>(), SignupView, Re
         }
 
         if (message.isNotEmpty()) {
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
         }
     }
 
     override fun signupuccessful() {
         hud.dismiss()
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(this.context!!)
                 .setTitle("Signup successful!")
                 .setMessage("You have successfully signed up with LiveRowing and are now signed in.")
                 .setPositiveButton("OK") { dialogInterface, which ->
-                    setResult(Activity.RESULT_OK)
-                    finish()
+                    startMainActivity()
                 }
                 .create()
                 .show()
+    }
+
+    private fun startMainActivity() {
+        val intent = Intent(activity, MainActivity::class.java)
+        startActivity(intent)
+        activity?.supportFinishAfterTransition()
     }
 
 }

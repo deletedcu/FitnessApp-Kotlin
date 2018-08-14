@@ -25,8 +25,8 @@ import com.liverowing.android.BuildConfig
 import com.liverowing.android.R
 import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.extensions.rotateImageIfRequired
-import com.liverowing.android.signup.fragments.BaseStepFragment
-import com.liverowing.android.signup.fragments.ResultListener
+import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
+import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_4.*
 import java.io.File
 import java.io.IOException

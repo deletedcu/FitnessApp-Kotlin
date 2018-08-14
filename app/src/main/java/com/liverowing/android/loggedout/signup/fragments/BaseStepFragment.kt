@@ -1,4 +1,4 @@
-package com.liverowing.android.signup.fragments
+package com.liverowing.android.loggedout.signup.fragments
 
 import androidx.fragment.app.Fragment
 

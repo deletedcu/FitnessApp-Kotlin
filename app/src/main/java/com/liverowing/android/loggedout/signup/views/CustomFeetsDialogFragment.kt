@@ -1,4 +1,4 @@
-package com.liverowing.android.signup.views
+package com.liverowing.android.loggedout.signup.views
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment

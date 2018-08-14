@@ -1,7 +1,5 @@
 package com.liverowing.android.loggedout.login
 
-
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +13,6 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
-import com.liverowing.android.signup.SignupActivity
 import com.parse.ParseException
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -24,8 +21,6 @@ import kotlinx.android.synthetic.main.fragment_login.*
 class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.OnClickListener {
 
     private lateinit var hud: KProgressHUD
-
-    private val REQUEST_SIGNUP_CODE = 1001
 
     override fun createPresenter() = LoginPresenter()
 
@@ -66,8 +61,8 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
             }
 
             R.id.f_login_signin_signup -> {
-                val intent = Intent(activity, SignupActivity::class.java)
-                startActivityForResult(intent, REQUEST_SIGNUP_CODE)
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, f_login_logo, "logo")
+                view?.findNavController()?.navigate(R.id.action_loginFragment_to_signupFragment, options.toBundle())
             }
 
             R.id.f_login_login_button -> login()
@@ -107,17 +102,6 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
         activity?.supportFinishAfterTransition()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_SIGNUP_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    startMainActivity()
-                }
-            }
-        }
     }
 
 }

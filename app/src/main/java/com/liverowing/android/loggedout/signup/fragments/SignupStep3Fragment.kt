@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.liverowing.android.R
-import com.liverowing.android.signup.fragments.BaseStepFragment
-import com.liverowing.android.signup.fragments.ResultListener
-import com.liverowing.android.signup.views.CustomFeetsDialogFragment
-import com.liverowing.android.signup.views.NumberPickerListener
+import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
+import com.liverowing.android.loggedout.signup.fragments.ResultListener
+import com.liverowing.android.loggedout.signup.views.CustomFeetsDialogFragment
+import com.liverowing.android.loggedout.signup.views.NumberPickerListener
 import kotlinx.android.synthetic.main.fragment_signup_3.*
 import android.text.InputFilter
 import com.liverowing.android.util.Utils

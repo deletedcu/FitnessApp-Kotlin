@@ -1,4 +1,4 @@
-package com.liverowing.android.signup.views
+package com.liverowing.android.loggedout.signup.views
 
 import android.widget.NumberPicker
 import android.os.Build
