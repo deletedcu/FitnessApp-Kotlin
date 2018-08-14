@@ -1,4 +1,4 @@
-package com.liverowing.android.loggedout.signup.views
+package com.liverowing.android.views
 
 import android.widget.NumberPicker
 import android.os.Build
@@ -7,7 +7,7 @@ import android.content.Context
 import android.util.AttributeSet
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)//For backward-compability
-class MyNumberPicker : NumberPicker {
+class LiveRowingNumberPicker : NumberPicker {
 
     constructor(context: Context) : super(context) {}
 

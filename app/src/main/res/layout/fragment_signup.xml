@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.liverowing.android.loggedout.signup.views.StepBarView
+            <com.liverowing.android.views.StepBarView
                 android:id="@+id/a_signup_stepbar"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"

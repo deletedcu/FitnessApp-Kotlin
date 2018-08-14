@@ -8,8 +8,8 @@ import android.widget.TextView
 import com.liverowing.android.R
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
-import com.liverowing.android.loggedout.signup.views.CustomFeetsDialogFragment
-import com.liverowing.android.loggedout.signup.views.NumberPickerListener
+import com.liverowing.android.views.FeetDialogFragment
+import com.liverowing.android.views.NumberPickerListener
 import kotlinx.android.synthetic.main.fragment_signup_3.*
 import android.text.InputFilter
 import com.liverowing.android.util.Utils
@@ -72,7 +72,7 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
 
         a_signup_height_text.setOnClickListener {
             if (!isMetric) {
-                val dialogFragment = CustomFeetsDialogFragment.newInstance(this)
+                val dialogFragment = FeetDialogFragment.newInstance(this)
                 dialogFragment.show(fragmentManager, "dialog")
             }
         }

@@ -1,4 +1,4 @@
-package com.liverowing.android.loggedout.signup.views
+package com.liverowing.android.views
 
 import android.content.Context
 import android.graphics.Canvas

@@ -1,4 +1,4 @@
-package com.liverowing.android.loggedout.signup.views
+package com.liverowing.android.views
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
@@ -9,7 +9,7 @@ import com.liverowing.android.R
 import kotlinx.android.synthetic.main.dialog_feets.*
 import kotlinx.android.synthetic.main.dialog_feets.view.*
 
-class CustomFeetsDialogFragment(var listener: NumberPickerListener) : DialogFragment() {
+class FeetDialogFragment(var listener: NumberPickerListener) : DialogFragment() {
 
     var feets: Int = 5
         get() = numberpicker_feet.value
@@ -24,8 +24,8 @@ class CustomFeetsDialogFragment(var listener: NumberPickerListener) : DialogFrag
         }
 
     companion object {
-        fun newInstance(listener: NumberPickerListener): CustomFeetsDialogFragment {
-            val f = CustomFeetsDialogFragment(listener)
+        fun newInstance(listener: NumberPickerListener): FeetDialogFragment {
+            val f = FeetDialogFragment(listener)
             return f
         }
     }
