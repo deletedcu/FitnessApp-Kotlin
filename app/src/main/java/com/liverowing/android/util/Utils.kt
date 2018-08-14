@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 
+@Suppress("NAME_SHADOWING")
 class Utils {
 
     companion object {
@@ -111,7 +112,7 @@ class Utils {
             if (view == null) {
                 view = View(activity)
             }
-            imm!!.hideSoftInputFromWindow(view!!.windowToken, 0)
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
     }

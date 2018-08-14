@@ -86,7 +86,7 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
         var map = HashMap<String, String>()
         map.put("username", username)
         map.put("email", email)
-        listener!!.onResultListener(true, map)
+        listener.onResultListener(true, map)
     }
 
     private fun isValidUserName(username: String, listener: ResultListener) {

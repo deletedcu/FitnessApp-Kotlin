@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "VARIABLE_WITH_REDUNDANT_INITIALIZER")
 class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragment() {
 
     private var permissionsToRequest = arrayListOf<String>()
@@ -70,13 +71,13 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
 
         a_signup_birthday_text.hint = "08/15/1986"
 
-        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             myCalendar.set(year, month, dayOfMonth)
             updateBirthday()
         }
 
         a_signup_birthday_text.setOnClickListener {
-            DatePickerDialog(this!!.activity, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(context, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
         a_signup_username_textview.text = userName
@@ -90,7 +91,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
                 if (permissionsToRequest.size > 0) {
                     val array = arrayOfNulls<String>(permissionsToRequest.size)
                     permissionsToRequest.toArray(array)
-                    requestPermissions(array, ALL_PERMISSIONS_RESULT);
+                    requestPermissions(array, ALL_PERMISSIONS_RESULT)
                 } else {
                     startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
                 }
@@ -127,61 +128,60 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     private fun getPickImageChooserIntent(): Intent {
 
         // Determine Uri of camera image to save.
-        val outputFileUri = getCaptureImageOutputUri();
+        val outputFileUri = getCaptureImageOutputUri()
 
         var allIntents = arrayListOf<Intent>()
-        val packageManager = activity!!.packageManager;
+        val packageManager = activity!!.packageManager
 
         // collect all camera intents
-        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        val listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val listCam = packageManager.queryIntentActivities(captureIntent, 0)
         for (res in listCam) {
-            val intent = Intent(captureIntent);
-            intent.setComponent(ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
+            val intent = Intent(captureIntent)
+            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
+            intent.setPackage(res.activityInfo.packageName)
             if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
             }
-            allIntents.add(intent);
+            allIntents.add(intent)
         }
 
         // collect all gallery intents
-        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        val listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
+        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        galleryIntent.type = "image/*"
+        val listGallery = packageManager.queryIntentActivities(galleryIntent, 0)
         for (res in listGallery) {
-            val intent = Intent(galleryIntent);
-            intent.setComponent(ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            allIntents.add(intent);
+            val intent = Intent(galleryIntent)
+            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
+            intent.setPackage(res.activityInfo.packageName)
+            allIntents.add(intent)
         }
 
         // the main intent is the last in the list (fucking android) so pickup the useless one
-        var mainIntent = allIntents.get(allIntents.size - 1);
+        var mainIntent = allIntents.get(allIntents.size - 1)
         for (intent in allIntents) {
-            if (intent.getComponent().getClassName().equals("com.android.documentsui.DocumentsActivity")) {
-                mainIntent = intent;
-                break;
+            if (intent.component.className.equals("com.android.documentsui.DocumentsActivity")) {
+                mainIntent = intent
+                break
             }
         }
-        allIntents.remove(mainIntent);
+        allIntents.remove(mainIntent)
 
         // Create a chooser from the main intent
-        val chooserIntent = Intent.createChooser(mainIntent, "Select source");
+        val chooserIntent = Intent.createChooser(mainIntent, "Select source")
 
         // Add all other intents
         val array = arrayOfNulls<Intent>(allIntents.size)
         allIntents.toArray(array)
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, array);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, array)
 
-        return chooserIntent;
+        return chooserIntent
     }
 
     /**
      * Get URI to image received from capture by camera.
      */
     private fun getCaptureImageOutputUri(): Uri? {
-        var outputFileUri: Uri? = null
         val file = getOutputMediaFile(activity!!.resources.getString(R.string.app_name) + File.separator + "profile")
         if (file != null) {
             val outputUri = FileProvider.getUriForFile(activity!!, BuildConfig.APPLICATION_ID + ".fileprovider", file)
@@ -232,6 +232,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     private fun hasPermission(permission: String): Boolean {
         if (canMakeSmores()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                @Suppress("DEPRECATED_IDENTITY_EQUALS")
                 return ContextCompat.checkSelfPermission(activity!!, permission) === PackageManager.PERMISSION_GRANTED
             }
         }
@@ -248,7 +249,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)
                 .create()
-                .show();
+                .show()
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -268,7 +269,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
                             showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
-                                    DialogInterface.OnClickListener { dialog, which ->
+                                    DialogInterface.OnClickListener { _, _ ->
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                             requestPermissions(permissionsRejected.toArray(arrayOfNulls<String>(permissionsRejected.size)), ALL_PERMISSIONS_RESULT)
                                         }
@@ -289,24 +290,26 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         var bitmap: Bitmap? = null
         when (requestCode) {
             REQUEST_PHOTO -> {
-                if (resultCode === Activity.RESULT_OK) {
-                    val picUri = getPickImageResultUri(data)
-                    if (picUri != null) {
-                        try {
-                            var tempBitmap = MediaStore.Images.Media.getBitmap(activity!!.getContentResolver(), picUri)
-                            tempBitmap = tempBitmap.rotateImageIfRequired(activity!!, picUri!!)
-                            myBitmap = tempBitmap.getResizedBitmap(500)
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        val picUri = getPickImageResultUri(data)
+                        if (picUri != null) {
+                            try {
+                                var tempBitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, picUri)
+                                tempBitmap = tempBitmap.rotateImageIfRequired(activity!!, picUri)
+                                myBitmap = tempBitmap.getResizedBitmap(500)
 
-                            btn_signup_profile_picture.background = BitmapDrawable(activity!!.resources, myBitmap)
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    } else {
-                        if (data != null && data.hasExtra("data")) {
-                            bitmap = data.getExtras().get("data") as? Bitmap
-                            if (bitmap != null) {
-                                myBitmap = bitmap
                                 btn_signup_profile_picture.background = BitmapDrawable(activity!!.resources, myBitmap)
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                        } else {
+                            if (data != null) {
+                                bitmap = data.extras.get("data") as? Bitmap
+                                if (bitmap != null) {
+                                    myBitmap = bitmap
+                                    btn_signup_profile_picture.background = BitmapDrawable(activity!!.resources, myBitmap)
+                                }
                             }
                         }
                     }

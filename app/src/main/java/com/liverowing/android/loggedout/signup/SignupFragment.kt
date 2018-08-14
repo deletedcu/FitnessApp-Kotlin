@@ -101,41 +101,39 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
     }
 
     override fun onResultListener(state: Boolean, data: HashMap<String, String>?) {
-        if (state) {
-            when (currentStep) {
-                1 -> {
-                    newUser.username = data!!.get("username")
-                    newUser.email = data!!.get("email")
-                    currentStep ++
-                    a_signup_stepbar.currentStep = currentStep
-                    updateFragment()
-                }
-                2 -> {
-                    newUser.setPassword(data!!.get("password"))
-                    password = data!!.get("password")!!
-                    currentStep ++
-                    a_signup_stepbar.currentStep = currentStep
-                    updateFragment()
-                }
-                3 -> {
-                    newUser.weight = data!!.get("weight")!!.toInt()
-                    newUser.height = data!!.get("height")!!.toInt()
-                    newUser.isMetric = data!!.get("isMetric")!!.toBoolean()
-                    currentStep ++
-                    a_signup_stepbar.currentStep = currentStep
-                    updateFragment()
-                }
-                4 -> {
-                    val birthday = data!!.get("birthday")
-                    val pattern = "MM/dd/yyyy"
-                    var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
-                    newUser.dob = simpleDateFormat.parse(birthday)
-                    newUser.gender = data!!.get("gender")
-                    val bitmap = (currentFragment as SignupStep4Fragment).myBitmap
-                    presenter.signup(newUser, password, bitmap)
-                }
-                else -> {}
+        if (state) when (currentStep) {
+            1 -> {
+                newUser.username = data!!.get("username")
+                newUser.email = data.get("email")
+                currentStep ++
+                a_signup_stepbar.currentStep = currentStep
+                updateFragment()
             }
+            2 -> {
+                newUser.setPassword(data!!.get("password"))
+                password = data.get("password")!!
+                currentStep ++
+                a_signup_stepbar.currentStep = currentStep
+                updateFragment()
+            }
+            3 -> {
+                newUser.weight = data!!.get("weight")!!.toInt()
+                newUser.height = data.get("height")!!.toInt()
+                newUser.isMetric = data.get("isMetric")!!.toBoolean()
+                currentStep ++
+                a_signup_stepbar.currentStep = currentStep
+                updateFragment()
+            }
+            4 -> {
+                val birthday = data!!.get("birthday")
+                val pattern = "MM/dd/yyyy"
+                var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
+                newUser.dob = simpleDateFormat.parse(birthday)
+                newUser.gender = data.get("gender")
+                val bitmap = (currentFragment as SignupStep4Fragment).myBitmap
+                presenter.signup(newUser, password, bitmap)
+            }
+            else -> {}
         }
     }
 
@@ -162,7 +160,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
         AlertDialog.Builder(this.context!!)
                 .setTitle("Signup successful!")
                 .setMessage("You have successfully signed up with LiveRowing and are now signed in.")
-                .setPositiveButton("OK") { dialogInterface, which ->
+                .setPositiveButton("OK") { _, _ ->
                     startMainActivity()
                 }
                 .create()

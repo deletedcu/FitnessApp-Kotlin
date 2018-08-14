@@ -42,7 +42,7 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        a_signup_radio_system.setOnCheckedChangeListener { radioGroup, i ->
+        a_signup_radio_system.setOnCheckedChangeListener { _, _ ->
             updateUI()
         }
         updateUI()
