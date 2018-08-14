@@ -65,7 +65,14 @@
     <fragment
         android:id="@+id/workoutBrowserDetail"
         android:name="com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragment"
-        tools:layout="@layout/fragment_workout_browser_detail" />
+        tools:layout="@layout/fragment_workout_browser_detail" >
+        <argument
+            android:name="workoutTypeId"
+            app:argType="string" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="liverowing.com/workout/browser/{workoutTypeId}" />
+    </fragment>
     <fragment
         android:id="@+id/workoutHistoryFragment"
         android:name="com.liverowing.android.workouthistory.WorkoutHistoryFragment"

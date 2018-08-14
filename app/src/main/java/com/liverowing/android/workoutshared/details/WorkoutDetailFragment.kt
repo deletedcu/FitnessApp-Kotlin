@@ -37,7 +37,7 @@ class WorkoutDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        return
         val workoutType = EventBus.getDefault().getStickyEvent(WorkoutType::class.java)
 
         f_workout_detail_intervals.text = workoutType.friendlySegmentDescription

@@ -33,13 +33,11 @@ class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, 
 
     private lateinit var workoutType: WorkoutType
 
-    override fun createPresenter(): WorkoutLeaderBoardsPresenter {
-        return WorkoutLeaderBoardsPresenter()
-    }
+    override fun createPresenter() = WorkoutLeaderBoardsPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        workoutType = EventBus.getDefault().getStickyEvent(WorkoutType::class.java)
+        //workoutType = EventBus.getDefault().getStickyEvent(WorkoutType::class.java)
     }
 
     override fun onDestroy() {
@@ -72,7 +70,7 @@ class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, 
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        presenter.loadUserStats(pullToRefresh, workoutType, ParseUser.getCurrentUser() as User)
+        //presenter.loadUserStats(pullToRefresh, workoutType, ParseUser.getCurrentUser() as User)
     }
 
     override fun onRefresh() {
