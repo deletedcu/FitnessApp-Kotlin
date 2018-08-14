@@ -1,7 +1,6 @@
 package com.liverowing.android.activity.login
 
 import android.os.Bundle
-import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import com.liverowing.android.extensions.isValidEmail
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_1.*
-import android.text.Spanned
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.parse.ParseUser
 
@@ -35,12 +33,6 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
         super.onViewCreated(view, savedInstanceState)
 
         hud = KProgressHUD(context)
-
-        a_signup_username_text.filters = arrayOf<InputFilter>(object : InputFilter.AllCaps() {
-            override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence {
-                return source.toString().toLowerCase().replace(" ", "")
-            }
-        })
 
         a_signup_username_text.hint = "joerow84"
         a_signup_email_text.hint = "test@gmail.com"

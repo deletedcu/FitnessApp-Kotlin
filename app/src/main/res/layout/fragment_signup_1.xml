@@ -27,18 +27,15 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
             app:helperTextEnabled="true"
-            app:helperText="@string/username"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:helperText="@string/username">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/a_signup_username_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
-                android:maxLines="1"
-                android:maxLength="12"
-                android:imeOptions="actionDone"/>
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,9 +55,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
             app:helperTextEnabled="true"
-            app:helperText="@string/email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:helperText="@string/email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/a_signup_email_text"

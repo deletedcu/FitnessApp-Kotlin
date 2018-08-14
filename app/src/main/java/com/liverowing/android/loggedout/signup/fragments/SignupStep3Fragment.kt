@@ -72,6 +72,9 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
 
         a_signup_height_text.setOnClickListener {
             if (!isMetric) {
+                if (a_signup_height_text.error != null) {
+                    a_signup_height_text.error = null
+                }
                 val dialogFragment = FeetDialogFragment.newInstance(this)
                 dialogFragment.show(fragmentManager, "dialog")
             }

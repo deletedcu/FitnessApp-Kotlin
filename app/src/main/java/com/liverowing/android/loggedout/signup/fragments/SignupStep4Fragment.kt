@@ -77,6 +77,9 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         }
 
         a_signup_birthday_text.setOnClickListener {
+            if (a_signup_birthday_text.error != null) {
+                a_signup_birthday_text.error = null
+            }
             DatePickerDialog(context, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
