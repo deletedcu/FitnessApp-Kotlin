@@ -83,14 +83,12 @@
                     android:id="@+id/a_signup_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                    app:helperTextEnabled="true">
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/a_signup_height_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
                         android:inputType="number"
                         android:imeOptions="actionNext"
                         android:focusableInTouchMode="false"/>
@@ -121,7 +119,6 @@
                         android:id="@+id/a_signup_weight_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
                         android:inputType="number"
                         android:imeOptions="actionDone"
                         android:maxLength="3"/>
