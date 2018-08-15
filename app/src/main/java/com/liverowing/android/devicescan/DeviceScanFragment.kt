@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.ble.service.BleProfileService
 import com.liverowing.android.ble.service.PM5Service
@@ -57,6 +58,8 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).setupToolbar(f_device_scan_toolbar)
 
         viewManager = LinearLayoutManager(activity)
         viewDividerItemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)

@@ -3,6 +3,7 @@ package com.liverowing.android.dashboard
 
 import android.os.Bundle
 import android.view.*
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -61,6 +62,14 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.fragment_dashboard, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_bluetooth -> view?.findNavController()?.navigate(R.id.deviceScanAction)
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupDashboard(view: View) {
