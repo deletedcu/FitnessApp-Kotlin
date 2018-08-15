@@ -17,14 +17,14 @@
             android:maxLines="2"
             android:text="@string/system_description"
             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin_large"
             android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
         <RadioGroup
             android:id="@+id/a_signup_radio_system"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin_medium">
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <RadioButton
                 android:id="@+id/a_signup_system_standard"
@@ -63,14 +63,14 @@
             android:maxLines="2"
             android:text="@string/height_description"
             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin_large"
             android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin_medium">
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <LinearLayout
                 android:layout_width="0dp"

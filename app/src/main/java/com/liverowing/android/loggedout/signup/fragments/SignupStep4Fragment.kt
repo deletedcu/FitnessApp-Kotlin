@@ -69,8 +69,6 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        a_signup_birthday_text.hint = "08/15/1986"
-
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             myCalendar.set(year, month, dayOfMonth)
             updateBirthday()

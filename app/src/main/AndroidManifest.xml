@@ -41,7 +41,7 @@
             <nav-graph android:value="@navigation/main_nav_graph"/>
         </activity>
         <activity android:name=".loggedout.LoggedOutActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:screenOrientation="portrait"/>
 
         <meta-data

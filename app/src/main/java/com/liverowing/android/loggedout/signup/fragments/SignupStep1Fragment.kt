@@ -33,7 +33,6 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
         super.onViewCreated(view, savedInstanceState)
 
         hud = KProgressHUD(context)
-
     }
 
     override fun checkValidation() {
