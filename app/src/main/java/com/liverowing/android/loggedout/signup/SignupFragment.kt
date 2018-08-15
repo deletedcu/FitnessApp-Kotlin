@@ -20,6 +20,7 @@ import com.liverowing.android.BaseMvpFragment
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
+import com.liverowing.android.util.Constants
 import com.liverowing.android.util.Utils
 import com.parse.ParseException
 import kotlinx.android.synthetic.main.fragment_signup.*
@@ -133,8 +134,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
             }
             4 -> {
                 val birthday = data!!.get("birthday")
-                val pattern = "MM/dd/yyyy"
-                var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
+                val simpleDateFormat = SimpleDateFormat(Constants.DATE_PATTERN, Locale.US)
                 newUser.dob = simpleDateFormat.parse(birthday)
                 newUser.gender = data.get("gender")
                 val bitmap = (currentFragment as SignupStep4Fragment).myBitmap

@@ -27,6 +27,7 @@ import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.extensions.rotateImageIfRequired
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
+import com.liverowing.android.util.Constants
 import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_4.*
 import java.io.File
@@ -63,6 +64,10 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
 
     var userName: String = ""
 
+    var defaultYear = 1980
+    var defaultMonth = 6
+    var defaultDay = 15
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_signup_4, container, false)
     }
@@ -83,10 +88,18 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
             if (a_signup_birthday_text.error != null) {
                 a_signup_birthday_text.error = null
             }
-            DatePickerDialog(context, dateSetListener, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+            if (birthday.isNotEmpty()) {
+                val simpleDateFormat = SimpleDateFormat(Constants.DATE_PATTERN, Locale.US)
+                val date = simpleDateFormat.parse(birthday)
+                myCalendar.time = date
+                defaultYear = myCalendar.get(Calendar.YEAR)
+                defaultMonth = myCalendar.get(Calendar.MONTH)
+                defaultDay = myCalendar.get(Calendar.DAY_OF_MONTH)
+            }
+            DatePickerDialog(context, dateSetListener, defaultYear, defaultMonth, defaultDay).show()
         }
 
-        a_signup_birthday_text.hint = "08/16/1989"
+        a_signup_birthday_text.hint = "Jun 15, 1980"
         a_signup_username_textview.text = userName
 
         permissions.add(Manifest.permission.CAMERA)
@@ -110,8 +123,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     }
 
     private fun updateBirthday() {
-        val pattern = "MM/dd/yyyy"
-        var simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
+        val simpleDateFormat = SimpleDateFormat(Constants.DATE_PATTERN, Locale.US)
         a_signup_birthday_text.setText(simpleDateFormat.format(myCalendar.time))
     }
 
