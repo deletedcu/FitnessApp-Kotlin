@@ -42,13 +42,23 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI()
+    }
+
+    private fun setupUI() {
+        layout_step3.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                Utils.hideKeyboard(activity!!)
+            }
+        })
+
         a_signup_radio_system.setOnCheckedChangeListener { _, _ ->
             updateUI()
         }
         updateUI()
     }
 
-    fun updateUI() {
+    private fun updateUI() {
         Utils.hideKeyboard(activity!!)
         if (isMetric) {
             a_signup_height_text.hint = "165 cm"

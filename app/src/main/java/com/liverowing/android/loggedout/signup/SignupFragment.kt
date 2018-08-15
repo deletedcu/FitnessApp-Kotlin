@@ -20,6 +20,7 @@ import com.liverowing.android.BaseMvpFragment
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
+import com.liverowing.android.util.Utils
 import com.parse.ParseException
 import kotlinx.android.synthetic.main.fragment_signup.*
 import java.text.SimpleDateFormat
@@ -53,6 +54,12 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
     }
 
     fun setupUI() {
+        view!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                Utils.hideKeyboard(activity!!)
+            }
+        })
+
         btn_back.setOnClickListener {
             back()
         }

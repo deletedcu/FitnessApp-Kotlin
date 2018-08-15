@@ -104,6 +104,17 @@ class Utils {
             }
         }
 
+        fun showKeyboard(activity: Activity) {
+            var view = activity.currentFocus
+            if (view == null) {
+                view = View(activity)
+            }
+            if (view.requestFocus()) {
+                val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+
         fun hideKeyboard(activity: Activity) {
             val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             //Find the currently focused view, so we can grab the correct window token from it.

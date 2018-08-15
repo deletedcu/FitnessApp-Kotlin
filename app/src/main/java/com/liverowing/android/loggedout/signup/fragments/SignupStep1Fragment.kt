@@ -10,6 +10,7 @@ import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_1.*
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.liverowing.android.util.Utils
 import com.parse.ParseUser
 
 class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragment() {
@@ -33,6 +34,19 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
         super.onViewCreated(view, savedInstanceState)
 
         hud = KProgressHUD(context)
+
+        setupUI()
+    }
+
+    private fun setupUI() {
+        layout_step1.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                Utils.hideKeyboard(activity!!)
+            }
+        })
+
+        a_signup_username_text.requestFocus()
+        Utils.showKeyboard(activity!!)
     }
 
     override fun checkValidation() {

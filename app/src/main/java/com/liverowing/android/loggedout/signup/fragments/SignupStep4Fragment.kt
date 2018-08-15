@@ -27,6 +27,7 @@ import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.extensions.rotateImageIfRequired
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
+import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_4.*
 import java.io.File
 import java.io.IOException
@@ -69,6 +70,10 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI()
+    }
+
+    private fun setupUI() {
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             myCalendar.set(year, month, dayOfMonth)
             updateBirthday()
