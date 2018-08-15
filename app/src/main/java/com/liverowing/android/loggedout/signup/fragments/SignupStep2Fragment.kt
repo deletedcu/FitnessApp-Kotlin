@@ -40,28 +40,43 @@ class SignupStep2Fragment(override var listener: ResultListener) : BaseStepFragm
             }
         })
 
-        a_signup_password_text.addTextChangedListener(object: TextWatcher {
+        a_signup_password_text.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                if (a_signup_password.isErrorEnabled) {
+                    a_signup_password.isErrorEnabled = false
+                }
+            } else {
+                checkPasswordValidation()
+            }
+        }
+
+        a_signup_password_text.setOnKeyListener(View.OnKeyListener { _, actionId, event ->
+            if (event!!.keyCode == KeyEvent.ACTION_DOWN && actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (checkPasswordValidation()) {
+                    return@OnKeyListener true
+                }
+            }
+            false
+        })
+
+        a_signup_password_confirm_text.setOnKeyListener(View.OnKeyListener { _, actionId, event ->
+            if (event!!.keyCode == KeyEvent.ACTION_DOWN && actionId == EditorInfo.IME_ACTION_DONE) {
+                if (checkConfirmPasswordValidation()) {
+                    return@OnKeyListener true
+                }
+            }
+            false
+        })
+
+        a_signup_password_text.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun afterTextChanged(editable: Editable?) {
-                if (editable!!.length > 0) {
-                    if (a_signup_password.isErrorEnabled) {
-                        a_signup_password.isErrorEnabled = false
-                    }
+            override fun afterTextChanged(p0: Editable?) {
+                if (a_signup_password.isErrorEnabled) {
+                    a_signup_password.isErrorEnabled = false
                 }
-            }
-        })
-
-        a_signup_password_text.setOnKeyListener(object : View.OnKeyListener {
-            override fun onKey(v: View?, actionId: Int, event: KeyEvent?): Boolean {
-                if (event!!.keyCode == KeyEvent.ACTION_DOWN && actionId == EditorInfo.IME_ACTION_NEXT) {
-                    a_signup_password_text.clearFocus()
-                    a_signup_password_confirm_text.requestFocus()
-                    return true
-                }
-                return false
             }
         })
 
@@ -71,10 +86,8 @@ class SignupStep2Fragment(override var listener: ResultListener) : BaseStepFragm
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
-                if (editable!!.length > 0) {
-                    if (a_signup_password_confirm.isErrorEnabled) {
-                        a_signup_password_confirm.isErrorEnabled = false
-                    }
+                if (a_signup_password_confirm.isErrorEnabled) {
+                    a_signup_password_confirm.isErrorEnabled = false
                 }
             }
         })
@@ -83,16 +96,32 @@ class SignupStep2Fragment(override var listener: ResultListener) : BaseStepFragm
         Utils.showKeyboard(activity!!)
     }
 
-    override fun checkValidation() {
+    private fun checkPasswordValidation(): Boolean {
         if (password.isEmpty()) {
-            a_signup_password_text.requestFocus()
             a_signup_password.error = "Empty password!"
+            return false
         } else if (password.length < 6) {
-            a_signup_password_text.requestFocus()
             a_signup_password.error = "Password must be of minimum 6 characters!"
-        } else if (!password.equals(confirmPassword)) {
+            return false
+        }
+        return true
+    }
+
+    private fun checkConfirmPasswordValidation(): Boolean {
+        if (!password.equals(confirmPassword)) {
+            a_signup_password_text.clearFocus()
             a_signup_password_confirm_text.requestFocus()
             a_signup_password_confirm.error = "Password does not match the confirm password!"
+            return false
+        }
+        return true
+    }
+
+    override fun checkValidation() {
+        if (!checkPasswordValidation()) {
+            a_signup_password_text.requestFocus()
+        } else if (!checkConfirmPasswordValidation()) {
+            a_signup_password_confirm_text.requestFocus()
         } else {
             var map = HashMap<String, String>()
             map.put("password", password)
