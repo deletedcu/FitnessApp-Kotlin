@@ -13,6 +13,7 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
+import com.liverowing.android.util.Utils
 import com.parse.ParseException
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -34,6 +35,8 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
         f_login_forgot_password.setOnClickListener(this@LoginFragment)
         f_login_signin_signup.setOnClickListener(this@LoginFragment)
         f_login_login_button.setOnClickListener(this@LoginFragment)
+        layout_login.setOnClickListener(this@LoginFragment)
+
         hud = KProgressHUD.create(this.context)
     }
 
@@ -66,6 +69,8 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
             }
 
             R.id.f_login_login_button -> login()
+
+            R.id.layout_login -> Utils.hideKeyboard(activity!!)
         }
 
     }

@@ -36,8 +36,7 @@
                 android:id="@+id/a_signup_birthday_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                android:hint="08/25/1989"/>
+                android:focusableInTouchMode="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

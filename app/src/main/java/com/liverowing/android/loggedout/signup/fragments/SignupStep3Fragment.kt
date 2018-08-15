@@ -16,10 +16,6 @@ import com.liverowing.android.util.Utils
 
 class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragment(), NumberPickerListener {
 
-    override fun onNumberPickerSelected(value: String) {
-        height = value
-    }
-
     var height: String = "0"
         get() = a_signup_height_text.text.toString()
         set(value) {
@@ -46,38 +42,10 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
     }
 
     private fun setupUI() {
-        layout_step3.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                Utils.hideKeyboard(activity!!)
-            }
-        })
+        layout_step3.setOnClickListener { Utils.hideKeyboard(activity!!) }
 
         a_signup_radio_system.setOnCheckedChangeListener { _, _ ->
             updateUI()
-        }
-        updateUI()
-    }
-
-    private fun updateUI() {
-        Utils.hideKeyboard(activity!!)
-        if (isMetric) {
-            a_signup_height_text.hint = "165 cm"
-            a_signup_weight_text.hint = "80 kg"
-            a_signup_height.helperText = "HEIGHT(cm)"
-            a_signup_weight.helperText = "WEIGHT(kg)"
-            a_signup_height_text.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(3))
-            a_signup_height_text.isFocusableInTouchMode = true
-            a_signup_height_text.setText(Utils.convertFeetToCM(height), TextView.BufferType.EDITABLE)
-            a_signup_weight_text.setText(Utils.convertPoundToKg(weight), TextView.BufferType.EDITABLE)
-        } else {
-            a_signup_height_text.hint = "5'6″ ft"
-            a_signup_weight_text.hint = "156 lbs"
-            a_signup_height.helperText = "HEIGHT(ft)"
-            a_signup_weight.helperText = "WEIGHT(lbs)"
-            a_signup_height_text.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(6))
-            a_signup_height_text.isFocusableInTouchMode = false
-            a_signup_height_text.setText(Utils.convertCMToFeet(height), TextView.BufferType.EDITABLE)
-            a_signup_weight_text.setText(Utils.convertKgToPound(weight), TextView.BufferType.EDITABLE)
         }
 
         a_signup_height_text.setOnClickListener {
@@ -89,6 +57,87 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
                 dialogFragment.show(fragmentManager, "dialog")
             }
         }
+
+        a_signup_height_text.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus -> setHeightHint(hasFocus) }
+
+        a_signup_weight_text.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus -> setWeightHint(hasFocus) }
+
+        updateUI()
+    }
+
+    private fun updateUI() {
+        Utils.hideKeyboard(activity!!)
+        setHeightHint(a_signup_height_text.hasFocus())
+        setWeightHint(a_signup_weight_text.hasFocus())
+        if (isMetric) {
+            a_signup_height.helperText = "HEIGHT(cm)"
+            a_signup_weight.helperText = "WEIGHT(kg)"
+            a_signup_height_text.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(3))
+            a_signup_height_text.isFocusableInTouchMode = true
+            a_signup_height_text.setText(Utils.convertFeetToCM(height), TextView.BufferType.EDITABLE)
+            a_signup_weight_text.setText(Utils.convertPoundToKg(weight), TextView.BufferType.EDITABLE)
+        } else {
+            a_signup_height.helperText = "HEIGHT(ft)"
+            a_signup_weight.helperText = "WEIGHT(lbs)"
+            a_signup_height_text.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(6))
+            a_signup_height_text.isFocusableInTouchMode = false
+            a_signup_height_text.setText(Utils.convertCMToFeet(height), TextView.BufferType.EDITABLE)
+            a_signup_weight_text.setText(Utils.convertKgToPound(weight), TextView.BufferType.EDITABLE)
+        }
+    }
+
+    private fun setHeightHint(hasFocus: Boolean) {
+        if (hasFocus) {
+            if (isMetric) {
+                a_signup_height.hint = "cm"
+            } else {
+                a_signup_height.hint = "fts"
+            }
+        } else {
+            if (isMetric) {
+                if (height.isEmpty()) {
+                    a_signup_height.hint = "170 cm"
+                } else {
+                    a_signup_height.hint = "cm"
+                }
+            } else {
+                if (height.isEmpty()) {
+                    a_signup_height.hint = "5'6″ ft"
+                } else {
+                    a_signup_height.hint = "fts"
+                }
+            }
+        }
+    }
+
+    private fun setWeightHint(hasFocus: Boolean) {
+        if (hasFocus) {
+            if (isMetric) {
+                a_signup_weight.hint = "kg"
+            } else {
+                a_signup_weight.hint = "lbs"
+            }
+        } else {
+            if (isMetric) {
+                if (weight.isEmpty()) {
+                    a_signup_weight.hint = "70 kg"
+                } else {
+                    a_signup_weight.hint = "kg"
+                }
+            } else {
+                if (weight.isEmpty()) {
+                    a_signup_weight.hint = "156 lbs"
+                } else {
+                    a_signup_weight.hint = "lbs"
+                }
+            }
+        }
+    }
+
+    // NumberPickerListener
+    override fun onNumberPickerSelected(value: String) {
+        height = value
+        setHeightHint(a_signup_height_text.hasFocus())
     }
 
     override fun checkValidation() {
