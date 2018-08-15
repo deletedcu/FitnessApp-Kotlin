@@ -64,6 +64,19 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
         inflater?.inflate(R.menu.workout_detail, menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_share -> {
+                val share = Intent(Intent.ACTION_SEND)
+                share.type = "text/plain"
+                share.putExtra(Intent.EXTRA_TEXT, "Check out this workout on LiveRowing! https://liverowing.com/workout/browser/${workoutType.objectId}")
+                startActivity(Intent.createChooser(share, "Share workout"))
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun loadData(pullToRefresh: Boolean) {
         val workoutTypeId = WorkoutBrowserDetailFragmentArgs.fromBundle(arguments).workoutTypeId
         if (workoutTypeId.isNotEmpty()) {
