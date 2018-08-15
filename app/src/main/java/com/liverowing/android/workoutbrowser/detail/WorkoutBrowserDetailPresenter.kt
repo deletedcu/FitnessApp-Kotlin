@@ -17,10 +17,7 @@ class WorkoutBrowserDetailPresenter : EventBusPresenter<WorkoutBrowserDetailView
             if (e !== null) {
                 ifViewAttached { it.showError(e, false) }
             } else {
-                ifViewAttached {
-                    it.setData(workoutType)
-                    it.showContent()
-                }
+                eventBus.postSticky(workoutType)
             }
         }
     }
