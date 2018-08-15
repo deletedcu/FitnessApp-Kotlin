@@ -40,10 +40,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/f_workout_browser_detail_container"
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <include layout="@layout/loading_view" />
+    <include layout="@layout/error_view" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/f_workout_browser_detail_fab"

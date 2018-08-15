@@ -68,7 +68,8 @@
         tools:layout="@layout/fragment_workout_browser_detail" >
         <argument
             android:name="workoutTypeId"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue=""/>
         <deepLink
             android:id="@+id/deepLink"
             app:uri="liverowing.com/workout/browser/{workoutTypeId}" />
