@@ -14,13 +14,23 @@ import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_2.*
 
-class SignupStep2Fragment(override var listener: ResultListener) : BaseStepFragment() {
+class SignupStep2Fragment : BaseStepFragment() {
+
+    override lateinit var listener: ResultListener
 
     var password: String = ""
         get() = a_signup_password_text.text.toString()
 
     var confirmPassword: String = ""
         get() = a_signup_password_confirm_text.text.toString()
+
+    companion object {
+        fun newInstance(listener: ResultListener) : SignupStep2Fragment {
+            var f = SignupStep2Fragment()
+            f.listener = listener;
+            return f
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_signup_2, container, false)

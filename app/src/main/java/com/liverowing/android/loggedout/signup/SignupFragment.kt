@@ -72,10 +72,10 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
 
     fun updateFragment() {
         currentFragment = when (currentStep) {
-            1 -> SignupStep1Fragment(this)
-            2 -> SignupStep2Fragment(this)
-            3 -> SignupStep3Fragment(this)
-            4 -> SignupStep4Fragment(this)
+            1 -> SignupStep4Fragment.newInstance(this)
+            2 -> SignupStep2Fragment.newInstance(this)
+            3 -> SignupStep3Fragment.newInstance(this)
+            4 -> SignupStep4Fragment.newInstance(this)
             else -> null
         }
 

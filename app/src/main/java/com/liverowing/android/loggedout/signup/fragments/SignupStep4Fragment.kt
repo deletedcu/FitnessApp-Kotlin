@@ -33,14 +33,14 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "VARIABLE_WITH_REDUNDANT_INITIALIZER")
-class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragment() {
+class SignupStep4Fragment : BaseStepFragment() {
+    override lateinit var listener: ResultListener
 
     private var permissionsToRequest = arrayListOf<String>()
     private var permissionsRejected = arrayListOf<String>()
     private var permissions = arrayListOf<String>()
 
     private val ALL_PERMISSIONS_RESULT = 107
-    private val REQUEST_PHOTO = 1001
 
     var myBitmap: Bitmap? = null
 
@@ -63,6 +63,14 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     var defaultYear = 1980
     var defaultMonth = 6
     var defaultDay = 15
+
+    companion object {
+        fun newInstance(listener: ResultListener) : SignupStep4Fragment {
+            var f = SignupStep4Fragment()
+            f.listener = listener;
+            return f
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_signup_4, container, false)
@@ -201,7 +209,6 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var bitmap: Bitmap? = null
         when (requestCode) {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)

@@ -14,7 +14,9 @@ import kotlinx.android.synthetic.main.fragment_signup_3.*
 import android.text.InputFilter
 import com.liverowing.android.util.Utils
 
-class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragment(), NumberPickerListener {
+class SignupStep3Fragment : BaseStepFragment(), NumberPickerListener {
+
+    override lateinit var listener: ResultListener
 
     var height: String = "0"
         get() = a_signup_height_text.text.toString()
@@ -30,6 +32,14 @@ class SignupStep3Fragment(override var listener: ResultListener) : BaseStepFragm
         get() {
             return a_signup_system_metric.isChecked
         }
+
+    companion object {
+        fun newInstance(listener: ResultListener) : SignupStep3Fragment {
+            var f = SignupStep3Fragment()
+            f.listener = listener;
+            return f
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_signup_3, container, false)

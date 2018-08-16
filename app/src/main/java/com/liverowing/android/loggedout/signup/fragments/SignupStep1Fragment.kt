@@ -13,7 +13,9 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.util.Utils
 import com.parse.ParseUser
 
-class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragment() {
+class SignupStep1Fragment : BaseStepFragment() {
+
+    override lateinit var listener: ResultListener
 
     var username: String = ""
         get() {
@@ -25,6 +27,14 @@ class SignupStep1Fragment(override var listener: ResultListener) : BaseStepFragm
         }
 
     private lateinit var hud: KProgressHUD
+
+    companion object {
+        fun newInstance(listener: ResultListener) : SignupStep1Fragment {
+            var f = SignupStep1Fragment()
+            f.listener = listener;
+            return f
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_signup_1, container, false)
