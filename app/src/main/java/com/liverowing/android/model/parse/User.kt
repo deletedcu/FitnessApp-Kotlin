@@ -44,8 +44,8 @@ class User : ParseUser() {
     var rotationRank by ParseDelegate<Int?>()
     var `class` by ParseDelegate<Int?>()
 
-    // Default constructor
-    fun User() {
+    // Default values
+    fun initValues() {
         boatColor = 1
         hatColor = 1
         maxHR = 220

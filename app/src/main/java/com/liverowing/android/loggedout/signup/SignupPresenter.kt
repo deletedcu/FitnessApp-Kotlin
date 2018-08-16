@@ -27,6 +27,10 @@ class SignupPresenter: MvpBasePresenter<SignupView>() {
         user.weight = newUser.weight
         user.height = newUser.height
         user.dob = newUser.dob
+        user.boatColor = newUser.boatColor
+        user.hatColor = newUser.hatColor
+        user.`class` = newUser.`class`
+        user.maxHR = newUser.maxHR
         if (bitmapBytes != null) {
             val parseFile = ParseFile("profilePicture.png", bitmapBytes)
             user.image = parseFile

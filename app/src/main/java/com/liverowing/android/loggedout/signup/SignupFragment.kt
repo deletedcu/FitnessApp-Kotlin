@@ -28,7 +28,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
     var currentStep: Int = 1
     var currentFragment: BaseStepFragment? = null
 
-    var newUser: User = User()
+    lateinit var newUser: User
 
     private lateinit var hud: KProgressHUD
 
@@ -41,6 +41,8 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hud = KProgressHUD.create(this.context)
+        newUser = User()
+        newUser.initValues()
         setupUI()
     }
 
