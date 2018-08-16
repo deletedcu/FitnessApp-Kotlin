@@ -61,7 +61,7 @@ class SignupStep4Fragment : BaseStepFragment() {
     var userName: String = ""
 
     var defaultYear = 1980
-    var defaultMonth = 6
+    var defaultMonth = 5
     var defaultDay = 15
 
     companion object {
