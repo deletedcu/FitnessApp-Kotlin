@@ -48,7 +48,6 @@ class User : ParseUser() {
     fun initValues() {
         boatColor = 1
         hatColor = 1
-        maxHR = 220
         `class` = 1
     }
 

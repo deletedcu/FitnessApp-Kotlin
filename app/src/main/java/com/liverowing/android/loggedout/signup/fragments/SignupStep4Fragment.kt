@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.liverowing.android.R
+import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.util.Constants
 import com.liverowing.android.util.DpHandler
 import com.liverowing.android.util.Utils
@@ -215,8 +216,9 @@ class SignupStep4Fragment : BaseStepFragment() {
                     Activity.RESULT_OK -> {
                         val uri = result.uri
                         try {
-                            val bitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
+                            var bitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
                             if (bitmap != null) {
+                                bitmap = bitmap.getResizedBitmap(500)
                                 val baos = ByteArrayOutputStream()
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
                                 bitmapBytes = baos.toByteArray()
@@ -236,17 +238,15 @@ class SignupStep4Fragment : BaseStepFragment() {
     }
 
     private fun startCropImageActivity() {
-        val defaultResultSize = DpHandler.dpToPx(context!!,500)
         CropImage.activity()
                 .setActivityTitle("Crop")
                 .setCropMenuCropButtonTitle("Done")
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setFixAspectRatio(true)
                 .setAspectRatio(1, 1)
-                .setOutputCompressQuality(50)
+                .setOutputCompressQuality(25)
                 .setCropShape(CropImageView.CropShape.OVAL)
-                .setMinCropResultSize(defaultResultSize, defaultResultSize)
-                .setMaxCropResultSize(defaultResultSize, defaultResultSize)
+                .setMinCropResultSize(500, 500)
                 .start(context!!, this)
     }
 
