@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.liverowing.android.BaseMvpFragment
+import com.liverowing.android.base.BaseMvpFragment
 import com.liverowing.android.R
 
 class LoggedOutActivity : AppCompatActivity() {

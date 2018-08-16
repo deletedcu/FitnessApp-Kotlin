@@ -12,7 +12,7 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
-import com.liverowing.android.BaseMvpFragment
+import com.liverowing.android.base.BaseMvpFragment
 import com.liverowing.android.loggedout.signup.fragments.*
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.util.Constants
