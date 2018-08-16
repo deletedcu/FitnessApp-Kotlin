@@ -23,6 +23,7 @@ import com.liverowing.android.extensions.rotateImageIfRequired
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.liverowing.android.util.Constants
+import com.liverowing.android.util.DpHandler
 import com.liverowing.android.util.Utils
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -212,14 +213,14 @@ class SignupStep4Fragment : BaseStepFragment() {
         when (requestCode) {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
-
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         val uri = result.uri
                         try {
-                            val tempBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
-                            myBitmap = CropImage.toOvalBitmap(tempBitmap.rotateImageIfRequired(context!!, uri))
-                            btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, myBitmap)
+                            myBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
+                            if (myBitmap != null) {
+                                btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, CropImage.toOvalBitmap(myBitmap!!))
+                            }
                         } catch (e: IOException) {
                             e.printStackTrace()
                             Toast.makeText(context!!, e.localizedMessage, Toast.LENGTH_LONG).show()
@@ -234,15 +235,17 @@ class SignupStep4Fragment : BaseStepFragment() {
     }
 
     private fun startCropImageActivity() {
+        val defaultResultSize = DpHandler.dpToPx(context!!,500)
         CropImage.activity()
                 .setActivityTitle("Crop")
                 .setCropMenuCropButtonTitle("Done")
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setFixAspectRatio(true)
                 .setAspectRatio(1, 1)
-                .setRequestedSize(400, 400)
-                .setGuidelines(CropImageView.Guidelines.ON)
+                .setOutputCompressQuality(50)
                 .setCropShape(CropImageView.CropShape.OVAL)
+                .setMinCropResultSize(defaultResultSize, defaultResultSize)
+                .setMaxCropResultSize(defaultResultSize, defaultResultSize)
                 .start(context!!, this)
     }
 
