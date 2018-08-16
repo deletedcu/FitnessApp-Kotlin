@@ -1,36 +1,32 @@
-package com.liverowing.android.activity.login
+package com.liverowing.android.loggedout.signup.fragments
 
 import android.Manifest
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.ComponentName
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import com.liverowing.android.BuildConfig
 import com.liverowing.android.R
-import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.extensions.rotateImageIfRequired
 import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.liverowing.android.util.Constants
 import com.liverowing.android.util.Utils
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_signup_4.*
-import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -113,10 +109,10 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
                     permissionsToRequest.toArray(array)
                     requestPermissions(array, ALL_PERMISSIONS_RESULT)
                 } else {
-                    startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+                    startCropImageActivity()
                 }
             } else {
-                startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+                startCropImageActivity()
             }
 
         }
@@ -139,103 +135,6 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         }
     }
 
-    /**
-     * Create a chooser intent to select the source to get image from.<br />
-     * The source can be camera's (ACTION_IMAGE_CAPTURE) or gallery's (ACTION_GET_CONTENT).<br />
-     * All possible sources are added to the intent chooser.
-     */
-    private fun getPickImageChooserIntent(): Intent {
-
-        // Determine Uri of camera image to save.
-        val outputFileUri = getCaptureImageOutputUri()
-
-        var allIntents = arrayListOf<Intent>()
-        val packageManager = activity!!.packageManager
-
-        // collect all camera intents
-        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val listCam = packageManager.queryIntentActivities(captureIntent, 0)
-        for (res in listCam) {
-            val intent = Intent(captureIntent)
-            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
-            intent.setPackage(res.activityInfo.packageName)
-            if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-            }
-            allIntents.add(intent)
-        }
-
-        // collect all gallery intents
-        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
-        galleryIntent.type = "image/*"
-        val listGallery = packageManager.queryIntentActivities(galleryIntent, 0)
-        for (res in listGallery) {
-            val intent = Intent(galleryIntent)
-            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
-            intent.setPackage(res.activityInfo.packageName)
-            allIntents.add(intent)
-        }
-
-        // the main intent is the last in the list (fucking android) so pickup the useless one
-        var mainIntent = allIntents.get(allIntents.size - 1)
-        for (intent in allIntents) {
-            if (intent.component.className.equals("com.android.documentsui.DocumentsActivity")) {
-                mainIntent = intent
-                break
-            }
-        }
-        allIntents.remove(mainIntent)
-
-        // Create a chooser from the main intent
-        val chooserIntent = Intent.createChooser(mainIntent, "Select source")
-
-        // Add all other intents
-        val array = arrayOfNulls<Intent>(allIntents.size)
-        allIntents.toArray(array)
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, array)
-
-        return chooserIntent
-    }
-
-    /**
-     * Get URI to image received from capture by camera.
-     */
-    private fun getCaptureImageOutputUri(): Uri? {
-        val file = getOutputMediaFile(activity!!.resources.getString(R.string.app_name) + File.separator + "profile")
-        if (file != null) {
-            val outputUri = FileProvider.getUriForFile(activity!!, BuildConfig.APPLICATION_ID + ".fileprovider", file)
-            return outputUri
-        } else {
-            return null
-        }
-    }
-
-    private fun getOutputMediaFile(folderName: String): File? {
-        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), folderName)
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null
-            }
-        }
-        val mediaFile = File(mediaStorageDir.path + File.separator + "profile_pic.jpg")
-        return  mediaFile
-    }
-
-    /**
-     * Get the URI of the selected image from [.getPickImageChooserIntent].<br></br>
-     * Will return the correct URI for camera and gallery image.
-     *
-     * @param data the returned data of the activity result
-     */
-    fun getPickImageResultUri(data: Intent?): Uri? {
-        var isCamera = true
-        if (data != null) {
-            val action = data.action
-            isCamera = action != null && action == MediaStore.ACTION_IMAGE_CAPTURE
-        }
-        return if (isCamera) getCaptureImageOutputUri() else data!!.data
-    }
-
     private fun findUnAskedPermissions(wanted: ArrayList<String>): ArrayList<String> {
         val result = arrayListOf<String>()
 
@@ -249,17 +148,13 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
     }
 
     private fun hasPermission(permission: String): Boolean {
-        if (canMakeSmores()) {
+        if (Utils.canMakeSmores()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 @Suppress("DEPRECATED_IDENTITY_EQUALS")
                 return ContextCompat.checkSelfPermission(activity!!, permission) === PackageManager.PERMISSION_GRANTED
             }
         }
         return true
-    }
-
-    private fun canMakeSmores(): Boolean {
-        return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
     }
 
     private fun showMessageOKCancel(message: String, okListener: DialogInterface.OnClickListener) {
@@ -298,7 +193,7 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
                     }
 
                 } else {
-                    startActivityForResult(getPickImageChooserIntent(), REQUEST_PHOTO)
+                    startCropImageActivity()
                 }
             }
         }
@@ -308,33 +203,40 @@ class SignupStep4Fragment(override var listener: ResultListener) : BaseStepFragm
         super.onActivityResult(requestCode, resultCode, data)
         var bitmap: Bitmap? = null
         when (requestCode) {
-            REQUEST_PHOTO -> {
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                val result = CropImage.getActivityResult(data)
+
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        val picUri = getPickImageResultUri(data)
-                        if (picUri != null) {
-                            try {
-                                var tempBitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, picUri)
-                                tempBitmap = tempBitmap.rotateImageIfRequired(activity!!, picUri)
-                                myBitmap = tempBitmap.getResizedBitmap(500)
-
-                                btn_signup_profile_picture.background = BitmapDrawable(activity!!.resources, myBitmap)
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
-                        } else {
-                            if (data != null) {
-                                bitmap = data.extras.get("data") as? Bitmap
-                                if (bitmap != null) {
-                                    myBitmap = bitmap
-                                    btn_signup_profile_picture.background = BitmapDrawable(activity!!.resources, myBitmap)
-                                }
-                            }
+                        val uri = result.uri
+                        try {
+                            val tempBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
+                            myBitmap = CropImage.toOvalBitmap(tempBitmap.rotateImageIfRequired(context!!, uri))
+                            btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, myBitmap)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            Toast.makeText(context!!, e.localizedMessage, Toast.LENGTH_LONG).show()
                         }
+                    }
+                    CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> {
+                        Toast.makeText(context!!, result.error.localizedMessage, Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
+    }
+
+    private fun startCropImageActivity() {
+        CropImage.activity()
+                .setActivityTitle("Crop")
+                .setCropMenuCropButtonTitle("Done")
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setFixAspectRatio(true)
+                .setAspectRatio(1, 1)
+                .setRequestedSize(400, 400)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                .start(context!!, this)
     }
 
 }

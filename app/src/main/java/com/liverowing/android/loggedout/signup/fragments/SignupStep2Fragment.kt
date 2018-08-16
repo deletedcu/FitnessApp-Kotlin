@@ -1,4 +1,4 @@
-package com.liverowing.android.activity.login
+package com.liverowing.android.loggedout.signup.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -13,7 +13,6 @@ import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
 import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_2.*
-import kotlinx.android.synthetic.main.fragment_signup_2.view.*
 
 class SignupStep2Fragment(override var listener: ResultListener) : BaseStepFragment() {
 

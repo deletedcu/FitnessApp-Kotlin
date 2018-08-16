@@ -1,4 +1,4 @@
-package com.liverowing.android.activity.login
+package com.liverowing.android.loggedout.signup.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

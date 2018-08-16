@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import kotlinx.io.ByteArrayOutputStream
 import android.app.Activity
+import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
@@ -126,6 +127,9 @@ class Utils {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
+        fun canMakeSmores(): Boolean {
+            return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
+        }
     }
 
 }

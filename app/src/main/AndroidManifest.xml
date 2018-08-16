@@ -11,8 +11,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.camera2" android:required="true" />
-
     <application
         android:name=".LiveRowing"
         android:allowBackup="true"
@@ -40,9 +38,15 @@
             android:theme="@style/AppTheme.NoActionBar">
             <nav-graph android:value="@navigation/main_nav_graph"/>
         </activity>
-        <activity android:name=".loggedout.LoggedOutActivity"
+
+        <activity
+            android:name=".loggedout.LoggedOutActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
 
         <meta-data
             android:name="preloaded_fonts"
