@@ -19,15 +19,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.liverowing.android.R
-import com.liverowing.android.extensions.rotateImageIfRequired
-import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
-import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.liverowing.android.util.Constants
 import com.liverowing.android.util.DpHandler
 import com.liverowing.android.util.Utils
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_signup_4.*
+import kotlinx.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,7 +41,7 @@ class SignupStep4Fragment : BaseStepFragment() {
 
     private val ALL_PERMISSIONS_RESULT = 107
 
-    var myBitmap: Bitmap? = null
+    var bitmapBytes: ByteArray? = null
 
     var birthday: String = ""
         get() = a_signup_birthday_text.text.toString()
@@ -217,9 +215,12 @@ class SignupStep4Fragment : BaseStepFragment() {
                     Activity.RESULT_OK -> {
                         val uri = result.uri
                         try {
-                            myBitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
-                            if (myBitmap != null) {
-                                btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, CropImage.toOvalBitmap(myBitmap!!))
+                            val bitmap = MediaStore.Images.Media.getBitmap(context!!.contentResolver, uri)
+                            if (bitmap != null) {
+                                val baos = ByteArrayOutputStream()
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+                                bitmapBytes = baos.toByteArray()
+                                btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, CropImage.toOvalBitmap(bitmap!!))
                             }
                         } catch (e: IOException) {
                             e.printStackTrace()

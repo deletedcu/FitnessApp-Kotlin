@@ -29,7 +29,6 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
     var currentFragment: BaseStepFragment? = null
 
     var newUser: User = User()
-    var password: String = ""
 
     private lateinit var hud: KProgressHUD
 
@@ -115,7 +114,6 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
             }
             2 -> {
                 newUser.setPassword(data!!.get("password"))
-                password = data.get("password")!!
                 currentStep ++
                 a_signup_stepbar.currentStep = currentStep
                 updateFragment()
@@ -133,8 +131,8 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
                 val simpleDateFormat = SimpleDateFormat(Constants.DATE_PATTERN, Locale.US)
                 newUser.dob = simpleDateFormat.parse(birthday)
                 newUser.gender = data.get("gender")
-                val bitmap = (currentFragment as SignupStep4Fragment).myBitmap
-                presenter.signup(newUser, password, bitmap)
+                val bitmapBytes = (currentFragment as SignupStep4Fragment).bitmapBytes
+                presenter.signup(newUser, bitmapBytes)
             }
             else -> {}
         }
