@@ -6,6 +6,7 @@ import com.liverowing.android.model.parse.*
 import com.parse.Parse
 import com.parse.ParseException
 import com.parse.ParseObject
+import com.parse.ParseUser
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 import com.squareup.leakcanary.RefWatcher

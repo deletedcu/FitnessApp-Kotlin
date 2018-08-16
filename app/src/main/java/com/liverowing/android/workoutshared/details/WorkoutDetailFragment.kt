@@ -16,6 +16,8 @@ import com.liverowing.android.model.parse.Segment
 import com.liverowing.android.model.parse.WorkoutType
 import kotlinx.android.synthetic.main.fragment_workout_details.*
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 class WorkoutDetailFragment : Fragment() {
@@ -25,6 +27,16 @@ class WorkoutDetailFragment : Fragment() {
     private lateinit var viewDividerItemDecoration: DividerItemDecoration
 
     private var dataSet = mutableListOf<Segment>()
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this@WorkoutDetailFragment)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this@WorkoutDetailFragment)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -37,11 +49,6 @@ class WorkoutDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        return
-        val workoutType = EventBus.getDefault().getStickyEvent(WorkoutType::class.java)
-
-        f_workout_detail_intervals.text = workoutType.friendlySegmentDescription
-        f_workout_detail_description.text = workoutType.descriptionText
 
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
@@ -54,6 +61,13 @@ class WorkoutDetailFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onWorkoutTypeMainThread(workoutType: WorkoutType) {
+        f_workout_detail_intervals.text = workoutType.friendlySegmentDescription
+        f_workout_detail_description.text = workoutType.descriptionText
+
 
         dataSet.clear()
         if (workoutType.segments is List<Segment>) {

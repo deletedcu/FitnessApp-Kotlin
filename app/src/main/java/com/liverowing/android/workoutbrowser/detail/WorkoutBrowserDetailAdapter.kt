@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.liverowing.android.workoutshared.details.WorkoutDetailFragment
-import com.liverowing.android.workoutshared.details.WorkoutHistoryFragment
+import com.liverowing.android.workoutshared.history.WorkoutHistoryFragment
 import com.liverowing.android.workoutshared.leaderboards.WorkoutLeaderBoardsFragment
 
 class WorkoutBrowserDetailAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
