@@ -135,6 +135,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
                 val age = Utils.calculateAge(newUser.dob!!)
                 newUser.maxHR = 220 - age
                 newUser.gender = data.get("gender")
+                newUser.calcIsHeavyweight()
                 val bitmapBytes = (currentFragment as SignupStep4Fragment).bitmapBytes
                 presenter.signup(newUser, bitmapBytes)
             }

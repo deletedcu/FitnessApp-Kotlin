@@ -59,6 +59,26 @@ class User : ParseUser() {
             return gender + heavyWeight.toString()
         }
 
+    fun calcIsHeavyweight() {
+        if (gender != null) {
+            var value = false
+            if (gender!!.toLowerCase().equals("male")) {
+                if (isMetric!!) {
+                    value = height!! > 75
+                } else {
+                    value = height!! > 165
+                }
+            } else {
+                if (isMetric!!) {
+                    value = height!! > 61.5
+                } else {
+                    value = height!! > 135
+                }
+            }
+            isHeavyweight = value
+        }
+    }
+
     fun getFlagColor(context: Context): Int {
             val colors = context.resources.getIntArray(hat_colors)
             if (hatColor in 0 until colors.size) {

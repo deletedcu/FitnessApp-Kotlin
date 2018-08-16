@@ -31,6 +31,9 @@ class SignupPresenter: MvpBasePresenter<SignupView>() {
         user.hatColor = newUser.hatColor
         user.`class` = newUser.`class`
         user.maxHR = newUser.maxHR
+        if (newUser.isHeavyweight != null) {
+            user.isHeavyweight = newUser.isHeavyweight
+        }
         if (bitmapBytes != null) {
             val parseFile = ParseFile("profilePicture.png", bitmapBytes)
             user.image = parseFile
