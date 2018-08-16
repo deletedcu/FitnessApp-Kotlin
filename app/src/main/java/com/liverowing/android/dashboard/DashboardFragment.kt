@@ -35,6 +35,16 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     override fun createPresenter() = DashboardPresenter()
 
+    override fun onStart() {
+        super.onStart()
+        presenter.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

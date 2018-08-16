@@ -1,13 +1,27 @@
 package com.liverowing.android.dashboard
 
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
+import com.liverowing.android.base.EventBusPresenter
+import com.liverowing.android.model.messages.DeviceConnected
+import com.liverowing.android.model.messages.DeviceDisconnected
 import com.liverowing.android.model.parse.WorkoutType
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
-class DashboardPresenter : MvpBasePresenter<DashboardView>() {
+class DashboardPresenter : EventBusPresenter<DashboardView>() {
     fun loadDashboard() {
         loadFeaturedWorkouts()
         loadRecentAndLikedWorkouts()
         loadMyCustomWorkouts()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onDeviceConnectedMainThread(message: DeviceConnected) {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onDeviceDisconnectedMainThread(message: DeviceDisconnected) {
+
     }
 
     private fun loadFeaturedWorkouts() {
