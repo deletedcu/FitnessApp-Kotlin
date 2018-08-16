@@ -14,7 +14,7 @@ class User : ParseUser() {
     var boatColor by ParseDelegate<Int>()
     var hatColor by ParseDelegate<Int>()
     var gender by ParseDelegate<String?>()
-    var height by ParseDelegate<Int?>()
+    var height by ParseDelegate<Double?>()
     var dob by ParseDelegate<Date?>()
     var weight by ParseDelegate<Int?>()
     var description by ParseDelegate<String?>()
@@ -42,6 +42,15 @@ class User : ParseUser() {
     var maxHR by ParseDelegate<Int?>()
     var getFullAccessLinkLabel by ParseDelegate<String?>()
     var rotationRank by ParseDelegate<Int?>()
+    var `class` by ParseDelegate<Int?>()
+
+    // Default constructor
+    fun User() {
+        boatColor = 1
+        hatColor = 1
+        maxHR = 220
+        `class` = 1
+    }
 
     // Calculated fields
     val userClass: String

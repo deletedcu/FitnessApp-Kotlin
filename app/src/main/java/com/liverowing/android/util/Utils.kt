@@ -58,6 +58,12 @@ class Utils {
             return result.toString()
         }
 
+        fun cmToMeter(cm: String): String {
+            val value = cm.toDouble() / 100
+            val result = String.format("%.2f", value)
+            return result
+        }
+
         fun convertFeetToCM(feet: String): String {
             if (feet.isEmpty()) {
                 return ""

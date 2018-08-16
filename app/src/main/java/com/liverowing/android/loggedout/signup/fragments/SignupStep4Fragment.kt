@@ -47,12 +47,12 @@ class SignupStep4Fragment : BaseStepFragment() {
     var birthday: String = ""
         get() = a_signup_birthday_text.text.toString()
 
-    var gender: String = "male"
+    var gender: String = "Male"
         get() {
             if (a_signup_gender_male.isChecked) {
-                return "male"
+                return "Male"
             } else {
-                return "female"
+                return "Female"
             }
         }
 

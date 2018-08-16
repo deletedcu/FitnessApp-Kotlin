@@ -108,7 +108,7 @@ class SignupStep3Fragment : BaseStepFragment(), NumberPickerListener {
 
     private fun getHeightValue(): String {
         if (isMetric) {
-            return height
+            return Utils.cmToMeter(height)
         } else {
             return Utils.feetToInch(height)
         }

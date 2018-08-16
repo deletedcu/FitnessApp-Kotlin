@@ -107,6 +107,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
         if (state) when (currentStep) {
             1 -> {
                 newUser.username = data!!.get("username")
+                newUser.displayName = newUser.username
                 newUser.email = data.get("email")
                 currentStep ++
                 a_signup_stepbar.currentStep = currentStep
@@ -121,7 +122,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
             }
             3 -> {
                 newUser.weight = data!!.get("weight")!!.toInt()
-                newUser.height = data.get("height")!!.toInt()
+                newUser.height = data.get("height")!!.toDouble()
                 newUser.isMetric = data.get("isMetric")!!.toBoolean()
                 currentStep ++
                 a_signup_stepbar.currentStep = currentStep
