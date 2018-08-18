@@ -9,30 +9,22 @@ import com.liverowing.android.R
 import kotlinx.android.synthetic.main.dialog_feets.*
 import kotlinx.android.synthetic.main.dialog_feets.view.*
 
-class FeetDialogFragment(var listener: NumberPickerListener) : DialogFragment() {
+class FeetDialogFragment : DialogFragment() {
+
+    lateinit var listener: NumberPickerListener
 
     var feets: Int = 5
         get() = numberpicker_feet.value
-        set(value) {
-            field = value
-        }
 
     var inchs: Int = 6
         get() = numberpicker_inch.value
-        set(value) {
-            field = value
-        }
 
     companion object {
         fun newInstance(listener: NumberPickerListener): FeetDialogFragment {
-            val f = FeetDialogFragment(listener)
+            val f = FeetDialogFragment()
+            f.listener = listener
             return f
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

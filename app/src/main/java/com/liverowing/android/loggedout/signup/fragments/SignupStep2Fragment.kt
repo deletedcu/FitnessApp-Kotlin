@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import com.liverowing.android.R
-import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
-import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import com.liverowing.android.util.Utils
 import kotlinx.android.synthetic.main.fragment_signup_2.*
 

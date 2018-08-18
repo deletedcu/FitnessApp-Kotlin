@@ -63,7 +63,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         viewManager = GridLayoutManager(activity!!, 2)
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
-        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(this)) { _, workout ->
+        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!)) { _, workout ->
             EventBus.getDefault().postSticky(workout)
             view.findNavController().navigate(R.id.workoutBrowserDetailAction)
         }

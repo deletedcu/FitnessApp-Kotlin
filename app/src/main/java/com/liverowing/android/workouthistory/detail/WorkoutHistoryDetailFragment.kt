@@ -65,12 +65,12 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
         workout_detail_createdby.text = "Created by | ${workoutType?.createdBy?.username}"
 
         Glide
-                .with(this@WorkoutHistoryDetailFragment)
+                .with(activity!!)
                 .load(workoutType?.image?.url)
                 .into(workout_detail_image)
 
         Glide
-                .with(this@WorkoutHistoryDetailFragment)
+                .with(activity!!)
                 .load(workoutType?.createdBy?.image?.url)
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(workout_detail_createdby_image)

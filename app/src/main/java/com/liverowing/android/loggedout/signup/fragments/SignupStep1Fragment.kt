@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.liverowing.android.R
 import com.liverowing.android.extensions.isValidEmail
-import com.liverowing.android.loggedout.signup.fragments.BaseStepFragment
-import com.liverowing.android.loggedout.signup.fragments.ResultListener
 import kotlinx.android.synthetic.main.fragment_signup_1.*
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.util.Utils

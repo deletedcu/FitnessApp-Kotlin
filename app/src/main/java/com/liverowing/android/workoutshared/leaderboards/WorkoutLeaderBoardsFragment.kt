@@ -56,7 +56,7 @@ class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, 
 
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutLeaderBoardsAdapter(dataSet, Glide.with(this)) { _, workout ->
+        viewAdapter = WorkoutLeaderBoardsAdapter(dataSet, Glide.with(activity!!)) { _, workout ->
             Timber.d("Clicked a userstats row: %s", workout)
         }
 

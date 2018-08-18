@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import com.liverowing.android.R
 import com.liverowing.android.extensions.getResizedBitmap
 import com.liverowing.android.util.Constants
-import com.liverowing.android.util.DpHandler
 import com.liverowing.android.util.Utils
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
