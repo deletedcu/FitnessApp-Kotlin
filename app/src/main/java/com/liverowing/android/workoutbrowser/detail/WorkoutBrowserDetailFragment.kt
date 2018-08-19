@@ -3,24 +3,20 @@ package com.liverowing.android.workoutbrowser.detail
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.navigation.Navigation.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
-import com.liverowing.android.model.parse.User
-import com.liverowing.android.model.parse.Workout
 import com.liverowing.android.model.parse.WorkoutType
-import com.liverowing.android.race.RaceActivity
 import kotlinx.android.synthetic.main.fragment_workout_browser_detail.*
 import kotlinx.android.synthetic.main.workout_detail_collapsing_toolbar.*
-import org.greenrobot.eventbus.EventBus
 
 
 class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutType, WorkoutBrowserDetailView, WorkoutBrowserDetailPresenter>(), WorkoutBrowserDetailView {
@@ -45,8 +41,7 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
         f_workout_browser_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
 
         f_workout_browser_detail_fab.setOnClickListener {
-            val intent = Intent(activity, RaceActivity::class.java)
-            startActivity(intent)
+            findNavController(view).navigate(R.id.raceActivityAction)
         }
     }
 

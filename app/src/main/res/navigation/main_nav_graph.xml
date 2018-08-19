@@ -76,6 +76,9 @@
         <deepLink
             android:id="@+id/deepLink"
             app:uri="liverowing.com/workout/browser/{workoutTypeId}" />
+        <action
+            android:id="@+id/raceActivityAction"
+            app:destination="@id/raceActivity" />
     </fragment>
     <fragment
         android:id="@+id/workoutHistoryFragment"

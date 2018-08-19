@@ -1,6 +1,6 @@
 package com.liverowing.android.race
 
-import com.hannesdorfmann.mosby3.mvp.MvpView
+import com.hannesdorfmann.mosby3.mvp.lce.MvpLceView
+import com.liverowing.android.model.parse.WorkoutType
 
-interface RaceView : MvpView {
-}
+interface RaceView : MvpLceView<WorkoutType>
