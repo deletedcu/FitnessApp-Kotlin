@@ -221,7 +221,7 @@ class SignupStep4Fragment : BaseStepFragment() {
                                 val baos = ByteArrayOutputStream()
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
                                 bitmapBytes = baos.toByteArray()
-                                btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, CropImage.toOvalBitmap(bitmap!!))
+                                btn_signup_profile_picture.background = BitmapDrawable(context!!.resources, CropImage.toOvalBitmap(bitmap))
                             }
                         } catch (e: IOException) {
                             e.printStackTrace()

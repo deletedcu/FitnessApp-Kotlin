@@ -52,7 +52,7 @@ class WorkoutDetailFragment : Fragment() {
 
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutSegmentAdapter(dataSet, Glide.with(this)) { _, segment ->
+        viewAdapter = WorkoutSegmentAdapter(dataSet, Glide.with(context!!)) { _, segment ->
             Timber.d("Clicked a segment row: %s", segment)
         }
 

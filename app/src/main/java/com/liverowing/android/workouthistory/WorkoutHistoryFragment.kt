@@ -65,7 +65,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             EventBus.getDefault().postSticky(workout)
             EventBus.getDefault().postSticky(workout.workoutType)
             view.findNavController().navigate(R.id.workoutHistoryDetailAction)
-        }, onOptionsClick = { v, workout ->
+        }, onOptionsClick = { _, workout ->
             showBottomMenu(workout)
         })
 
@@ -98,12 +98,6 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showOptionsMenu(view: View, workout: Workout) {
-        val popup = PopupMenu(activity!!, view)
-        popup.inflate(R.menu.workout_history_item)
-        popup.show()
     }
 
     private fun showBottomMenu(workout: Workout) {

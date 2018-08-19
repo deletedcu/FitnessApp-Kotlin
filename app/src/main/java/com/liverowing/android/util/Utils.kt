@@ -139,11 +139,12 @@ class Utils {
             return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
         }
 
+        @Suppress("DEPRECATED_IDENTITY_EQUALS")
         fun calculateAge(dateOfBirth: Date): Int {
             val today = Calendar.getInstance()
             val birthDate = Calendar.getInstance()
 
-            var age = 0
+            var age: Int
 
             birthDate.time = dateOfBirth
             if (birthDate.after(today)) {

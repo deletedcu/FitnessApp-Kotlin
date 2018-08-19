@@ -61,7 +61,7 @@ class User : ParseUser() {
 
     fun calcIsHeavyweight() {
         if (gender != null) {
-            var value = false
+            var value: Boolean
             if (gender!!.toLowerCase().equals("male")) {
                 if (isMetric!!) {
                     value = height!! > 75

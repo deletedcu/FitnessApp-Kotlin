@@ -90,13 +90,13 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
         workout_detail_collapsing_toolbar.title = workoutType.name
 
         Glide
-                .with(this@WorkoutBrowserDetailFragment)
+                .with(context!!)
                 .load(workoutType.image?.url)
                 .into(workout_detail_image)
 
         workout_detail_createdby.text = "Created by | ${workoutType.createdBy?.username}"
         Glide
-                .with(this@WorkoutBrowserDetailFragment)
+                .with(context!!)
                 .load(workoutType.createdBy?.image?.url)
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(workout_detail_createdby_image)
