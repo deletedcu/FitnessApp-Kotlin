@@ -2,9 +2,7 @@ package com.liverowing.android.workouthistory
 
 import android.os.Bundle
 import android.view.*
-import android.widget.PopupMenu
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,10 +16,13 @@ import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.R.id.*
 import com.liverowing.android.model.parse.Workout
+import com.liverowing.android.workouthistory.bottomSheet.BottomSheetFragment
+import com.liverowing.android.workouthistory.bottomSheet.BottomSheetListener
 import kotlinx.android.synthetic.main.fragment_workout_history.*
 import org.greenrobot.eventbus.EventBus
 
-class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>(), WorkoutHistoryView, SwipeRefreshLayout.OnRefreshListener {
+class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>(), WorkoutHistoryView, SwipeRefreshLayout.OnRefreshListener, BottomSheetListener {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -59,12 +60,12 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(this), onClick = { _, workout ->
+        viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(activity!!), onClick = { _, workout ->
             EventBus.getDefault().postSticky(workout)
             EventBus.getDefault().postSticky(workout.workoutType)
             findNavController(view).navigate(R.id.workoutHistoryDetailAction)
-        }, onOptionsClick = { v, workout ->
-            showOptionsMenu(v, workout)
+        }, onOptionsClick = { _, workout ->
+            showBottomMenu(workout)
         })
 
         contentView.setOnRefreshListener(this@WorkoutHistoryFragment)
@@ -98,10 +99,9 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showOptionsMenu(view: View, workout: Workout) {
-        val popup = PopupMenu(activity!!, view)
-        popup.inflate(R.menu.workout_history_item)
-        popup.show()
+    private fun showBottomMenu(workout: Workout) {
+        val bottomSheetFragment = BottomSheetFragment.newInstance(workout, this)
+        bottomSheetFragment.show(fragmentManager, bottomSheetFragment.javaClass.toString())
     }
 
     override fun loadData(pullToRefresh: Boolean) {
@@ -140,5 +140,30 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
         return "There was an error loading workout history:\n\n${e?.message}"
+    }
+
+    // BottomSheetFragment listener
+    override fun onViewClick(workout: Workout) {
+
+    }
+
+    override fun onShareToFriend(workout: Workout) {
+
+    }
+
+    override fun onShareToSocial(workout: Workout) {
+
+    }
+
+    override fun onShareToConcept2(workout: Workout) {
+
+    }
+
+    override fun onSendToStrava(workout: Workout) {
+
+    }
+
+    override fun onDeleteWorkout(workout: Workout) {
+
     }
 }
