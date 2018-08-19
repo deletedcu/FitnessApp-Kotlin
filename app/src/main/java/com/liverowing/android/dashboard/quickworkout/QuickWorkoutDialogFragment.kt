@@ -11,15 +11,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.base.MvpLceBottomSheetDialogFragment
-import com.liverowing.android.dashboard.DashboardFragmentDirections
 import kotlinx.android.synthetic.main.fragment_quick_workout_dialog.*
 import kotlinx.android.synthetic.main.fragment_quick_workout_settings.*
 
 
 class QuickWorkoutDialogFragment : MvpLceBottomSheetDialogFragment<RecyclerView, List<QuickWorkoutDialogPresenter.QuickWorkoutItem>, QuickWorkoutDialogView, QuickWorkoutDialogPresenter>(), QuickWorkoutDialogView {
+    companion object {
+        fun newInstance(listener: QuickWorkoutDialogListener): QuickWorkoutDialogFragment{
+            val dialog = QuickWorkoutDialogFragment()
+            dialog.listener = listener
+
+            return dialog
+        }
+    }
+
+    lateinit var listener: QuickWorkoutDialogListener
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -38,6 +46,8 @@ class QuickWorkoutDialogFragment : MvpLceBottomSheetDialogFragment<RecyclerView,
             behavior.isFitToContents = true
             behavior.peekHeight = 1000
         }
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimationEnterExit
+
         return inflater.inflate(R.layout.fragment_quick_workout_dialog, container, false)
     }
 
@@ -58,9 +68,7 @@ class QuickWorkoutDialogFragment : MvpLceBottomSheetDialogFragment<RecyclerView,
                 setupQuickWorkoutSettings(item.items)
                 f_quick_workout_viewswitcher.showNext()
             } else if (item.workoutType != null) {
-                val action = DashboardFragmentDirections.RaceActivityAction()
-                action.setWorkoutTypeId(item.workoutType)
-                (activity as MainActivity).navController.navigate(action)
+                listener.onWorkoutTypeChoosen(this.dialog, item.workoutType)
             }
         }
 
@@ -80,14 +88,11 @@ class QuickWorkoutDialogFragment : MvpLceBottomSheetDialogFragment<RecyclerView,
         }
 
         f_quick_workout_cancel.setOnClickListener {
-            dismiss()
+            listener.onCancel(this.dialog)
         }
 
         f_quick_workout_start_button.setOnClickListener {
-            val action = DashboardFragmentDirections.RaceActivityAction()
-            action.setWorkoutTypeId(items[f_quick_workout_seekbar.progress].workoutType!!)
-            (activity as MainActivity).navController.navigate(action)
-            dismiss()
+            listener.onWorkoutTypeChoosen(this.dialog, items[f_quick_workout_seekbar.progress].workoutType!!)
         }
 
         f_quick_workout_seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

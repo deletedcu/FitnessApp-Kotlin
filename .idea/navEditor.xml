@@ -156,6 +156,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="raceActivityAction">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>

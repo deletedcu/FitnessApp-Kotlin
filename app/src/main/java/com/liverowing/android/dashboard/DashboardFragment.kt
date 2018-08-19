@@ -1,6 +1,7 @@
 package com.liverowing.android.dashboard
 
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.*
 import androidx.navigation.Navigation.findNavController
@@ -11,6 +12,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogFragment
+import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogListener
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.greenrobot.eventbus.EventBus
 
 
-class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView {
+class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener {
     private lateinit var itemDecoration: GridSpanDecoration
 
     private val featuredWorkouts = mutableListOf<WorkoutType>()
@@ -85,7 +87,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     private fun setupDashboard(view: View) {
         f_dashboard_fab.setOnClickListener {
-            val dialog = QuickWorkoutDialogFragment()
+            val dialog = QuickWorkoutDialogFragment.newInstance(this@DashboardFragment)
             dialog.show(childFragmentManager, dialog.javaClass.toString())
         }
 
@@ -183,5 +185,18 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         val action = DashboardFragmentDirections.workoutBrowserAction()
         action.setCategory(category)
         findNavController(v).navigate(action)
+    }
+
+    // QuickWorkoutDialogListener
+    override fun onCancel(dialog: Dialog) {
+        dialog.dismiss()
+    }
+
+    override fun onWorkoutTypeChoosen(dialog: Dialog, workoutTypeId: String) {
+        dialog.dismiss()
+
+        val action = DashboardFragmentDirections.raceActivityAction()
+        action.setWorkoutTypeId(workoutTypeId)
+        findNavController(view!!).navigate(action)
     }
 }
