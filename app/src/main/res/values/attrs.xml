@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TextMetricView">
-        <attr name="title" format="string" />
-        <attr name="value" format="string" />
-        <attr name="position" format="enum">
-            <enum name="left" value="8388611" />
-            <enum name="right" value="8388613" />
-            <enum name="center" value="1" />
-        </attr>
-    </declare-styleable>
-
-    <declare-styleable name="RaceProgressView">
-        <attr name="cornerRadius" format="integer" />
-        <attr name="startColor" format="color" />
-        <attr name="endColor" format="color" />
-        <attr name="name" format="string" />
-        <attr name="progress" format="float" />
-        <attr name="image" format="reference" />
-    </declare-styleable>
-
-    <declare-styleable name="GaugeView">
-
+    <declare-styleable name="TintableImageView">
+        <attr name="tintColorStateList" format="reference|color" />
     </declare-styleable>
 </resources>
