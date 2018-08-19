@@ -19,8 +19,8 @@ import timber.log.Timber
 
 
 class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceScanView>() {
-    private lateinit var bluetoothAdapter: BluetoothAdapter
-    private lateinit var bluetoothLeScanner: BluetoothLeScanner
+    private var bluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothLeScanner: BluetoothLeScanner? = null
     private var scanCallback: ScanCallback? = null
     private var scanning: Boolean = false
     private val devices = mutableMapOf<String, BluetoothDeviceAndStatus>()
@@ -51,7 +51,7 @@ class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceSca
             return
         }
 
-        bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
+        bluetoothLeScanner = bluetoothAdapter?.bluetoothLeScanner
 
         scanCallback = (object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
@@ -89,12 +89,12 @@ class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceSca
                 .build()
 
         scanning = true
-        bluetoothLeScanner.startScan(filters, settings, scanCallback)
+        bluetoothLeScanner?.startScan(filters, settings, scanCallback)
     }
 
     fun stopScanning() {
-        if (bluetoothAdapter !== null && bluetoothAdapter.isEnabled && bluetoothLeScanner !== null) {
-            bluetoothLeScanner.stopScan(scanCallback)
+        if (bluetoothAdapter !== null && bluetoothAdapter!!.isEnabled && bluetoothLeScanner !== null) {
+            bluetoothLeScanner?.stopScan(scanCallback)
             Timber.d("Stopped scanning for devices")
         }
 
@@ -103,7 +103,7 @@ class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceSca
     }
 
     private fun checkPermissions(): Boolean {
-        if (bluetoothAdapter === null || !bluetoothAdapter.isEnabled) {
+        if (bluetoothAdapter === null || !bluetoothAdapter!!.isEnabled) {
             ifViewAttached {
                 it.showError(Exception("Enable Bluetooth to scan for devices."), false)
                 it.requestBluetoothEnable()
