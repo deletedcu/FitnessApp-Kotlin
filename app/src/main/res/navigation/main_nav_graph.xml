@@ -37,6 +37,9 @@
             app:destination="@id/workoutHistoryFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_raceActivity"
+            app:destination="@id/raceActivity" />
     </fragment>
     <fragment
         android:id="@+id/workoutBrowserFragment"
@@ -89,4 +92,9 @@
         android:id="@+id/workoutHistoryDetailFragment"
         android:name="com.liverowing.android.workouthistory.detail.WorkoutHistoryDetailFragment"
         tools:layout="@layout/fragment_workout_history_detail" />
+    <activity
+        android:id="@+id/raceActivity"
+        android:name="com.liverowing.android.race.RaceActivity"
+        android:label="activity_race"
+        tools:layout="@layout/activity_race" />
 </navigation>

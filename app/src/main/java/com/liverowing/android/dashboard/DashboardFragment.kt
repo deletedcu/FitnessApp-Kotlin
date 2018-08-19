@@ -1,6 +1,7 @@
 package com.liverowing.android.dashboard
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.navigation.Navigation.findNavController
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
+import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogFragment
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
@@ -18,6 +20,15 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
 import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.greenrobot.eventbus.EventBus
+import android.view.WindowManager
+import android.os.Build
+import android.text.method.TextKeyListener.clear
+import android.view.ViewGroupOverlay
+import android.view.ViewGroup
+import androidx.annotation.NonNull
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import timber.log.Timber
 
 
 class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView {
@@ -76,18 +87,23 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_bluetooth -> view?.findNavController()?.navigate(R.id.deviceScanAction)
+            R.id.action_bluetooth -> findNavController(view!!).navigate(R.id.deviceScanAction)
         }
 
         return super.onOptionsItemSelected(item)
     }
 
     private fun setupDashboard(view: View) {
-        f_dashboard_fab.setOnClickListener { v -> fabOnClick(v) }
+        f_dashboard_fab.setOnClickListener {
+            val dialog = QuickWorkoutDialogFragment()
+            dialog.show(childFragmentManager, QuickWorkoutDialogFragment::class.toString())
+        }
+        /*
         f_dashboard_fab_just_row.setOnClickListener { v -> fabOnClick(v) }
         f_dashboard_fab_single_distance.setOnClickListener { v -> fabOnClick(v) }
         f_dashboard_fab_single_time.setOnClickListener { v -> fabOnClick(v) }
         f_dashboard_fab_background.setOnClickListener { v -> fabOnClick(v) }
+        */
         f_dashboard_featured_workouts_title.setOnClickListener { v -> titleOnClick(v); }
         f_dashboard_recent_and_liked_workouts_title.setOnClickListener { v -> titleOnClick(v); }
 
@@ -97,7 +113,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         featuredWorkoutsViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
         featuredWorkoutsViewAdapter = DashboardAdapter(580, featuredWorkouts, Glide.with(this)) { _, workoutType ->
             EventBus.getDefault().postSticky(workoutType)
-            view.findNavController().navigate(R.id.workoutBrowserDetailAction)
+            findNavController(view).navigate(R.id.workoutBrowserDetailAction)
         }
 
         featuredWorkoutsRecyclerView = f_dashboard_featured_workouts_recyclerview.apply {
@@ -110,7 +126,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         recentAndLikedWorkoutsViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
         recentAndLikedWorkoutsViewAdapter = DashboardAdapter(400, recentAndLikedWorkouts, Glide.with(this)) { _, workoutType ->
             EventBus.getDefault().postSticky(workoutType)
-            view.findNavController().navigate(R.id.workoutBrowserDetailAction)
+            findNavController(view).navigate(R.id.workoutBrowserDetailAction)
         }
 
         recentAndLikedWorkoutsRecyclerView = f_dashboard_recent_and_liked_workouts_recyclerview.apply {
@@ -160,7 +176,19 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
+    override fun deviceConnected(device: Any) {
+        activity?.invalidateOptionsMenu()
+    }
 
+    override fun deviceConnecting(device: Any) {
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun deviceDisconnected(device: Any) {
+        activity?.invalidateOptionsMenu()
+    }
+
+    /*
     private var mFabOpen: Boolean = false
     private fun fabOnClick(v: View) {
         when (v.id) {
@@ -170,14 +198,21 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             R.id.f_dashboard_fab_just_row -> {
             }
             R.id.f_dashboard_fab_single_distance -> {
+
+                closeFabMenu()
             }
-            R.id.action_single_time -> {
+            R.id.f_dashboard_fab_single_time -> {
+                val dialog = QuickWorkoutDialogFragment()
+                dialog.type = 2
+                dialog.show(childFragmentManager, QuickWorkoutDialogFragment::class.toString())
+                closeFabMenu()
             }
         }
     }
 
     private fun showFabMenu() {
         mFabOpen = true
+
         f_dashboard_fab_just_row.apply {
             alpha = 0f
             visibility = View.VISIBLE
@@ -216,6 +251,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             f_dashboard_fab_just_row.visibility = View.GONE
         }
     }
+    */
 
     private fun titleOnClick(v: View) {
         val category = when (v.id) {
@@ -226,6 +262,6 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
         val action = DashboardFragmentDirections.workoutBrowserAction()
         action.setCategory(category)
-        v.findNavController().navigate(action)
+        findNavController(v).navigate(action)
     }
 }

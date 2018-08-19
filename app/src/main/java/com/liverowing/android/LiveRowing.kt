@@ -3,10 +3,7 @@ package com.liverowing.android
 import android.app.Application
 import android.content.Context
 import com.liverowing.android.model.parse.*
-import com.parse.Parse
-import com.parse.ParseException
-import com.parse.ParseObject
-import com.parse.ParseUser
+import com.parse.*
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 import com.squareup.leakcanary.RefWatcher
@@ -46,6 +43,8 @@ class LiveRowing : Application() {
             Parse.setLogLevel(Parse.LOG_LEVEL_INFO)
         }
 
+        Preferences.init(this@LiveRowing)
+
         ParseObject.registerSubclass(Affiliate::class.java)
         ParseObject.registerSubclass(Goals::class.java)
         ParseObject.registerSubclass(Segment::class.java)
@@ -68,7 +67,18 @@ class LiveRowing : Application() {
                 .build()
 
         Parse.initialize(conf)
-        //ParseUser.logOut()
+
+        val configRefreshInterval = 12 * 60 * 60 * 1000
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - Preferences.lastParseConfigFetch > configRefreshInterval) {
+            ParseConfig.getInBackground { _, e ->
+                if (e != null) {
+                    Timber.e(e, "Failed to fetch config from server.")
+                } else {
+                    Preferences.lastParseConfigFetch = currentTime
+                }
+            }
+        }
     }
 
 }

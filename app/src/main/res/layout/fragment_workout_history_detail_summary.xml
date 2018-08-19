@@ -36,7 +36,7 @@
                     android:text="Your split details" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/f_quick_workout_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="13dp"
-                    android:layout_toEndOf="@+id/textView3"
+                    android:layout_toEndOf="@id/f_quick_workout_title"
                     android:entries="@array/split_comparisons"/>
 
             </RelativeLayout>

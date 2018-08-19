@@ -11,7 +11,6 @@
         -->
         <item name="android:toolbarStyle">@style/AppTheme.Widget.Toolbar</item>
         <item name="toolbarStyle">@style/AppTheme.Widget.Toolbar</item>
-        <!--<item name="bottomSheetDialogTheme">@style/LRBottomSheetDialogTheme</item>-->
 
         <!--<item name="android:fontFamily">@font/lato</item>-->
     </style>
@@ -88,6 +87,12 @@
         <item name="android:textColor">@color/textColor</item>
     </style>
 
+    <style name="AppTheme.TextAppearance.AppCompat.Title.Main" parent="AppTheme.TextAppearance.AppCompat.Title.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textColorDark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="AppTheme.TextAppearance.AppCompat.Title.Description.Small" parent="TextAppearance.AppCompat.Small">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">10sp</item>
@@ -100,11 +105,4 @@
         <item name="android:textColor">@color/textColorDark</item>
         <item name="android:letterSpacing">0.0125</item>
     </style>
-
-    <!--Dialog animation theme-->
-    <style name="DialogAnimationEnterExit" >
-        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
-    </style>
-
 </resources>

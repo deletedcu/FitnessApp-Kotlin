@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.kaopiz.kprogresshud.KProgressHUD
@@ -60,12 +61,12 @@ class LoginFragment : MvpFragment<LoginView, LoginPresenter>(), LoginView, View.
         when (v.id) {
             R.id.f_login_forgot_password -> {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, f_login_logo, "logo")
-                view?.findNavController()?.navigate(R.id.action_loginFragment_to_forgotPasswordFragment, options.toBundle())
+                findNavController(view!!).navigate(R.id.action_loginFragment_to_forgotPasswordFragment, options.toBundle())
             }
 
             R.id.f_login_signin_signup -> {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, f_login_logo, "logo")
-                view?.findNavController()?.navigate(R.id.action_loginFragment_to_signupFragment, options.toBundle())
+                findNavController(view!!).navigate(R.id.action_loginFragment_to_signupFragment, options.toBundle())
             }
 
             R.id.f_login_login_button -> login()

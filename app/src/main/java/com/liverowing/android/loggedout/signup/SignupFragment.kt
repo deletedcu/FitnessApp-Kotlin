@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
@@ -100,7 +100,7 @@ class SignupFragment: BaseMvpFragment<SignupView, SignupPresenter>(), SignupView
             currentFragment = fragmentManager!!.findFragmentByTag(currentStep.toString()) as BaseStepFragment?
             a_signup_stepbar.currentStep = currentStep
         } else {
-            view!!.findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
+            Navigation.findNavController(view!!).navigate(R.id.action_signupFragment_to_loginFragment)
         }
     }
 

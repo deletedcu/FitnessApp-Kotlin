@@ -81,6 +81,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_dashboardFragment_to_raceActivity">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="calculatorsAction">
                               <value>
                                 <LayoutPositions />
@@ -118,6 +123,18 @@
                           <Point>
                             <option name="x" value="265" />
                             <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="raceActivity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="258" />
+                            <option name="y" value="-355" />
                           </Point>
                         </option>
                       </LayoutPositions>

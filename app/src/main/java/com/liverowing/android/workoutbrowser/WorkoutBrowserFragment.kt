@@ -19,8 +19,7 @@ import com.liverowing.android.util.GridSpanDecoration
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
 import org.greenrobot.eventbus.EventBus
 import android.content.Intent
-
-
+import androidx.navigation.Navigation
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener {
@@ -65,7 +64,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
         viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!)) { _, workout ->
             EventBus.getDefault().postSticky(workout)
-            view.findNavController().navigate(R.id.workoutBrowserDetailAction)
+            Navigation.findNavController(view).navigate(R.id.workoutBrowserDetailAction)
         }
 
         contentView.setOnRefreshListener(this@WorkoutBrowserFragment)

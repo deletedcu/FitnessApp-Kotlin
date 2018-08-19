@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--<string name="facebook_app_id" translatable="false">644407955731400</string>-->
     <!--<string name="fb_login_protocol_scheme" translatable="false">fb644407955731400</string>-->
 
@@ -302,16 +302,16 @@
     <!--<string name="pref_color_theme_value">#87CEEB</string>-->
 
     <!--<string-array name="pref_color_theme_entries">-->
-        <!--<item>Black</item>-->
-        <!--<item>Sky Blue</item>-->
-        <!--<item>Red</item>-->
-        <!--<item>White</item>-->
+    <!--<item>Black</item>-->
+    <!--<item>Sky Blue</item>-->
+    <!--<item>Red</item>-->
+    <!--<item>White</item>-->
     <!--</string-array>-->
     <!--<string-array name="pref_color_theme_values">-->
-        <!--<item>#000000</item>-->
-        <!--<item>#87CEEB</item>-->
-        <!--<item>#FF0000</item>-->
-        <!--<item>#FFFFFF</item>-->
+    <!--<item>#000000</item>-->
+    <!--<item>#87CEEB</item>-->
+    <!--<item>#FF0000</item>-->
+    <!--<item>#FFFFFF</item>-->
     <!--</string-array>-->
 
     <!--<string name="pref_group_admin">Admin</string>-->
@@ -322,4 +322,8 @@
     <!--<string name="pref_group_support_summary">About, Help</string>-->
     <!--<string name="pref_support_about">About</string>-->
     <!--<string name="pref_support_show_help">Help</string>-->
+    <string name="lr_appbar_scrolling_view_behavior" translatable="false" tools:override="true">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
