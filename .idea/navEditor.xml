@@ -81,17 +81,17 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_dashboardFragment_to_raceActivity">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                             <entry key="calculatorsAction">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
                             <entry key="deviceScanAction">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="raceActivityAction">
                               <value>
                                 <LayoutPositions />
                               </value>

@@ -38,7 +38,7 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_enter_anim" />
         <action
-            android:id="@+id/action_dashboardFragment_to_raceActivity"
+            android:id="@+id/raceActivityAction"
             app:destination="@id/raceActivity" />
     </fragment>
     <fragment
@@ -68,11 +68,11 @@
     <fragment
         android:id="@+id/workoutBrowserDetail"
         android:name="com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragment"
-        tools:layout="@layout/fragment_workout_browser_detail" >
+        tools:layout="@layout/fragment_workout_browser_detail">
         <argument
             android:name="workoutTypeId"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <deepLink
             android:id="@+id/deepLink"
             app:uri="liverowing.com/workout/browser/{workoutTypeId}" />
@@ -96,5 +96,10 @@
         android:id="@+id/raceActivity"
         android:name="com.liverowing.android.race.RaceActivity"
         android:label="activity_race"
-        tools:layout="@layout/activity_race" />
+        tools:layout="@layout/activity_race">
+        <argument
+            android:name="workoutTypeId"
+            android:defaultValue=""
+            app:argType="string" />
+    </activity>
 </navigation>
