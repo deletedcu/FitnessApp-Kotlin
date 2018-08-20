@@ -9,14 +9,14 @@ import com.parse.ParseQuery
 class WorkoutHistoryPresenter : MvpBasePresenter<WorkoutHistoryView>() {
     private var query: ParseQuery<Workout>? = null
 
-    fun loadWorkouts(pullToRefresh: Boolean, workoutTypes: Set<Int>, start: Int = 0) {
+    fun loadWorkouts(pullToRefresh: Boolean) {
         ifViewAttached { it.showLoading(pullToRefresh) }
 
         if (query !== null && query!!.isRunning) {
             query?.cancel()
         }
 
-        query = Workout.forUser(ParseUser.getCurrentUser(), workoutTypes, start)
+        query = Workout.forUser(ParseUser.getCurrentUser())
         query?.findInBackground { objects, e ->
             run {
                 if (e != null) {

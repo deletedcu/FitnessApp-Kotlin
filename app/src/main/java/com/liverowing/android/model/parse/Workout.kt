@@ -51,13 +51,11 @@ class Workout : ParseObject() {
             return search.get(objectId)
         }
 
-        fun forUser(user: ParseUser, workoutTypes: Set<Int>, start: Int = 0): ParseQuery<Workout> {
+        fun forUser(user: ParseUser): ParseQuery<Workout> {
             val userWorkouts = ParseQuery.getQuery(Workout::class.java)
             userWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
             userWorkouts.whereEqualTo("createdBy", user)
-            if (workoutTypes.isNotEmpty()) {
-                userWorkouts.whereContainedIn("workoutType.type", workoutTypes)
-            }
+
             userWorkouts.include("workoutType.createdBy")
             userWorkouts.addDescendingOrder("createdAt")
 

@@ -165,6 +165,13 @@ class Utils {
             return age
         }
 
+        fun getBeforeDate(dates: Int): Date {
+            val DAY_IN_MS:Long = 1000 * 60 * 60 * 24
+            val date = Date()
+            val beforeDate = Date(date.time - dates * DAY_IN_MS)
+            return beforeDate
+        }
+
     }
 
 }

@@ -2,12 +2,13 @@ package com.liverowing.android.workouthistory
 
 import android.os.Bundle
 import android.view.*
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
@@ -16,10 +17,15 @@ import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.R.id.*
 import com.liverowing.android.model.parse.Workout
+import com.liverowing.android.util.Utils
 import com.liverowing.android.workouthistory.bottomSheet.BottomSheetFragment
 import com.liverowing.android.workouthistory.bottomSheet.BottomSheetListener
 import kotlinx.android.synthetic.main.fragment_workout_history.*
 import org.greenrobot.eventbus.EventBus
+
+enum class DATETYPE {
+    DAYS_7, DAYS_30, DAYS_365, DAYS_ALL
+}
 
 class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>(), WorkoutHistoryView, SwipeRefreshLayout.OnRefreshListener, BottomSheetListener {
 
@@ -29,7 +35,9 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     private lateinit var viewDividerItemDecoration: DividerItemDecoration
 
     private var dataSet = mutableListOf<Workout>()
+    private var workoutHistories = mutableListOf<Workout>()
     private val workoutTypesFilter = mutableSetOf<Int>()
+    private var workoutTabType = DATETYPE.DAYS_7
     private val workoutTypesMap = hashMapOf(
             action_single_distance to 1,
             action_single_time to 2,
@@ -63,7 +71,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(activity!!), onClick = { _, workout ->
             EventBus.getDefault().postSticky(workout)
             EventBus.getDefault().postSticky(workout.workoutType)
-            findNavController(view).navigate(R.id.workoutHistoryDetailAction)
+            view.findNavController().navigate(R.id.workoutHistoryDetailAction)
         }, onOptionsClick = { _, workout ->
             showBottomMenu(workout)
         })
@@ -75,6 +83,22 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        f_workout_history_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> workoutTabType = DATETYPE.DAYS_7
+                    1 -> workoutTabType = DATETYPE.DAYS_30
+                    2 -> workoutTabType = DATETYPE.DAYS_365
+                    3 -> workoutTabType = DATETYPE.DAYS_ALL
+                }
+                filterValues()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -90,7 +114,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
                 if (item.isChecked) workoutTypesFilter.remove(type) else workoutTypesFilter.add(type)
                 item.isChecked = !item.isChecked
 
-                presenter.loadWorkouts(false, workoutTypesFilter)
+                filterValues()
             }
 
             else -> {}
@@ -101,11 +125,11 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
     private fun showBottomMenu(workout: Workout) {
         val bottomSheetFragment = BottomSheetFragment.newInstance(workout, this)
-        bottomSheetFragment.show(fragmentManager, bottomSheetFragment.javaClass.toString())
+        bottomSheetFragment.show(fragmentManager, "dialog")
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        presenter.loadWorkouts(pullToRefresh, workoutTypesFilter)
+        presenter.loadWorkouts(pullToRefresh)
     }
 
     override fun onRefresh() {
@@ -113,6 +137,13 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     }
 
     override fun setData(data: List<Workout>) {
+        workoutHistories.clear()
+        workoutHistories.addAll(data)
+
+        filterValues()
+    }
+
+    private fun updateAdapter(data: List<Workout>) {
         dataSet.clear()
         dataSet.addAll(data)
 
@@ -140,6 +171,54 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
         return "There was an error loading workout history:\n\n${e?.message}"
+    }
+
+    private fun filterValues() {
+        var data = mutableListOf<Workout>()
+        // Filter by WorkoutType
+        if (workoutTypesFilter.isNotEmpty()) {
+            workoutHistories.forEach {
+                if (workoutTypesFilter.contains(element = it.workoutType?.valueType)) {
+                    data.add(it)
+                }
+            }
+        } else {
+            data.addAll(workoutHistories)
+        }
+
+        // Filter by tab
+        var filterData = mutableListOf<Workout>()
+        when (workoutTabType) {
+            DATETYPE.DAYS_7 -> {
+                val date = Utils.getBeforeDate(7)
+                data.forEach {
+                    if (it.createdAt.compareTo(date) > 0) {
+                        filterData.add(it)
+                    }
+                }
+            }
+            DATETYPE.DAYS_30 -> {
+                val date = Utils.getBeforeDate(30)
+                data.forEach {
+                    if (it.createdAt.compareTo(date) > 0) {
+                        filterData.add(it)
+                    }
+                }
+            }
+            DATETYPE.DAYS_365 -> {
+                val date = Utils.getBeforeDate(365)
+                data.forEach {
+                    if (it.createdAt.compareTo(date) > 0) {
+                        filterData.add(it)
+                    }
+                }
+            }
+            DATETYPE.DAYS_ALL -> {
+                filterData.addAll(data)
+            }
+        }
+
+        updateAdapter(filterData)
     }
 
     // BottomSheetFragment listener
