@@ -104,10 +104,31 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
                 filterValues()
             }
         })
+        setupUI()
+    }
+
+    private fun setupUI() {
+        when (workoutTabType) {
+            DATETYPE.DAYS_7 -> f_workout_history_tabs.getTabAt(0)?.select()
+            DATETYPE.DAYS_30 -> f_workout_history_tabs.getTabAt(1)?.select()
+            DATETYPE.DAYS_365 -> f_workout_history_tabs.getTabAt(2)?.select()
+            DATETYPE.DAYS_ALL -> f_workout_history_tabs.getTabAt(3)?.select()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.workout_history, menu)
+        when (workoutSortType) {
+            SORTTYPE.DESC -> menu?.findItem(action_most_recent)?.isChecked = true
+            SORTTYPE.ASC -> menu?.findItem(action_oldest_first)?.isChecked = true
+        }
+        workoutTypesFilter.forEach {
+            when (it) {
+                1 -> menu?.findItem(action_single_distance)?.isChecked = true
+                2 -> menu?.findItem(action_single_time)?.isChecked = true
+                4 -> menu?.findItem(action_intervals)?.isChecked = true
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -155,10 +176,13 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         loadData(true)
     }
 
-    override fun setData(data: List<Workout>) {
+    override fun setHistory(data: List<Workout>) {
         workoutHistories.clear()
         workoutHistories.addAll(data)
+        filterValues()
+    }
 
+    override fun setData(data: List<Workout>) {
         filterValues()
     }
 

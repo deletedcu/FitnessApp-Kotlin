@@ -23,7 +23,7 @@ class WorkoutHistoryPresenter : MvpBasePresenter<WorkoutHistoryView>() {
                     ifViewAttached { it.showError(e, pullToRefresh) }
                 } else {
                     ifViewAttached {
-                        it.setData(objects)
+                        it.setHistory(objects)
                         it.showContent()
                     }
                 }
