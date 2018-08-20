@@ -11,50 +11,60 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/f_workout_history_toolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:layout_height="100dp"
+            app:titleEnabled="false"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-        </androidx.appcompat.widget.Toolbar>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/f_workout_history_tabs"
+                style="@style/AppTheme.Widget.Toolbar.TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                app:tabIndicatorFullWidth="false"
+                app:tabMode="scrollable">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/f_workout_history_tabs"
-            style="@style/AppTheme.Widget.Toolbar.TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorFullWidth="false"
-            app:tabMode="scrollable">
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_history_tab_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="7 days" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_history_tab_7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="7 days" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_history_tab_30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="30 days" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_history_tab_30"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="30 days" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_history_tab_365"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="365 days" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_history_tab_365"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="365 days" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/f_workout_history_tab_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="All" />
+            </com.google.android.material.tabs.TabLayout>
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_history_tab_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="All" />
-        </com.google.android.material.tabs.TabLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/f_workout_history_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"/>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/loading_view"/>
