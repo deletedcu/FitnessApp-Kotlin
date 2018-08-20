@@ -27,6 +27,10 @@ enum class DATETYPE {
     DAYS_7, DAYS_30, DAYS_365, DAYS_ALL
 }
 
+enum class SORTTYPE {
+    DESC, ASC
+}
+
 class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>(), WorkoutHistoryView, SwipeRefreshLayout.OnRefreshListener, BottomSheetListener {
 
     private lateinit var recyclerView: RecyclerView
@@ -43,6 +47,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             action_single_time to 2,
             action_intervals to 4
     )
+    private var workoutSortType = SORTTYPE.DESC
 
     override fun createPresenter() = WorkoutHistoryPresenter()
 
@@ -116,6 +121,20 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
                 filterValues()
             }
+            action_most_recent -> {
+                workoutSortType = SORTTYPE.DESC
+                if (!item.isChecked) {
+                    item.isChecked = !item.isChecked
+                    filterValues()
+                }
+            }
+            action_oldest_first -> {
+                workoutSortType = SORTTYPE.ASC
+                if (!item.isChecked) {
+                    item.isChecked = !item.isChecked
+                    filterValues()
+                }
+            }
 
             else -> {}
         }
@@ -174,16 +193,17 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     }
 
     private fun filterValues() {
+        val sortData = sortValues()
         var data = mutableListOf<Workout>()
         // Filter by WorkoutType
         if (workoutTypesFilter.isNotEmpty()) {
-            workoutHistories.forEach {
+            sortData.forEach {
                 if (workoutTypesFilter.contains(element = it.workoutType?.valueType)) {
                     data.add(it)
                 }
             }
         } else {
-            data.addAll(workoutHistories)
+            data.addAll(sortData)
         }
 
         // Filter by tab
@@ -219,6 +239,20 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         }
 
         updateAdapter(filterData)
+    }
+
+    private fun sortValues(): MutableList<Workout> {
+        when (workoutSortType) {
+            SORTTYPE.DESC -> return workoutHistories
+            SORTTYPE.ASC -> {
+                var data = mutableListOf<Workout>()
+                workoutHistories.forEach {
+                    data.add(0, it)
+                }
+                return data
+            }
+        }
+
     }
 
     // BottomSheetFragment listener
