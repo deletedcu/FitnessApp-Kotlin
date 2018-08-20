@@ -17,7 +17,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         fun newInstance(workout: Workout, listener: BottomSheetListener): BottomSheetFragment {
-            var f = BottomSheetFragment()
+            val f = BottomSheetFragment()
             f.listener = listener
             f.workout = workout
             return f
