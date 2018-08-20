@@ -42,7 +42,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        view.bottom_sheet_share_friend.setOnClickListener {
+        view.bottom_sheet_send_friend.setOnClickListener {
             listener.onShareToFriend(workout)
             dismiss()
         }
@@ -67,7 +67,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        view.bottom_sheet_share_friend_check.isEnabled = false
+        view.bottom_sheet_send_friend_check.isEnabled = false
         view.bottom_sheet_share_social_check.isEnabled = false
         view.bottom_sheet_share_concept2_check.isEnabled = false
         view.bottom_sheet_send_strava_check.isEnabled = true

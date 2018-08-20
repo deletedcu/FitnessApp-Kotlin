@@ -41,7 +41,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bottom_sheet_share_friend"
+        android:id="@+id/bottom_sheet_send_friend"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal"
@@ -65,12 +65,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:text="Share Workout to Friend"
+            android:text="Send Workout to Friend"
             android:textColor="@color/textColorDark"
             android:textSize="16sp"/>
 
         <com.liverowing.android.views.TintableImageView
-            android:id="@+id/bottom_sheet_share_friend_check"
+            android:id="@+id/bottom_sheet_send_friend_check"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical|right"
