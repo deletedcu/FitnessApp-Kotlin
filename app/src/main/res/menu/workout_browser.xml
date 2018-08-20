@@ -21,40 +21,51 @@
 
             <item
                 android:enabled="false"
-                android:title="WORKOUT TYPE" />
+                android:title="WORKOUT TYPE"
+                android:orderInCategory="0"/>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@+id/action_single_distance"
-                    android:title="Single distance" />
+                    android:title="Single distance"
+                    android:orderInCategory="1" />
                 <item
                     android:id="@+id/action_single_time"
-                    android:title="Single time" />
+                    android:title="Single time"
+                    android:orderInCategory="2" />
                 <item
                     android:id="@+id/action_intervals"
-                    android:title="Intervals" />
+                    android:title="Intervals"
+                    android:orderInCategory="4" />
             </group>
             <item
                 android:enabled="false"
-                android:title="TAGS" />
+                android:title="TAGS"
+                android:orderInCategory="9"/>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@+id/action_tag_power"
-                    android:title="Power" />
+                    android:title="Power"
+                    android:orderInCategory="10" />
                 <item
                     android:id="@+id/action_tag_cardio"
-                    android:title="Cardio" />
+                    android:title="Cardio"
+                    android:orderInCategory="11" />
                 <item
                     android:id="@+id/action_tag_cross_training"
-                    android:title="Cross training" />
+                    android:title="Cross training"
+                    android:orderInCategory="12" />
                 <item
                     android:id="@+id/action_tag_hiit"
-                    android:title="HIIT" />
+                    android:title="HIIT"
+                    android:orderInCategory="13" />
                 <item
                     android:id="@+id/action_tag_speed"
-                    android:title="Speed" />
+                    android:title="Speed"
+                    android:orderInCategory="14" />
                 <item
                     android:id="@+id/action_tag_weight_loss"
-                    android:title="Weight loss" />
+                    android:title="Weight loss"
+                    android:orderInCategory="15" />
             </group>
         </menu>
     </item>

@@ -3,12 +3,15 @@ package com.liverowing.android
 import android.app.Application
 import android.content.Context
 import com.liverowing.android.model.parse.*
-import com.parse.*
+import com.parse.Parse
+import com.parse.ParseConfig
+import com.parse.ParseException
+import com.parse.ParseObject
 import com.squareup.leakcanary.LeakCanary
-import timber.log.Timber
 import com.squareup.leakcanary.RefWatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import timber.log.Timber
 
 class LiveRowing : Application() {
     companion object {
@@ -57,7 +60,7 @@ class LiveRowing : Application() {
 
         val clientBuilder = OkHttpClient.Builder()
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         clientBuilder.networkInterceptors().add(httpLoggingInterceptor)
 
         val conf = Parse.Configuration.Builder(this)

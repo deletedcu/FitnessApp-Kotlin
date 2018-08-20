@@ -15,6 +15,7 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FI
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_NOT_COMPLETED
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_POPULAR
 import com.parse.ParseQuery
+import timber.log.Timber
 import java.util.*
 
 class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
@@ -37,6 +38,8 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
             query?.cancel()
         }
 
+        Timber.d("OkHttp(jk) - $category, $filter, $types, $tags")
+
         // Category
         query = when(category) {
             CATEGORY_FEATURED -> WorkoutType.featuredWorkouts()
@@ -48,7 +51,9 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
         }
 
         // Workout Types
-        if (types.size > 0) query?.whereContainedIn("valueType", types)
+        if (types.size > 0) {
+            query?.whereContainedIn("valueType", types)
+        }
 
         // Tags
         for (tag in tags) {
@@ -68,7 +73,6 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
 
         ifViewAttached { it.showLoading(pullToRefresh) }
 
-        query = WorkoutType.featuredWorkouts()
         query?.findInBackground { objects, e ->
             run {
                 if (e !== null) {
