@@ -2,7 +2,7 @@ package com.liverowing.android.workoutbrowser
 
 import android.os.Bundle
 import android.view.*
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,14 +18,32 @@ import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
 import org.greenrobot.eventbus.EventBus
-import android.content.Intent
-import androidx.navigation.Navigation
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener {
     companion object {
         const val CATEGORY_FEATURED = 1
-        const val CATEGORY_RECENT_AND_LIKED = 2
+        const val CATEGORY_COMMUNITY = 2
+        const val CATEGORY_RECENT_AND_LIKED = 3
+        const val CATEGORY_MY_CUSTOM = 4
+        const val CATEGORY_AFFILIATE = 5
+
+        const val FILTER_ALL = 1
+        const val FILTER_NEW = 2
+        const val FILTER_POPULAR = 3
+        const val FILTER_COMPLETED = 4
+        const val FILTER_NOT_COMPLETED = 5
+
+        const val TYPE_SINGLE_DISTANCE = 1
+        const val TYPE_SINGLE_TIME = 2
+        const val TYPE_INTERVALS = 4
+
+        const val TAG_POWER = 0
+        const val TAG_CARDIO = 1
+        const val TAG_CROSS_TRAINING = 2
+        const val TAG_HIIT = 3
+        const val TAG_SPEED = 4
+        const val TAG_WEIGHT_LOSS = 5
     }
 
     private lateinit var recyclerView: RecyclerView
