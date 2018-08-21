@@ -10,15 +10,63 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.ParcelUuid
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.liverowing.android.devicescan.BluetoothDeviceAndStatus.Companion.Status.Connecting
+import com.liverowing.android.ble.PM5Manager
+import com.liverowing.android.ble.PM5ManagerCallbacks
 import com.liverowing.android.devicescan.BluetoothDeviceAndStatus.Companion.Status.Disconnected
-import com.liverowing.android.model.messages.DeviceConnectRequest
 import com.liverowing.android.model.messages.DeviceDisconnectRequest
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
 
-class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceScanView>() {
+class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceScanView>(), PM5ManagerCallbacks {
+    override fun onDeviceDisconnecting(device: BluetoothDevice?) {
+        Timber.d("** onDeviceDisconnecting")
+    }
+
+    override fun onDeviceDisconnected(device: BluetoothDevice?) {
+        Timber.d("** onDeviceDisconnected")
+    }
+
+    override fun onDeviceConnected(device: BluetoothDevice?) {
+        Timber.d("** onDeviceConnected")
+    }
+
+    override fun onDeviceNotSupported(device: BluetoothDevice?) {
+        Timber.d("** onDeviceNotSupported")
+    }
+
+    override fun onBondingFailed(device: BluetoothDevice?) {
+        Timber.d("** onBondingFailed")
+    }
+
+    override fun onServicesDiscovered(device: BluetoothDevice?, optionalServicesFound: Boolean) {
+        Timber.d("** onServicesDiscovered")
+    }
+
+    override fun onBondingRequired(device: BluetoothDevice?) {
+        Timber.d("** onBondingRequired")
+    }
+
+    override fun onLinkLossOccurred(device: BluetoothDevice?) {
+        Timber.d("** onLinkLossOccurred")
+    }
+
+    override fun onBonded(device: BluetoothDevice?) {
+        Timber.d("** onBonded")
+    }
+
+    override fun onDeviceReady(device: BluetoothDevice?) {
+        Timber.d("** onDeviceReady")
+    }
+
+    override fun onError(device: BluetoothDevice?, message: String?, errorCode: Int) {
+        Timber.d("** onError")
+    }
+
+    override fun onDeviceConnecting(device: BluetoothDevice?) {
+        Timber.d("** onDeviceConnecting")
+    }
+
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothLeScanner: BluetoothLeScanner? = null
     private var scanCallback: ScanCallback? = null
@@ -128,9 +176,18 @@ class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceSca
         }
     }
 
+    private var pm5Manager: PM5Manager? = null
     fun connectToDevice(device: BluetoothDevice) {
+        pm5Manager = PM5Manager(ctx)
+        pm5Manager?.setGattCallbacks(this)
 
-
+        Timber.d("** Connecting to ${device.address}")
+        pm5Manager?.connect(device)?.done {
+            Timber.d("** done")
+        }?.fail { device, status ->
+            Timber.d("** $device, $status")
+        }?.enqueue()
+        /*
         EventBus.getDefault().post(DeviceConnectRequest(device))
         if (devices.contains(device.address)) {
             devices[device.address]?.status = Connecting
@@ -138,6 +195,7 @@ class DeviceScanPresenter(private val ctx: Context) : MvpBasePresenter<DeviceSca
                 it.setData(devices.values.toList())
             }
         }
+        */
     }
 
     fun disconnectFromDevice(device: BluetoothDevice) {

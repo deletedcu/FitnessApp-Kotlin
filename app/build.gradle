@@ -87,6 +87,5 @@ dependencies {
 
     implementation 'com.lapism:searchview:27.1.1.0.0'
 
-    implementation 'no.nordicsemi.android:ble:1.2.0'
-    implementation 'no.nordicsemi.android.support.v18:scanner:1.1.0'
+    implementation 'no.nordicsemi.android:ble:2.0-alpha6'
 }

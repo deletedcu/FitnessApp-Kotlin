@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <service
-            android:name=".ble.service.PM5Service"
+            android:name=".ble_.service.PM5Service"
             android:enabled="true"
             android:exported="true" />
 

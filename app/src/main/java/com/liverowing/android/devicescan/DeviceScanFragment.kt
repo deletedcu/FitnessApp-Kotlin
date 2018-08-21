@@ -20,8 +20,6 @@ import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
-import com.liverowing.android.ble.service.BleProfileService
-import com.liverowing.android.ble.service.PM5Service
 import com.liverowing.android.extensions.isPermissionGranted
 import kotlinx.android.synthetic.main.fragment_device_scan.*
 import timber.log.Timber
@@ -40,7 +38,7 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
 
     private val dataSet = mutableListOf<BluetoothDeviceAndStatus>()
 
-    override fun createPresenter() = DeviceScanPresenter(activity!!)
+    override fun createPresenter() = DeviceScanPresenter(activity!!.applicationContext)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_device_scan, container, false)
@@ -68,15 +66,6 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
                 presenter.disconnectFromDevice(device.device)
             } else {
                 presenter.connectToDevice(device.device)
-
-                Timber.d("Creating PM5Service..")
-
-                val service = Intent(context, PM5Service::class.java)
-                service.putExtra(BleProfileService.EXTRA_DEVICE_ADDRESS, device.device.address)
-                service.putExtra(BleProfileService.EXTRA_DEVICE_NAME, device.device.name)
-                context?.startService(service)
-                Timber.d("Binding to the service...")
-                context?.bindService(service, mServiceConnection, 0)
             }
         }
 

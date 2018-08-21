@@ -1,5 +1,7 @@
 package com.liverowing.android.model.pm
 
+import timber.log.Timber
+
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
@@ -9,16 +11,22 @@ enum class PMErgMachineType(val value: Int) {
     STATIC_C(1),
     STATIC_A(2),
     STATIC_B(3),
-    STATIC_E(4),
-    SLIDES_C(5),
-    SLIDES_D(6),
-    SLIDES_E(7),
+    STATIC_E(5),
+    STATIC_SIMULATOR(7),
     STATIC_DYNAMIC(8),
     SLIDES_A(16),
     SLIDES_B(17),
+    SLIDES_C(18),
+    SLIDES_D(19),
+    SLIDES_E(20),
     SLIDES_DYNAMIC(32),
     STATIC_DYNO(64),
-    STATIC_SKI(128);
+    STATIC_SKI(128),
+    STATIC_SKI_SIMULATOR(143),
+    BIKE(192),
+    BIKE_ARMS(193),
+    BIKE_NOARMS(194),
+    BIKE_SIMULATOR(207);
 
     companion object {
         private val map = PMErgMachineType.values().associateBy(PMErgMachineType::value)
@@ -26,7 +34,7 @@ enum class PMErgMachineType(val value: Int) {
     }
 }
 
-enum class WorkoutType (val value: Int) {
+enum class WorkoutType(val value: Int) {
     JUSTROW_NOSPLITS(0),
     JUSTROW_SPLITS(1),
     FIXEDDIST_NOSPLITS(2),
@@ -38,15 +46,21 @@ enum class WorkoutType (val value: Int) {
     VARIABLE_INTERVAL(8),
     VARIABLE_UNDEFINEDREST_INTERVAL(9),
     FIXED_CALORIE(10),
-    FIXED_WATTMINUTES(11);
+    FIXED_WATTMINUTES(11),
+    FIXEDCALS_INTERVAL(12),
+    UNKNOWN1(13),
+    UNKNOWN2(14);
 
     companion object {
         private val map = WorkoutType.values().associateBy(WorkoutType::value)
-        fun fromInt(type: Int) = map[type]!!
+        fun fromInt(type: Int): WorkoutType {
+            Timber.d("** type == $type")
+            return map[type]!!
+        }
     }
 }
 
-enum class IntervalType (val value: Int) {
+enum class IntervalType(val value: Int) {
     TIME(0),
     DIST(1),
     REST(2),
@@ -65,7 +79,7 @@ enum class IntervalType (val value: Int) {
     }
 }
 
-enum class WorkoutState (val value: Int) {
+enum class WorkoutState(val value: Int) {
     WAITTOBEGIN(0),
     WORKOUTROW(1),
     COUNTDOWNPAUSE(2),
@@ -87,7 +101,7 @@ enum class WorkoutState (val value: Int) {
     }
 }
 
-enum class RowingState (val value: Int) {
+enum class RowingState(val value: Int) {
     INACTIVE(0),
     ACTIVE(1);
 
@@ -97,7 +111,7 @@ enum class RowingState (val value: Int) {
     }
 }
 
-enum class StrokeState (val value: Int) {
+enum class StrokeState(val value: Int) {
     WAITING_FOR_WHEEL_TO_REACH_MIN_SPEED_STATE(0),
     WAITING_FOR_WHEEL_TO_ACCELERATE_STATE(1),
     DRIVING_STATE(2),
@@ -110,7 +124,7 @@ enum class StrokeState (val value: Int) {
     }
 }
 
-enum class DurationType (val value: Int) {
+enum class DurationType(val value: Int) {
     TIME(0),
     CALORIES(0x40),
     DISTANCE(0x80),

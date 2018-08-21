@@ -1,10 +1,13 @@
-package com.liverowing.android.ble.profile
+package com.liverowing.android.ble
 
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
+import com.liverowing.android.model.messages.DeviceConnected
+import com.liverowing.android.model.messages.DeviceDisconnected
+import com.liverowing.android.model.pm.*
 import no.nordicsemi.android.ble.BleManager
-import no.nordicsemi.android.ble.Request
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.util.*
 
@@ -49,10 +52,12 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
     private var mMachineTypeCharacteristic: BluetoothGattCharacteristic? = null
     private var mHardwareRevisionCharacteristic: BluetoothGattCharacteristic? = null
     private var mFirmwareRevisionCharacteristic: BluetoothGattCharacteristic? = null
+    private var mModelNumberCharacteristic: BluetoothGattCharacteristic? = null
+    private var mSerialNumberCharacteristic: BluetoothGattCharacteristic? = null
 
     private var mRowingStatusCharacteristic: BluetoothGattCharacteristic? = null
-    private var mExtraStatus1Characteristic: BluetoothGattCharacteristic? = null
-    private var mExtraStatus2Characteristic: BluetoothGattCharacteristic? = null
+    private var mExtraRowingStatus1Characteristic: BluetoothGattCharacteristic? = null
+    private var mExtraRowingStatus2Characteristic: BluetoothGattCharacteristic? = null
     private var mRowingStatusSampleRateCharacteristic: BluetoothGattCharacteristic? = null
     private var mStrokeDataCharacteristic: BluetoothGattCharacteristic? = null
     private var mExtraStrokeDataCharacteristic: BluetoothGattCharacteristic? = null
@@ -65,23 +70,74 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
 
     private var mTransmitCharacteristic: BluetoothGattCharacteristic? = null
 
-    private val mGattCallback: BleManagerGattCallback = object: BleManagerGattCallback() {
-        override fun initGatt(gatt: BluetoothGatt): Deque<Request> {
-            val requests = LinkedList<Request>()
-            requests.push(Request.newReadRequest(mMachineTypeCharacteristic))
-            requests.push(Request.newReadRequest(mHardwareRevisionCharacteristic))
-            requests.push(Request.newReadRequest(mFirmwareRevisionCharacteristic))
+    private val eventBus = EventBus.getDefault()
 
-            requests.push(Request.newEnableNotificationsRequest(mRowingStatusCharacteristic))
-            requests.push(Request.newEnableNotificationsRequest(mExtraStatus1Characteristic))
-            requests.push(Request.newEnableNotificationsRequest(mExtraStatus2Characteristic))
-            requests.push(Request.newEnableNotificationsRequest(mStrokeDataCharacteristic))
-            requests.push(Request.newEnableNotificationsRequest(mExtraStrokeDataCharacteristic))
-            requests.push(Request.newEnableNotificationsRequest(mSplitIntervalDataCharacteristic))
-            requests.push(Request.newEnableNotificationsRequest(mExtraSplitIntervalDataCharacteristic))
-            requests.push(Request.newEnableNotificationsRequest(mRowingSummaryCharacteristic))
-            requests.push(Request.newEnableNotificationsRequest(mExtraRowingSummaryCharacteristic))
-            return requests
+    private var firmwareRevision: String = ""
+    private var hardwareRevision: String = ""
+
+    override fun getGattCallback(): BleManagerGattCallback {
+        Timber.d("** getGattCallback")
+        return mGattCallback
+    }
+
+    override fun shouldAutoConnect() = false
+
+    private val mGattCallback: BleManagerGattCallback = object : BleManagerGattCallback() {
+        override fun initialize() {
+            super.initialize()
+
+            readCharacteristic(mFirmwareRevisionCharacteristic).enqueue()
+            readCharacteristic(mHardwareRevisionCharacteristic).enqueue()
+
+            enableNotifications(mRowingStatusCharacteristic).enqueue()
+            enableNotifications(mExtraRowingStatus1Characteristic).enqueue()
+            enableNotifications(mExtraRowingStatus2Characteristic).enqueue()
+            enableNotifications(mStrokeDataCharacteristic).enqueue()
+            enableNotifications(mExtraStrokeDataCharacteristic).enqueue()
+            enableNotifications(mSplitIntervalDataCharacteristic).enqueue()
+            enableNotifications(mExtraSplitIntervalDataCharacteristic).enqueue()
+            enableNotifications(mRowingSummaryCharacteristic).enqueue()
+            enableNotifications(mExtraRowingSummaryCharacteristic).enqueue()
+        }
+
+        override fun onCharacteristicRead(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
+            when (characteristic) {
+                mFirmwareRevisionCharacteristic -> firmwareRevision = characteristic.getStringValue(0)
+                mHardwareRevisionCharacteristic -> hardwareRevision = characteristic.getStringValue(0)
+                else -> Timber.d("** (Read) Unknown characteristic: ${characteristic.uuid}")
+            }
+        }
+
+        override fun onCharacteristicIndicated(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
+            Timber.d("** onCharacteristicIndicated ${characteristic.uuid}")
+        }
+
+        override fun onCharacteristicNotified(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
+            when (characteristic) {
+                mRowingStatusCharacteristic -> Timber.d(RowingStatus.fromByteArray(characteristic.value).toString())
+                mExtraRowingStatus1Characteristic -> Timber.d(ExtraRowingStatus1.fromByteArray(characteristic.value).toString())
+                mExtraRowingStatus2Characteristic -> Timber.d(ExtraRowingStatus2.fromByteArray(characteristic.value).toString())
+
+                mStrokeDataCharacteristic -> Timber.d(StrokeData.fromByteArray(characteristic.value).toString())
+                mExtraStrokeDataCharacteristic -> Timber.d(ExtraStrokeData.fromByteArray(characteristic.value).toString())
+
+                mSplitIntervalDataCharacteristic -> Timber.d(SplitIntervalData.fromByteArray(characteristic.value).toString())
+                mExtraSplitIntervalDataCharacteristic -> Timber.d(ExtraSplitIntervalData.fromByteArray(characteristic.value).toString())
+
+                mRowingSummaryCharacteristic -> Timber.d(RowingSummary.fromByteArray(characteristic.value).toString())
+                mExtraRowingSummaryCharacteristic-> Timber.d(ExtraRowingSummary.fromByteArray(characteristic.value).toString())
+
+                else -> Timber.d("** (Notification) Unknown characteristic: ${characteristic.uuid}")
+            }
+        }
+
+        override fun onDeviceReady() {
+            super.onDeviceReady()
+            eventBus.post(DeviceConnected(bluetoothDevice))
+        }
+
+        override fun onDeviceDisconnected() {
+            eventBus.post(DeviceDisconnected(bluetoothDevice))
         }
 
         override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
@@ -89,22 +145,19 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
 
             val deviceInformationService = gatt.getService(PM_DEVICEINFO_SERVICE_UUID)
             if (deviceInformationService != null) {
-                //mMachineTypeCharacteristic = deviceInformationService.getCharacteristic(MACHINE_TYPE_CHARACTERISTIC_UUID) // Does not exist?
                 mHardwareRevisionCharacteristic = deviceInformationService.getCharacteristic(HWREVISION_CHARACTERISTIC_UUID)
                 mFirmwareRevisionCharacteristic = deviceInformationService.getCharacteristic(FWREVISION_CHARACTERISTIC_UUID)
 
                 supported = supported &&
                         mHardwareRevisionCharacteristic != null &&
                         mFirmwareRevisionCharacteristic != null
-
-                Timber.d("Supported: $supported")
             }
 
             val rowingService = gatt.getService(PM_ROWING_SERVICE_UUID)
             if (rowingService != null) {
                 mRowingStatusCharacteristic = rowingService.getCharacteristic(ROWING_STATUS_CHARACTERISTIC_UUID)
-                mExtraStatus1Characteristic = rowingService.getCharacteristic(EXTRA_ROWING_STATUS1_CHARACTERISTIC_UUID)
-                mExtraStatus2Characteristic = rowingService.getCharacteristic(EXTRA_ROWING_STATUS2_CHARACTERISTIC_UUID)
+                mExtraRowingStatus1Characteristic = rowingService.getCharacteristic(EXTRA_ROWING_STATUS1_CHARACTERISTIC_UUID)
+                mExtraRowingStatus2Characteristic = rowingService.getCharacteristic(EXTRA_ROWING_STATUS2_CHARACTERISTIC_UUID)
                 mRowingStatusSampleRateCharacteristic = rowingService.getCharacteristic(ROWINGSTATUS_SAMPLERATE_CHARACTERISTIC_UUID)
                 mStrokeDataCharacteristic = rowingService.getCharacteristic(STROKEDATA_CHARACTERISTIC_UUID)
                 mExtraStrokeDataCharacteristic = rowingService.getCharacteristic(EXTRA_STROKEDATA_CHARACTERISTIC_UUID)
@@ -117,8 +170,8 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
 
                 supported = supported &&
                         mRowingStatusCharacteristic != null &&
-                        mExtraStatus1Characteristic != null &&
-                        mExtraStatus2Characteristic != null &&
+                        mExtraRowingStatus1Characteristic != null &&
+                        mExtraRowingStatus2Characteristic != null &&
                         mRowingStatusSampleRateCharacteristic != null &&
                         mStrokeDataCharacteristic != null &&
                         mExtraStrokeDataCharacteristic != null &&
@@ -127,8 +180,6 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
                         mRowingSummaryCharacteristic != null &&
                         mExtraRowingSummaryCharacteristic != null &&
                         mHeartRateBeltCharacteristic != null
-
-                Timber.d("Supported: $supported")
             }
 
             val controlService = gatt.getService(PM_CONTROL_SERVICE_UUID)
@@ -141,49 +192,9 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
                 val rxProperties = mTransmitCharacteristic!!.properties
                 writeRequest = rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE > 0
             }
-            Timber.d("Supported: $supported")
-            Timber.d("WriteRequest: $writeRequest")
 
             return supported && writeRequest
         }
 
-        override fun onDeviceDisconnected() {
-            mMachineTypeCharacteristic = null
-            mHardwareRevisionCharacteristic = null
-            mFirmwareRevisionCharacteristic = null
-
-            mRowingStatusCharacteristic = null
-            mExtraStatus1Characteristic = null
-            mExtraStatus2Characteristic = null
-            mRowingStatusSampleRateCharacteristic = null
-            mStrokeDataCharacteristic = null
-            mExtraStrokeDataCharacteristic = null
-            mSplitIntervalDataCharacteristic = null
-            mExtraSplitIntervalDataCharacteristic = null
-            mRowingSummaryCharacteristic = null
-            mExtraRowingSummaryCharacteristic = null
-            mHeartRateBeltCharacteristic = null
-            mForceCurveCharacteristic = null
-
-            mTransmitCharacteristic = null
-        }
-
-        override fun onCharacteristicRead(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic) {
-            Timber.d("onCharacteristicRead($gatt, $characteristic)")
-        }
-
-        override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic) {
-            Timber.d("onCharacteristicWrite($gatt, $characteristic)")
-        }
-
-        override fun onCharacteristicNotified(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic) {
-            Timber.d("onCharacteristicNotified($gatt, $characteristic)")
-        }
-    }
-
-    override fun shouldAutoConnect() = true
-
-    override fun getGattCallback(): BleManagerGattCallback {
-        return mGattCallback
     }
 }
