@@ -9,7 +9,10 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceActivity
 import com.liverowing.android.R
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.util.metric.Metric
+import com.liverowing.android.views.HighlightFirstWordTextView
 import kotlinx.android.synthetic.main.activity_race.*
+import kotlinx.android.synthetic.main.race_racing.*
 
 class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, RacePresenter>(), RaceView {
     private lateinit var workoutType: WorkoutType
@@ -22,6 +25,15 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         loadData(false)
+
+        // Click on primary metrics
+        race_racing_gauge_left.setOnClickListener { presenter.switchPrimaryMetricLeft() }
+        race_racing_gauge_right.setOnClickListener { presenter.switchPrimaryMetricRight() }
+
+        // Click on secondary metrics
+        race_racing_metric_left.setOnClickListener { presenter.switchSecondaryMetricLeft() }
+        race_racing_metric_center.setOnClickListener { presenter.switchSecondaryMetricCenter() }
+        race_racing_metric_right.setOnClickListener { presenter.switchSecondaryMetricRight() }
     }
 
     override fun onDestroy() {
@@ -80,6 +92,73 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
         return e.toString()
+    }
+
+    override fun setLoadingMessage(message: String) {
+        (loadingView as HighlightFirstWordTextView).text = message
+    }
+
+    override fun primaryMetricLeftUpdated(metric: Metric.Primary, animated: Boolean) {
+        race_racing_gauge_left.apply {
+            title = metric.title
+            subtitle = metric.subtitle
+            scaleStartValue = metric.min
+            scaleEndValue = metric.max
+            formatter = metric.formatter
+            setValue(metric.value, metric.subvalue, animated)
+        }
+    }
+
+    override fun primaryMetricRightUpdated(metric: Metric.Primary, animated: Boolean) {
+        race_racing_gauge_right.apply {
+            title = metric.title
+            subtitle = metric.subtitle
+            scaleStartValue = metric.min
+            scaleEndValue = metric.max
+            formatter = metric.formatter
+            setValue(metric.value, metric.subvalue, animated)
+        }
+    }
+
+    override fun secondaryMetricLeftUpdated(metric: Metric.Secondary) {
+        race_racing_metric_left.apply {
+            title = metric.title
+            value = metric.formattedValue
+        }
+    }
+
+    override fun secondaryMetricCenterUpdated(metric: Metric.Secondary) {
+        race_racing_metric_center.apply {
+            title = metric.title
+            value = metric.formattedValue
+        }
+    }
+
+    override fun secondaryMetricRightUpdated(metric: Metric.Secondary) {
+        race_racing_metric_right.apply {
+            title = metric.title
+            value = metric.formattedValue
+        }
+    }
+
+    override fun workoutStarting() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun workoutResting() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun workoutContinuing() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun workoutFinishing() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun positionsUpdated() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

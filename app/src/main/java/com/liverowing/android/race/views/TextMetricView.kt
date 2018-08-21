@@ -12,9 +12,7 @@ class TextMetricView constructor(context: Context?, attrs: AttributeSet?) : Cons
     private var mTitle: TextView
     private var mValue: TextView
 
-    var metricId: Int = 0 //Metric.SECONDARY_METRIC_LOW
-
-    var metric: String?
+    var title: String?
         get() = mTitle.text.toString()
         set(value) {
             mTitle.text = value
@@ -36,7 +34,7 @@ class TextMetricView constructor(context: Context?, attrs: AttributeSet?) : Cons
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.TextMetricView, 0, 0)
         val gravity = a.getInt(R.styleable.TextMetricView_position, Gravity.START)
         if (a.hasValue(R.styleable.TextMetricView_title)) {
-            metric = a.getString(R.styleable.TextMetricView_title)
+            title = a.getString(R.styleable.TextMetricView_title)
         }
         if (a.hasValue(R.styleable.TextMetricView_value)) {
             value = a.getString(R.styleable.TextMetricView_value)
