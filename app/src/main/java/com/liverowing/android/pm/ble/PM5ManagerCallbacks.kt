@@ -1,4 +1,4 @@
-package com.liverowing.android.ble
+package com.liverowing.android.pm.ble
 
 import no.nordicsemi.android.ble.BleManagerCallbacks
 

@@ -1,7 +1,5 @@
 package com.liverowing.android.model.pm
 
-import timber.log.Timber
-
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
@@ -53,10 +51,7 @@ enum class WorkoutType(val value: Int) {
 
     companion object {
         private val map = WorkoutType.values().associateBy(WorkoutType::value)
-        fun fromInt(type: Int): WorkoutType {
-            Timber.d("** type == $type")
-            return map[type]!!
-        }
+        fun fromInt(type: Int) = map[type]!!
     }
 }
 

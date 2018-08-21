@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_overlay"
-    android:clickable="true"
-    android:focusable="true"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <com.liverowing.android.view.TextMetricView
+    <com.liverowing.android.race.views.TextMetricView
         android:id="@+id/race_racing_metric_left"
         android:tag="left"
         android:layout_width="0dp"
@@ -27,22 +25,7 @@
         app:title="Drive length"
         app:value="2.34" />
 
-    <com.liverowing.android.view.TextMetricView
-        android:id="@+id/race_racing_metric_right"
-        android:tag="right"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/race_racing_metric_center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:position="right"
-        app:title="Stroke count"
-        app:value="342" />
-
-    <com.liverowing.android.view.TextMetricView
+    <com.liverowing.android.race.views.TextMetricView
         android:id="@+id/race_racing_metric_center"
         android:tag="center"
         android:layout_width="0dp"
@@ -58,7 +41,23 @@
         app:title="Stroke ratio"
         app:value="NOT SO FAST" />
 
-    <com.liverowing.android.view.RaceProgressView
+    <com.liverowing.android.race.views.TextMetricView
+        android:id="@+id/race_racing_metric_right"
+        android:tag="right"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/race_racing_metric_center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:position="right"
+        app:title="Stroke count"
+        app:value="342" />
+
+
+    <com.liverowing.android.race.views.RaceProgressView
         android:id="@+id/race_racing_opponent_progress"
         android:layout_width="0dp"
         android:layout_height="25dp"
@@ -69,18 +68,17 @@
         app:name="Hank"
         app:progress="0.1" />
 
-    <com.liverowing.android.view.MultiRaceProgressView
+    <com.liverowing.android.race.views.MultiRaceProgressView
         android:id="@+id/race_racing_me_progress"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginBottom="4dp"
-        app:image="@drawable/ic_add_black_48dp_00"
         app:layout_constraintBottom_toTopOf="@+id/race_racing_overview_progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:progress="0.1" />
 
-    <com.liverowing.android.view.SplitIntervalOverviewView
+    <com.liverowing.android.race.views.SplitIntervalOverviewView
         android:id="@+id/race_racing_overview_progress"
         android:layout_width="0dp"
         android:layout_height="20dp"
@@ -88,7 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.liverowing.android.view.GaugeView
+    <com.liverowing.android.race.views.GaugeView
         android:id="@+id/race_racing_gauge_left"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -104,14 +102,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/race_racing_metric_left" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <com.liverowing.android.view.GaugeView
+    <com.liverowing.android.race.views.GaugeView
         android:id="@+id/race_racing_gauge_right"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -126,7 +124,7 @@
         app:layout_constraintStart_toEndOf="@+id/race_racing_stroke_ratio"
         app:layout_constraintTop_toBottomOf="@+id/race_racing_metric_right" />
 
-    <com.liverowing.android.view.RatioView
+    <com.liverowing.android.race.views.RatioView
         android:id="@+id/race_racing_stroke_ratio"
         android:layout_width="40dp"
         android:layout_height="0dp"
@@ -140,4 +138,4 @@
         app:layout_constraintTop_toBottomOf="@+id/race_racing_metric_center" />
 
 
-</android.support.constraint.ConstraintLayout>
+</merge>

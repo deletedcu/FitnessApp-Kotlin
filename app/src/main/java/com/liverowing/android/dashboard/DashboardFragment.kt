@@ -4,6 +4,7 @@ package com.liverowing.android.dashboard
 import android.app.Dialog
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
 import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 
 
 class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener {
@@ -163,16 +165,24 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
-    override fun deviceConnected(device: Any) {
+    override fun deviceConnected(device: Any?) {
+        Timber.d("** deviceConnected($device)")
         activity?.invalidateOptionsMenu()
     }
 
-    override fun deviceConnecting(device: Any) {
+    override fun deviceConnecting(device: Any?) {
+        Timber.d("** deviceConnecting($device)")
         activity?.invalidateOptionsMenu()
     }
 
-    override fun deviceDisconnected(device: Any) {
+    override fun deviceDisconnected(device: Any?) {
+        Timber.d("** deviceDisconnected($device)")
         activity?.invalidateOptionsMenu()
+    }
+
+    override fun deviceReady(device: Any?, name: String) {
+        Timber.d("** Device is ready!")
+        Toast.makeText(activity, "$name connected.", Toast.LENGTH_SHORT).show()
     }
 
     private fun titleOnClick(v: View) {

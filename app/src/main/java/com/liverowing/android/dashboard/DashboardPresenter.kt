@@ -2,16 +2,10 @@ package com.liverowing.android.dashboard
 
 import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.model.messages.DeviceConnected
-import com.liverowing.android.model.messages.DeviceConnecting
 import com.liverowing.android.model.messages.DeviceDisconnected
 import com.liverowing.android.model.parse.WorkoutType
-import com.parse.ParseConfig
-import kotlinx.serialization.*
-import kotlinx.serialization.json.JSON
-import kotlinx.serialization.json.JsonArray
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.json.JSONArray
 
 class DashboardPresenter : EventBusPresenter<DashboardView>() {
     fun loadDashboard() {
@@ -21,18 +15,13 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onDeviceConnectedMainThread(message: DeviceConnected) {
-        ifViewAttached { it.deviceConnected(message.device) }
+    fun onDeviceConnectedMainThread(data: DeviceConnected) {
+        ifViewAttached { it.deviceConnected(data.device) }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onDeviceConnectingMainThread(message: DeviceConnecting) {
-        ifViewAttached { it.deviceConnecting(message.device) }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onDeviceDisconnectedMainThread(message: DeviceDisconnected) {
-        ifViewAttached { it.deviceDisconnected(message.device) }
+    fun onDeviceDisconnectedMainThread(data: DeviceDisconnected) {
+        ifViewAttached { it.deviceDisconnected(data.device) }
     }
 
     private fun loadFeaturedWorkouts() {

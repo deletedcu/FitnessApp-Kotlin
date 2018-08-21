@@ -3,6 +3,8 @@ package com.liverowing.android
 import android.app.Application
 import android.content.Context
 import com.liverowing.android.model.parse.*
+import com.liverowing.android.model.pm.RowingStatus
+import com.liverowing.android.model.pm.WorkoutState
 import com.parse.Parse
 import com.parse.ParseConfig
 import com.parse.ParseException
@@ -11,13 +13,18 @@ import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 class LiveRowing : Application() {
     companion object {
+        var deviceReady: Boolean = false
+        var workoutState: WorkoutState? = null
+
         @JvmStatic
-        fun refWatcher(context: Context?): RefWatcher =
-                (context?.applicationContext as LiveRowing).refWatcher
+        fun refWatcher(context: Context?): RefWatcher = (context?.applicationContext as LiveRowing).refWatcher
 
         fun parseErrorMessageFromException(e: ParseException): String {
             return when (e.code) {
@@ -30,6 +37,7 @@ class LiveRowing : Application() {
     }
 
     lateinit var refWatcher: RefWatcher
+
 
     override fun onCreate() {
         super.onCreate()
@@ -45,6 +53,9 @@ class LiveRowing : Application() {
             Timber.plant(Timber.DebugTree())
             Parse.setLogLevel(Parse.LOG_LEVEL_INFO)
         }
+
+        EventBus.getDefault().register(this)
+
 
         Preferences.init(this@LiveRowing)
 
@@ -84,4 +95,18 @@ class LiveRowing : Application() {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onDeviceReadyMainThread() {
+        deviceReady = true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onDeviceDisconnected() {
+        deviceReady = false
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRowingStatusMainThread(data: RowingStatus) {
+        workoutState = data.workoutState
+    }
 }

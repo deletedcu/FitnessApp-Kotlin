@@ -1,4 +1,4 @@
-package com.liverowing.android.ble
+package com.liverowing.android.pm.ble
 
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
@@ -7,12 +7,13 @@ import com.liverowing.android.model.messages.DeviceConnected
 import com.liverowing.android.model.messages.DeviceDisconnected
 import com.liverowing.android.model.pm.*
 import no.nordicsemi.android.ble.BleManager
+import no.nordicsemi.android.ble.BleManagerCallbacks
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.util.*
 
 
-class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
+class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
     companion object {
         // Peripheral UUID
         val PM_DEVICE_UUID = UUID.fromString("ce060000-43e5-11e4-916c-0800200c9a66")
@@ -125,7 +126,7 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
                 mExtraSplitIntervalDataCharacteristic -> Timber.d(ExtraSplitIntervalData.fromByteArray(characteristic.value).toString())
 
                 mRowingSummaryCharacteristic -> Timber.d(RowingSummary.fromByteArray(characteristic.value).toString())
-                mExtraRowingSummaryCharacteristic-> Timber.d(ExtraRowingSummary.fromByteArray(characteristic.value).toString())
+                mExtraRowingSummaryCharacteristic -> Timber.d(ExtraRowingSummary.fromByteArray(characteristic.value).toString())
 
                 else -> Timber.d("** (Notification) Unknown characteristic: ${characteristic.uuid}")
             }
@@ -137,6 +138,23 @@ class PM5Manager(context: Context) : BleManager<PM5ManagerCallbacks>(context) {
         }
 
         override fun onDeviceDisconnected() {
+            mHardwareRevisionCharacteristic = null
+            mFirmwareRevisionCharacteristic = null
+
+            mRowingStatusCharacteristic = null
+            mExtraRowingStatus1Characteristic = null
+            mExtraRowingStatus2Characteristic = null
+            mRowingStatusSampleRateCharacteristic = null
+            mStrokeDataCharacteristic = null
+            mExtraStrokeDataCharacteristic = null
+            mSplitIntervalDataCharacteristic = null
+            mExtraSplitIntervalDataCharacteristic = null
+            mRowingSummaryCharacteristic = null
+            mExtraRowingSummaryCharacteristic = null
+            mHeartRateBeltCharacteristic = null
+
+            mTransmitCharacteristic = null
+
             eventBus.post(DeviceDisconnected(bluetoothDevice))
         }
 

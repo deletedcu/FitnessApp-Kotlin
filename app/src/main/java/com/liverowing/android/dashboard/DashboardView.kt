@@ -16,7 +16,8 @@ interface DashboardView : MvpView {
     fun myCustomWorkoutsLoaded(workouts: List<WorkoutType>)
     fun myCustomWorkoutsError(e: Exception)
 
-    fun deviceConnected(device: Any)
-    fun deviceConnecting(device: Any)
-    fun deviceDisconnected(device: Any)
+    fun deviceConnected(device: Any?)
+    fun deviceConnecting(device: Any?)
+    fun deviceDisconnected(device: Any?)
+    fun deviceReady(device: Any?, name: String)
 }

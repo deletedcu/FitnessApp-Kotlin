@@ -3,14 +3,13 @@ package com.liverowing.android.devicescan
 import android.Manifest
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,6 @@ import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.extensions.isPermissionGranted
 import kotlinx.android.synthetic.main.fragment_device_scan.*
-import timber.log.Timber
 
 
 class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<BluetoothDeviceAndStatus>, DeviceScanView, DeviceScanPresenter>(), DeviceScanView, SwipeRefreshLayout.OnRefreshListener {
@@ -40,18 +38,18 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
 
     override fun createPresenter() = DeviceScanPresenter(activity!!.applicationContext)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_device_scan, container, false)
+    override fun onStart() {
+        super.onStart()
+        presenter.onStart()
     }
 
-    private val mServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            Timber.d("onServiceConnected($name, $service")
-        }
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
+    }
 
-        override fun onServiceDisconnected(name: ComponentName) {
-            Timber.d("onServiceDisconnected($name")
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_device_scan, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -101,11 +99,15 @@ class DeviceScanFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Blue
     override fun requestBluetoothEnable() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-
     }
 
     override fun requestLocationPermission() {
         requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FINE_LOCATION)
+    }
+
+    override fun deviceConnected(name: String) {
+        Toast.makeText(activity, "$name connected.", Toast.LENGTH_SHORT).show()
+        findNavController(view!!).navigateUp()
     }
 
     override fun loadData(pullToRefresh: Boolean) {
