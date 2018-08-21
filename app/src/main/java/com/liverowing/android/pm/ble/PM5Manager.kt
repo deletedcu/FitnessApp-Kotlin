@@ -115,18 +115,18 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
 
         override fun onCharacteristicNotified(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
             when (characteristic) {
-                mRowingStatusCharacteristic -> Timber.d(RowingStatus.fromByteArray(characteristic.value).toString())
-                mExtraRowingStatus1Characteristic -> Timber.d(ExtraRowingStatus1.fromByteArray(characteristic.value).toString())
-                mExtraRowingStatus2Characteristic -> Timber.d(ExtraRowingStatus2.fromByteArray(characteristic.value).toString())
+                mRowingStatusCharacteristic -> eventBus.post(RowingStatus.fromByteArray(characteristic.value))
+                mExtraRowingStatus1Characteristic -> eventBus.post(ExtraRowingStatus1.fromByteArray(characteristic.value))
+                mExtraRowingStatus2Characteristic -> eventBus.post(ExtraRowingStatus2.fromByteArray(characteristic.value))
 
-                mStrokeDataCharacteristic -> Timber.d(StrokeData.fromByteArray(characteristic.value).toString())
-                mExtraStrokeDataCharacteristic -> Timber.d(ExtraStrokeData.fromByteArray(characteristic.value).toString())
+                mStrokeDataCharacteristic -> eventBus.post(StrokeData.fromByteArray(characteristic.value))
+                mExtraStrokeDataCharacteristic -> eventBus.post(ExtraStrokeData.fromByteArray(characteristic.value))
 
-                mSplitIntervalDataCharacteristic -> Timber.d(SplitIntervalData.fromByteArray(characteristic.value).toString())
-                mExtraSplitIntervalDataCharacteristic -> Timber.d(ExtraSplitIntervalData.fromByteArray(characteristic.value).toString())
+                mSplitIntervalDataCharacteristic -> eventBus.post(SplitIntervalData.fromByteArray(characteristic.value))
+                mExtraSplitIntervalDataCharacteristic -> eventBus.post(ExtraSplitIntervalData.fromByteArray(characteristic.value))
 
-                mRowingSummaryCharacteristic -> Timber.d(RowingSummary.fromByteArray(characteristic.value).toString())
-                mExtraRowingSummaryCharacteristic -> Timber.d(ExtraRowingSummary.fromByteArray(characteristic.value).toString())
+                mRowingSummaryCharacteristic -> eventBus.post(RowingSummary.fromByteArray(characteristic.value))
+                mExtraRowingSummaryCharacteristic -> eventBus.post(ExtraRowingSummary.fromByteArray(characteristic.value))
 
                 else -> Timber.d("** (Notification) Unknown characteristic: ${characteristic.uuid}")
             }
