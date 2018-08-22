@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         navController = Navigation.findNavController(this, R.id.a_main_nav_host)
     }
 
+
     override fun onBackPressed() {
         if (a_main_drawer_layout.isDrawerOpen(GravityCompat.START)) {
             a_main_drawer_layout.closeDrawer(GravityCompat.START)

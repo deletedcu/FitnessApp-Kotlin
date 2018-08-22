@@ -2,6 +2,7 @@ package com.liverowing.android.race
 
 import android.util.Base64
 import com.liverowing.android.base.EventBusPresenter
+import com.liverowing.android.extensions.roundToDecimals
 import com.liverowing.android.model.parse.Affiliate
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.Workout
@@ -15,7 +16,6 @@ import com.parse.ParseUser
 import kotlinx.serialization.json.JSON
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -80,7 +80,20 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     
     fun switchSecondaryMetricCenter() {
         mMetricsHolder.switchSecondaryMetricCenter()
+        updateStrokeRatio()
         ifViewAttached { it.secondaryMetricCenterUpdated(mMetricsHolder.secondaryMetricCenter) }
+    }
+
+    private fun updateStrokeRatio() {
+        val strokeRatio = mMetricsHolder.strokeRatio
+        ifViewAttached {
+            if (strokeRatio == null) {
+                it.setStrokeRatioVisible(false)
+            } else {
+                it.strokeRatioUpdated(strokeRatio / 100)
+                it.setStrokeRatioVisible(true)
+            }
+        }
     }
 
     fun switchSecondaryMetricRight() {
@@ -105,7 +118,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onWorkoutTypeMainThread(workoutType: WorkoutType) {
-        Timber.d("** onWorkoutTypeMainThread")
         mWorkoutType = workoutType
         mWorkout.workoutType = workoutType
 
@@ -125,9 +137,8 @@ class RacePresenter : EventBusPresenter<RaceView>() {
             it.secondaryMetricLeftUpdated(mMetricsHolder.secondaryMetricLeft)
             it.secondaryMetricCenterUpdated(mMetricsHolder.secondaryMetricCenter)
             it.secondaryMetricRightUpdated(mMetricsHolder.secondaryMetricRight)
-
-            //race_racing_stroke_ratio.setStrokeRatio(data.driveTime, data.recoveryTime)
         }
+        updateStrokeRatio()
     }
 
     private fun workoutStarting(data: RowingStatus) {
@@ -176,25 +187,27 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     }
 
     private fun logDataPoint(fromStrokeData: Boolean = false) {
-        val dp = Workout.DataPoint(
-                workoutState = lastRowingStatus!!.workoutState,
-                caloriesBurned = lastAdditionalStrokeData!!.calories,
-                interval = mCurrentIntervalOrSplit,
-                meters = lastRowingStatus!!.distance,
-                splitTime = lastAdditionalRowingStatus1!!.currentPace.toDouble(),
-                strokesPerMinute = lastAdditionalRowingStatus1!!.strokeRate,
-                strokeLength = (lastStrokeData.strokeDistance * 10).toInt(),
-                watts = lastAdditionalStrokeData!!.power,
-                split = mCurrentIntervalOrSplit,
-                dragFactor = lastRowingStatus!!.dragFactor,
-                heartRate = if (lastAdditionalRowingStatus1!!.heartRate == 255) 0 else lastAdditionalRowingStatus1!!.heartRate,
-                strokeTime = (lastStrokeData.driveTime * 100).toInt(),
-                time = lastRowingStatus!!.elapsedTime,
-                timestamp = System.currentTimeMillis() / 1000,
-                isRow = fromStrokeData
-        )
+        if (lastAdditionalRowingStatus1!!.currentPace.toDouble() > 0) {
+            val dp = Workout.DataPoint(
+                    workoutState = lastRowingStatus!!.workoutState,
+                    caloriesBurned = lastAdditionalStrokeData!!.calories,
+                    interval = mCurrentIntervalOrSplit,
+                    meters = lastRowingStatus!!.distance,
+                    splitTime = lastAdditionalRowingStatus1!!.currentPace.toDouble(),
+                    strokesPerMinute = lastAdditionalRowingStatus1!!.strokeRate,
+                    strokeLength = (lastStrokeData.strokeDistance * 10).toInt(),
+                    watts = lastAdditionalStrokeData!!.power,
+                    split = mCurrentIntervalOrSplit,
+                    dragFactor = lastRowingStatus!!.dragFactor,
+                    heartRate = if (lastAdditionalRowingStatus1!!.heartRate == 255) 0 else lastAdditionalRowingStatus1!!.heartRate,
+                    strokeTime = (lastStrokeData.driveTime * 100).toInt(),
+                    time = lastRowingStatus!!.elapsedTime,
+                    timestamp = System.currentTimeMillis() / 1000,
+                    isRow = fromStrokeData
+            )
 
-        mDataPoints.add(dp)
+            mDataPoints.add(dp)
+        }
     }
 
     private fun getPlaybackPosition(workout: Workout, lastIndex: Int, data: RowingStatus): Int {
@@ -220,7 +233,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastRowingStatus: RowingStatus? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRowingStatusMainThread(data: RowingStatus) {
-        Timber.d("** onRowingStatusMainThread")
         lastRowingStatus = data
 
         when (data.workoutState) {
@@ -290,7 +302,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastAdditionalRowingStatus1: ExtraRowingStatus1? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalRowingStatus1(data: ExtraRowingStatus1) {
-        Timber.d("** onAdditionalRowingStatus1")
         lastAdditionalRowingStatus1 = data
 
         if (mWorkoutStarted) {
@@ -302,7 +313,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastAdditionalRowingStatus2: ExtraRowingStatus2? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalRowingStatus2(data: ExtraRowingStatus2) {
-        Timber.d("** onAdditionalRowingStatus2")
         lastAdditionalRowingStatus2 = data
 
         if (mCurrentIntervalOrSplit != data.intervalCount) {
@@ -319,7 +329,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private lateinit var lastStrokeData: StrokeData
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onStrokeData(data: StrokeData) {
-        Timber.d("** onStrokeData")
         lastStrokeData = data
 
         if (lastRowingStatus!!.workoutState != WorkoutState.INTERVALREST) {
@@ -347,7 +356,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastAdditionalStrokeData: ExtraStrokeData? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalStrokeData(data: ExtraStrokeData) {
-        Timber.d("** onAdditionalStrokeData")
         lastAdditionalStrokeData = data
 
         if (mWorkoutStarted) {
@@ -359,14 +367,12 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastSplitIntervalData: SplitIntervalData? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSplitIntervalData(data: SplitIntervalData) {
-        Timber.d("** onSplitIntervalData")
         lastSplitIntervalData = data
     }
 
     private var lastAdditionalSplitIntervalData: ExtraSplitIntervalData? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalSplitIntervalData(data: ExtraSplitIntervalData) {
-        Timber.d("** onAdditionalSplitIntervalData")
         lastAdditionalSplitIntervalData = data
 
         var splitStrokeCount = 0
@@ -380,10 +386,10 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         val splitNumber = if (mWorkoutType!!.valueType == VALUE_TYPE_CUSTOM) data.intervalNumber else data.intervalNumber-1
         val splitAvgDPS = lastSplitIntervalData!!.distance / splitStrokeCount
 
-        // Distance workouts: tenths of seconds, Time workouts: meters
+        // Distance workouts: elapsedTime, Time workouts: meters
         val splitTimeDistance = when (lastSplitIntervalData!!.intervalType) {
             IntervalType.TIME -> lastSplitIntervalData!!.distance
-            IntervalType.DIST -> lastSplitIntervalData!!.elapsedTime * 10
+            IntervalType.DIST -> lastSplitIntervalData!!.splitTime
             else -> 0.0
         }
 
@@ -395,19 +401,19 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                         .toString()
 
         mSplits.add(Workout.Split(
-                splitDistance = lastSplitIntervalData!!.distance,
+                splitDistance = lastSplitIntervalData!!.splitDistance,
                 splitHeartRate = data.workHeartRate.toDouble(),
                 splitStrokeRate = data.spm,
                 splitTimeDistance = splitTimeDistance,
                 splitRestDistance = lastSplitIntervalData!!.restDistance.toDouble(),
                 splitRestTime = lastSplitIntervalData!!.restTime,
-                splitAvgDPS = splitAvgDPS,
+                splitAvgDPS = splitAvgDPS.roundToDecimals(1),
                 splitCals = data.calories.toDouble(),
-                splitTime = data.elapsedTime,
+                splitTime = lastSplitIntervalData!!.splitTime,
                 splitAvgWatts = data.power.toDouble(),
                 splitAvgDragFactor = data.averageDragFactor,
                 splitAvgPace = data.pace.toDouble(),
-                splitAvgDriveLength = splitAvgDriveLength.toDouble(),
+                splitAvgDriveLength = splitAvgDriveLength.toDouble().roundToDecimals(1),
                 splitStrokeCount = splitStrokeCount,
                 splitNumber = splitNumber
         ))
@@ -419,13 +425,11 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private lateinit var workoutSummary: RowingSummary
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRowingSummary(data: RowingSummary) {
-        Timber.d("** onRowingSummary")
         workoutSummary = data
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onExtraRowingSummary(data: ExtraRowingSummary) {
-        Timber.d("** onExtraRowingSummary")
         // TODO: Unregister EventBus here?
 
         val workTimeDataPoints = mDataPoints.filter { it.workoutState != WorkoutState.INTERVALREST }
@@ -450,16 +454,16 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                 heartRate = workoutSummary.averageHeartRate,
                 SplitsWatts = data.watts.toDouble(),
                 splitType = data.type.value, // TODO: Really?
-                fastestPace = fastestPace,
-                SplitsAvgDPS = splitAvgDPS,
+                fastestPace = fastestPace.roundToDecimals(1),
+                SplitsAvgDPS = splitAvgDPS.roundToDecimals(1),
                 strokeRate = workoutSummary.averageSpm,
                 SplitsAvgDrag = workoutSummary.averageDragFactor.toDouble(),
                 SplitsCals = data.calories.toDouble(),
                 maxHeartRate = maxHeartRate.toDouble(),
-                splitsAvgPace = workoutSummary.averagePace.toDouble(),
+                splitsAvgPace = workoutSummary.averagePace.toDouble().roundToDecimals(1),
                 strokeCount = lastStrokeData.strokeCount,
                 workTime = workoutSummary.elapsedTime,
-                SplitsAvgDriveLength = avgDriveLength,
+                SplitsAvgDriveLength = avgDriveLength.roundToDecimals(1),
                 workDistance = workoutSummary.distance.roundToInt(),
                 heartRateNormalZoneTime = 0.0, // TODO: Implement
                 heartRateZone1Time = 0.0, // TODO: Implement
@@ -472,7 +476,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         val dataPointWrapper = Workout.DataPointWrapper(mDataPoints)
         val dataPoints = Base64.encode(JSON.stringify(dataPointWrapper).toByteArray(), Base64.DEFAULT)
         val file = ParseFile(dataPoints)
-        //file.save()
+        file.save()
 
         val avgSplitTime =
                 mSplits
@@ -486,7 +490,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         mWorkout.dragFactor = workoutSummary.averageDragFactor
         mWorkout.averageHeartRate = workoutSummary.averageHeartRate
         mWorkout.meters = workoutSummary.distance.roundToInt()
-        mWorkout.averageSplitTime = avgSplitTime.toFloat()
+        mWorkout.averageSplitTime = workoutSummary.averagePace.toDouble().roundToDecimals(1)
         mWorkout.averageWatts = data.watts
         mWorkout.isDone = true
         mWorkout.totalTime = TimeUnit.MILLISECONDS.toSeconds(endTime.time - mWorkout.startTime!!.time).toInt()
@@ -496,6 +500,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         mWorkout.duration = workoutSummary.elapsedTime
 
         mWorkout.data = Workout.Data(workoutData, mStrokes,"standard")
-        //mWorkout.save()
+        mWorkout.save()
     }
 }

@@ -20,6 +20,13 @@ class MetricsHolder {
     val secondaryMetricLeft get() = metrics[mSecondaryMetricLeft] as Metric.Secondary
     val secondaryMetricCenter get() = metrics[mSecondaryMetricCenter] as Metric.Secondary
     val secondaryMetricRight get() = metrics[mSecondaryMetricRight] as Metric.Secondary
+    val strokeRatio: Float?
+        get() {
+            if (mSecondaryMetricCenter == Metric.SECONDARY_METRIC_STROKE_RATIO) {
+                return (metrics[Metric.SECONDARY_METRIC_STROKE_RATIO] as Metric.Secondary).value
+            }
+            return null
+        }
 
     private val primaryMetricAggregates = mapOf(
             Metric.SECONDARY_METRIC_POWER to AggregateMetric(0, 0f, 0f),
@@ -75,7 +82,7 @@ class MetricsHolder {
         }
         Preferences.primaryMetricLeft = mPrimaryMetricLeft
     }
-    
+
     fun switchPrimaryMetricRight() {
         mPrimaryMetricRight++
         if (mPrimaryMetricRight >= Metric.PRIMARY_METRIC_RIGHT_HIGH) {
@@ -83,7 +90,7 @@ class MetricsHolder {
         }
         Preferences.primaryMetricRight = mPrimaryMetricRight
     }
-    
+
     fun switchSecondaryMetricLeft() {
         mSecondaryMetricLeft++
         if (mSecondaryMetricLeft >= Metric.SECONDARY_METRIC_HIGH) {
@@ -99,7 +106,7 @@ class MetricsHolder {
         }
         Preferences.secondaryMetricCenter = mSecondaryMetricCenter
     }
-    
+
     fun switchSecondaryMetricRight() {
         mSecondaryMetricRight++
         if (mSecondaryMetricRight >= Metric.SECONDARY_METRIC_HIGH) {
@@ -107,9 +114,8 @@ class MetricsHolder {
         }
         Preferences.secondaryMetricRight = mSecondaryMetricRight
     }
-    
-    
-    
+
+
     fun onAdditionalRowingStatus1(data: ExtraRowingStatus1) {
         (metrics[Metric.SECONDARY_METRIC_RATE] as Metric.Secondary).value = data.strokeRate.toFloat()
         if (data.heartRate != 255) {
@@ -119,18 +125,20 @@ class MetricsHolder {
         (metrics[Metric.SECONDARY_METRIC_PACE] as Metric.Secondary).value = data.currentPace
 
 
-        primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.apply {
-            num += 1
-            total += data.currentPace
-            high = if (high > data.currentPace) data.currentPace else high
-        }
-        (metrics[Metric.PRIMARY_METRIC_LEFT_PACE_WITH_AVG] as Metric.Primary).apply {
-            value = data.currentPace
-            subvalue = primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.total / primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.num
-        }
-        (metrics[Metric.PRIMARY_METRIC_LEFT_PACE_WITH_PEAK] as Metric.Primary).apply {
-            value = data.currentPace
-            subvalue = primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.high
+        if (data.currentPace > 0) {
+            primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.apply {
+                num += 1
+                total += data.currentPace
+                high = if (high > data.currentPace) data.currentPace else high
+            }
+            (metrics[Metric.PRIMARY_METRIC_LEFT_PACE_WITH_AVG] as Metric.Primary).apply {
+                value = data.currentPace
+                subvalue = primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.total / primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.num
+            }
+            (metrics[Metric.PRIMARY_METRIC_LEFT_PACE_WITH_PEAK] as Metric.Primary).apply {
+                value = data.currentPace
+                subvalue = primaryMetricAggregates[Metric.SECONDARY_METRIC_PACE]!!.high
+            }
         }
 
         primaryMetricAggregates[Metric.SECONDARY_METRIC_RATE]!!.apply {

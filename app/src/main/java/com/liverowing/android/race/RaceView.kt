@@ -14,6 +14,9 @@ interface RaceView : MvpLceView<WorkoutType> {
     fun secondaryMetricCenterUpdated(metric: Metric.Secondary)
     fun secondaryMetricRightUpdated(metric: Metric.Secondary)
 
+    fun setStrokeRatioVisible(visible: Boolean)
+    fun strokeRatioUpdated(ratio: Float)
+
     fun workoutStarting()
     fun workoutResting()
     fun workoutContinuing()

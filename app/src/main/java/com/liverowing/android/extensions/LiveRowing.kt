@@ -53,6 +53,11 @@ fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
     return this.toDouble().secondsToTimespan(milliSecondPrecision)
 }
 
+fun Double.roundToDecimals(numDecimalPlaces: Int): Double {
+    val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
+    return Math.round(this * factor) / factor
+}
+
 fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
     val hours = Math.floor(this / 3600).toInt()
     val minutes = Math.floor((this % 3600) / 60).toInt()

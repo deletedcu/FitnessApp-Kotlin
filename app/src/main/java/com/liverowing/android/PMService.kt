@@ -25,7 +25,9 @@ class PMService : Service() {
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
         Timber.d("** onStart")
-        eventBus.register(this)
+        if (!eventBus.isRegistered(this)) {
+            eventBus.register(this)
+        }
     }
 
     override fun onDestroy() {

@@ -77,10 +77,18 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
     override fun setData(data: WorkoutType) {
         workoutType = data
 
-        Glide
-                .with(this@RaceActivity)
-                .load(workoutType.image?.url)
-                .into(a_race_background)
+        if (workoutType.image?.url != null) {
+            Glide
+                    .with(this@RaceActivity)
+                    .load(workoutType.image?.url)
+                    .into(a_race_background)
+        } else {
+            Glide
+                    .with(this@RaceActivity)
+                    .load("https://stmed.net/sites/default/files/rowing-wallpapers-31335-7292265.jpg")
+                    .into(a_race_background)
+        }
+
     }
 
     override fun loadData(pullToRefresh: Boolean) {
@@ -139,6 +147,14 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
             title = metric.title
             value = metric.formattedValue
         }
+    }
+
+    override fun setStrokeRatioVisible(visible: Boolean) {
+        race_racing_stroke_ratio.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    override fun strokeRatioUpdated(ratio: Float) {
+        race_racing_stroke_ratio.setStrokeRatio(ratio)
     }
 
     override fun workoutStarting() {

@@ -40,8 +40,8 @@ class RatioView : View {
         mTickHeight = height / (mTickCount * 2f)
     }
 
-    fun setStrokeRatio(strokeTime: Float, recoveryTime: Float) {
-        mRatio = strokeTime / (strokeTime + recoveryTime)
+    fun setStrokeRatio(ratio: Float) {
+        mRatio = ratio
         postInvalidate()
     }
 
