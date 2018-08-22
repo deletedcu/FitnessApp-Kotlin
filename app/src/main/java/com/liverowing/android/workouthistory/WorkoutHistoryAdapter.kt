@@ -20,9 +20,10 @@ class WorkoutHistoryAdapter(private val items: List<Workout>, private val glide:
 
     class ViewHolder(view: View, private val glide: RequestManager) : RecyclerView.ViewHolder(view) {
         fun bind(item: Workout, onClick: (View, Workout) -> Unit, onOptionsClick: (View, Workout) -> Unit) = with(itemView) {
+
             glide
-                    .load(item.workoutType?.image?.url)
-                    .apply( RequestOptions.bitmapTransform(RoundedCorners(8)))
+                    .load(item.workoutType?.createdBy?.image?.url)
+                    .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
                     .into(f_workout_history_item_image)
 
             f_workout_history_item_title.text = item.workoutType?.name

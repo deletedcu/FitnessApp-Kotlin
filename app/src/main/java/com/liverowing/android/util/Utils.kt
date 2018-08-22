@@ -5,12 +5,13 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import kotlinx.io.ByteArrayOutputStream
 import android.app.Activity
+import android.graphics.Canvas
 import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import java.time.Period
 import java.util.*
-
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 
 @Suppress("NAME_SHADOWING")
 class Utils {
@@ -170,6 +171,27 @@ class Utils {
             val date = Date()
             val beforeDate = Date(date.time - dates * DAY_IN_MS)
             return beforeDate
+        }
+
+        fun drawableToBitmap(drawable: Drawable): Bitmap? {
+            var bitmap: Bitmap? = null
+
+            if (drawable is BitmapDrawable) {
+                if (drawable.bitmap != null) {
+                    return drawable.bitmap
+                }
+            }
+
+            if (drawable.intrinsicWidth <= 0 || drawable.intrinsicHeight <= 0) {
+                bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888) // Single color bitmap will be created of 1x1 pixel
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            }
+
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+            drawable.draw(canvas)
+            return bitmap
         }
 
     }
