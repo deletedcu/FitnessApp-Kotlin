@@ -1,6 +1,7 @@
 package com.liverowing.android.race
 
 import android.util.Base64
+import com.liverowing.android.LiveRowing
 import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.extensions.roundToDecimals
 import com.liverowing.android.model.parse.Affiliate
@@ -29,6 +30,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var mResting = false
     private var mWorkoutFinished = false
     private var mCurrentIntervalOrSplit = 0
+
+    private var mWorkoutProgrammed = false
+    private var mProgrammingWorkout = false
 
     private var mOpponentLastIndex = 0
     private var mOpponentWorkout: Workout? = null
@@ -77,11 +81,16 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         mMetricsHolder.switchSecondaryMetricLeft()
         ifViewAttached { it.secondaryMetricLeftUpdated(mMetricsHolder.secondaryMetricLeft) }
     }
-    
+
     fun switchSecondaryMetricCenter() {
         mMetricsHolder.switchSecondaryMetricCenter()
         updateStrokeRatio()
         ifViewAttached { it.secondaryMetricCenterUpdated(mMetricsHolder.secondaryMetricCenter) }
+    }
+
+    fun switchSecondaryMetricRight() {
+        mMetricsHolder.switchSecondaryMetricRight()
+        ifViewAttached { it.secondaryMetricRightUpdated(mMetricsHolder.secondaryMetricRight) }
     }
 
     private fun updateStrokeRatio() {
@@ -94,11 +103,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                 it.setStrokeRatioVisible(true)
             }
         }
-    }
-
-    fun switchSecondaryMetricRight() {
-        mMetricsHolder.switchSecondaryMetricRight()
-        ifViewAttached { it.secondaryMetricRightUpdated(mMetricsHolder.secondaryMetricRight) }
     }
 
     fun setAffiliate(affiliate: Affiliate) {
@@ -123,9 +127,28 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
         ifViewAttached {
             updateViewMetrics()
-            
+
             it.setData(workoutType)
-            it.showContent()
+            preFlightCheck()
+        }
+    }
+
+    private fun preFlightCheck() {
+        if (!LiveRowing.deviceReady) {
+            ifViewAttached {
+                it.setLoadingMessage("Click to connect")
+                it.showLoading(false)
+            }
+        } else if (!mWorkoutProgrammed && !mProgrammingWorkout) {
+            ifViewAttached {
+                it.setLoadingMessage("Programming workout..")
+                it.showLoading(false)
+            }
+        } else {
+            ifViewAttached {
+                it.setLoadingMessage("Row to start!")
+                it.showLoading(false)
+            }
         }
     }
 
@@ -279,7 +302,8 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                 }
             }
 
-            else -> {}
+            else -> {
+            }
         }
 
         if (mWorkoutStarted) {
@@ -377,13 +401,13 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
         var splitStrokeCount = 0
         if (mWorkoutType!!.valueType == VALUE_TYPE_CUSTOM) {
-            splitStrokeCount =  lastStrokeCountInWorkPeriod
+            splitStrokeCount = lastStrokeCountInWorkPeriod
         } else {
             val previousStrokeCount = mSplits.sumBy { it.splitStrokeCount }
-            splitStrokeCount =  lastStrokeCountInWorkPeriod - previousStrokeCount
+            splitStrokeCount = lastStrokeCountInWorkPeriod - previousStrokeCount
         }
 
-        val splitNumber = if (mWorkoutType!!.valueType == VALUE_TYPE_CUSTOM) data.intervalNumber else data.intervalNumber-1
+        val splitNumber = if (mWorkoutType!!.valueType == VALUE_TYPE_CUSTOM) data.intervalNumber else data.intervalNumber - 1
         val splitAvgDPS = lastSplitIntervalData!!.distance / splitStrokeCount
 
         // Distance workouts: elapsedTime, Time workouts: meters
@@ -395,7 +419,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
         val splitAvgDriveLength =
                 mDataPoints
-                        .filter { it.workoutState != WorkoutState.INTERVALREST && it.isRow && it.split == data.intervalNumber-1 }
+                        .filter { it.workoutState != WorkoutState.INTERVALREST && it.isRow && it.split == data.intervalNumber - 1 }
                         .map { it.strokeLength }
                         .average()
                         .toString()
@@ -412,7 +436,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                 splitTime = lastSplitIntervalData!!.splitTime,
                 splitAvgWatts = data.power.toDouble(),
                 splitAvgDragFactor = data.averageDragFactor,
-                splitAvgPace = data.pace.toDouble(),
+                splitAvgPace = data.pace.toDouble().roundToDecimals(1),
                 splitAvgDriveLength = splitAvgDriveLength.toDouble().roundToDecimals(1),
                 splitStrokeCount = splitStrokeCount,
                 splitNumber = splitNumber
@@ -499,7 +523,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         mWorkout.caloriesBurned = data.calories
         mWorkout.duration = workoutSummary.elapsedTime
 
-        mWorkout.data = Workout.Data(workoutData, mStrokes,"standard")
+        mWorkout.data = Workout.Data(workoutData, mStrokes, "standard")
         mWorkout.save()
     }
 }
