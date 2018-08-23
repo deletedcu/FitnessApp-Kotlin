@@ -43,19 +43,28 @@ class Workout : ParseObject() {
     var playbackData = arrayListOf<DataPoint>()
 
     companion object {
-        fun fetchWorkout(objectId: String): Workout {
-            val search = ParseQuery.getQuery(Workout::class.java)
-            search.include("createdBy")
-            return search.get(objectId)
-        }
-
-        fun forUser(user: ParseUser): ParseQuery<Workout> {
+        fun forUser(user: ParseUser, createdAt: Date? = null, isDESC: Boolean = true, page: Int = 0): ParseQuery<Workout> {
+            val limit = 50
             val userWorkouts = ParseQuery.getQuery(Workout::class.java)
             userWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
             userWorkouts.whereEqualTo("createdBy", user)
 
+            if (createdAt != null) {
+                userWorkouts.whereGreaterThan("createdAt", createdAt)
+            }
+
             userWorkouts.include("workoutType.createdBy")
-            userWorkouts.addDescendingOrder("createdAt")
+
+            if (isDESC) {
+                userWorkouts.addDescendingOrder("createdAt")
+            } else {
+                userWorkouts.addAscendingOrder("createdAt")
+            }
+
+            if (page > 0) {
+                userWorkouts.skip = limit * page
+            }
+            userWorkouts.limit = limit
 
             return userWorkouts
         }

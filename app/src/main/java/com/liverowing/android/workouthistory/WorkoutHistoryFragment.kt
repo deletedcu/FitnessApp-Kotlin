@@ -18,8 +18,10 @@ import com.liverowing.android.R
 import com.liverowing.android.R.id.*
 import com.liverowing.android.model.parse.Workout
 import com.liverowing.android.util.Utils
+import com.liverowing.android.views.PaginationScrollListener
 import com.liverowing.android.workouthistory.bottomSheet.BottomSheetFragment
 import com.liverowing.android.workouthistory.bottomSheet.BottomSheetListener
+import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.fragment_workout_history.*
 import org.greenrobot.eventbus.EventBus
 
@@ -39,7 +41,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     private lateinit var viewDividerItemDecoration: DividerItemDecoration
 
     private var dataSet = mutableListOf<Workout>()
-    private var workoutHistories = mutableListOf<Workout>()
+    private var workoutList = mutableListOf<Workout>()
     private val workoutTypesFilter = mutableSetOf<Int>()
     private var workoutTabType = DATETYPE.DAYS_7
     private val workoutTypesMap = hashMapOf(
@@ -48,6 +50,11 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             action_intervals to 4
     )
     private var workoutSortType = SORTTYPE.DESC
+    private var page = 0
+
+    // Loadmore variables
+    private var isLastPage = false
+    private var isLoading = false
 
     override fun createPresenter() = WorkoutHistoryPresenter()
 
@@ -71,9 +78,15 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         (activity as MainActivity).setupToolbar(f_workout_history_toolbar)
 
+        setupUI(view)
+
+        initData()
+    }
+
+    private fun setupUI(view: View) {
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutHistoryAdapter(dataSet, Glide.with(activity!!), onClick = { _, workout ->
+        viewAdapter = WorkoutHistoryAdapter(workoutList, Glide.with(activity!!), onClick = { _, workout ->
             EventBus.getDefault().postSticky(workout)
             EventBus.getDefault().postSticky(workout.workoutType)
             view.findNavController().navigate(R.id.workoutHistoryDetailAction)
@@ -82,6 +95,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         })
 
         contentView.setOnRefreshListener(this@WorkoutHistoryFragment)
+
         recyclerView = f_workout_history_recyclerview.apply {
             setHasFixedSize(true)
             addItemDecoration(viewDividerItemDecoration)
@@ -101,13 +115,12 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
                     2 -> workoutTabType = DATETYPE.DAYS_365
                     3 -> workoutTabType = DATETYPE.DAYS_ALL
                 }
-                filterValues()
+                loadData(true)
             }
         })
-        setupUI()
     }
 
-    private fun setupUI() {
+    private fun initData() {
         when (workoutTabType) {
             DATETYPE.DAYS_7 -> f_workout_history_tabs.getTabAt(0)?.select()
             DATETYPE.DAYS_30 -> f_workout_history_tabs.getTabAt(1)?.select()
@@ -141,19 +154,20 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
                 item.isChecked = !item.isChecked
 
                 filterValues()
+                showContent()
             }
             action_most_recent -> {
                 workoutSortType = SORTTYPE.DESC
                 if (!item.isChecked) {
                     item.isChecked = !item.isChecked
-                    filterValues()
+                    loadData(true)
                 }
             }
             action_oldest_first -> {
                 workoutSortType = SORTTYPE.ASC
                 if (!item.isChecked) {
                     item.isChecked = !item.isChecked
-                    filterValues()
+                    loadData(true)
                 }
             }
 
@@ -169,42 +183,63 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        presenter.loadWorkouts(pullToRefresh)
+        if (pullToRefresh) {
+            page = 0
+            isLoading = false
+            isLastPage = false
+        }
+
+        val isDESC = workoutSortType == SORTTYPE.DESC
+        val createdAt = when (workoutTabType) {
+            DATETYPE.DAYS_7 -> Utils.getBeforeDate(7)
+            DATETYPE.DAYS_30 -> Utils.getBeforeDate(30)
+            DATETYPE.DAYS_365 -> Utils.getBeforeDate(365)
+            DATETYPE.DAYS_ALL -> null
+        }
+        presenter.loadWorkouts(createdAt, isDESC, page)
     }
 
     override fun onRefresh() {
         loadData(true)
     }
 
-    override fun setHistory(data: List<Workout>) {
-        workoutHistories.clear()
-        workoutHistories.addAll(data)
-        filterValues()
-    }
-
     override fun setData(data: List<Workout>) {
-        filterValues()
-    }
-
-    private fun updateAdapter(data: List<Workout>) {
-        dataSet.clear()
+        if (page == 0)
+            dataSet.clear()
         dataSet.addAll(data)
 
-        viewAdapter.notifyDataSetChanged()
+        if (data.size == 0) {
+            isLastPage = true
+        }
+
+        filterValues()
     }
 
     override fun showContent() {
         super.showContent()
         contentView.isRefreshing = false
+        f_workout_history_loading.visibility = View.GONE
+        isLoading = false
+
+        if (workoutList.size == 0) {
+            emptyView.visibility = View.VISIBLE
+        } else {
+            emptyView.visibility = View.GONE
+        }
     }
 
     override fun showError(e: Throwable?, pullToRefresh: Boolean)  {
         super.showError(e, pullToRefresh)
         contentView.isRefreshing = false
+        f_workout_history_loading.visibility = View.GONE
+        isLoading = false
     }
 
     override fun showLoading(pullToRefresh: Boolean) {
-        super.showLoading(pullToRefresh)
+//        super.showLoading(pullToRefresh)
+        if (!pullToRefresh) {
+            f_workout_history_loading.visibility = View.VISIBLE
+        }
         contentView.isRefreshing = pullToRefresh
     }
 
@@ -216,68 +251,24 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         return "There was an error loading workout history:\n\n${e?.message}"
     }
 
+    // Filter and refresh recyclerView
     private fun filterValues() {
-        val sortData = sortValues()
+        workoutList.clear()
         var data = mutableListOf<Workout>()
         // Filter by WorkoutType
         if (workoutTypesFilter.isNotEmpty()) {
-            sortData.forEach {
+            dataSet.forEach {
                 if (workoutTypesFilter.contains(element = it.workoutType?.valueType)) {
                     data.add(it)
                 }
             }
         } else {
-            data.addAll(sortData)
+            data.addAll(dataSet)
         }
-
-        // Filter by tab
-        var filterData = mutableListOf<Workout>()
-        when (workoutTabType) {
-            DATETYPE.DAYS_7 -> {
-                val date = Utils.getBeforeDate(7)
-                data.forEach {
-                    if (it.createdAt.compareTo(date) > 0) {
-                        filterData.add(it)
-                    }
-                }
-            }
-            DATETYPE.DAYS_30 -> {
-                val date = Utils.getBeforeDate(30)
-                data.forEach {
-                    if (it.createdAt.compareTo(date) > 0) {
-                        filterData.add(it)
-                    }
-                }
-            }
-            DATETYPE.DAYS_365 -> {
-                val date = Utils.getBeforeDate(365)
-                data.forEach {
-                    if (it.createdAt.compareTo(date) > 0) {
-                        filterData.add(it)
-                    }
-                }
-            }
-            DATETYPE.DAYS_ALL -> {
-                filterData.addAll(data)
-            }
-        }
-
-        updateAdapter(filterData)
+        workoutList.addAll(data)
+        viewAdapter.notifyDataSetChanged()
     }
 
-    private fun sortValues(): MutableList<Workout> {
-        when (workoutSortType) {
-            SORTTYPE.DESC -> return workoutHistories
-            SORTTYPE.ASC -> {
-                var data = mutableListOf<Workout>()
-                workoutHistories.forEach {
-                    data.add(0, it)
-                }
-                return data
-            }
-        }
-
-    }
 
     // BottomSheetFragment listener
     override fun onViewClick(workout: Workout) {
