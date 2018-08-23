@@ -18,7 +18,7 @@ class Workout : ParseObject() {
     var caloriesBurned by ParseDelegate<Int?>()
     var finishTime by ParseDelegate<Date?>()
     var workoutType by ParseDelegate<WorkoutType?>()
-    var averageSPM by ParseDelegate<Int?>()
+    var averageSPM by ParseDelegate<Number?>()
     var startTime by ParseDelegate<Date?>()
     var averageWatts by ParseDelegate<Int?>()
     var duration by ParseDelegate<Double?>()

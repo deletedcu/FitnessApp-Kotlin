@@ -27,7 +27,7 @@ class WorkoutHistoryAdapter(private val items: List<Workout>, private val glide:
                     .into(f_workout_history_item_image)
 
             f_workout_history_item_title.text = item.workoutType?.name
-            f_workout_history_item_metrics.text = String.format("Pace: %s | Rate: %d | Time: %s", item.averageSplitTime?.secondsToTimespan(), item.averageSPM, item.totalTime?.secondsToTimespan())
+            f_workout_history_item_metrics.text = String.format("Pace: %s | Rate: %d | Time: %s", item.averageSplitTime?.secondsToTimespan(), item.averageSPM?.toInt(), item.totalTime?.secondsToTimespan())
             f_workout_history_item_date.text = SimpleDateFormat.getDateTimeInstance().format(item.createdAt)
 
             setOnClickListener { onClick(itemView, item) }
