@@ -1,7 +1,5 @@
 package com.liverowing.android.model.pm
 
-import android.util.Log
-
 class PMWorkout(val workoutType: WorkoutType) {
     companion object {
         const val PM_MAX_INTERVALS = 30
@@ -77,9 +75,8 @@ class PMWorkout(val workoutType: WorkoutType) {
     }
 
     fun addInterval(intervalType: IntervalType, workoutDuration: Int, rDuration: Int, pace: Int?): Boolean {
-        Log.d("LiveRowing", "Adding interval (" + intervalType.toString() + ", " + workoutDuration + ", " + rDuration + ", " + pace + ")")
         var status = false
-        var wDuration = workoutDuration
+        val wDuration = workoutDuration
 
         if ((workoutType == WorkoutType.VARIABLE_INTERVAL) || (workoutType == WorkoutType.VARIABLE_UNDEFINEDREST_INTERVAL)) {
             if (intervals.size < PM_MAX_INTERVALS) {

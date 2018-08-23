@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.Navigation.findNavController
 import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.liverowing.android.LiveRowing
@@ -16,7 +17,6 @@ import com.liverowing.android.util.metric.Metric
 import com.liverowing.android.views.HighlightFirstWordTextView
 import kotlinx.android.synthetic.main.fragment_race.*
 import kotlinx.android.synthetic.main.race_racing.*
-import timber.log.Timber
 
 class RaceFragment : MvpLceFragment<ConstraintLayout, WorkoutType, RaceView, RacePresenter>(), RaceView {
     private lateinit var workoutType: WorkoutType
@@ -43,7 +43,7 @@ class RaceFragment : MvpLceFragment<ConstraintLayout, WorkoutType, RaceView, Rac
 
         loadingView.setOnClickListener {
             if (!LiveRowing.deviceReady) {
-
+                findNavController(view).navigate(R.id.deviceScanAction)
             }
         }
     }
@@ -60,9 +60,7 @@ class RaceFragment : MvpLceFragment<ConstraintLayout, WorkoutType, RaceView, Rac
     override fun onResume() {
         super.onResume()
 
-        Timber.d("** onResume")
         if (activity is MainActivity) {
-            Timber.d("** isMainActivity")
             (activity as MainActivity).setImmersiveModeState(true)
         }
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
@@ -87,6 +85,7 @@ class RaceFragment : MvpLceFragment<ConstraintLayout, WorkoutType, RaceView, Rac
                     .load(workoutType.image?.url)
                     .into(a_race_background)
         } else {
+            // TODO: Remember to remove and have WorkoutType decide a proper default image (Remote Config?)'
             Glide
                     .with(this@RaceFragment)
                     .load("https://stmed.net/sites/default/files/rowing-wallpapers-31335-7292265.jpg")

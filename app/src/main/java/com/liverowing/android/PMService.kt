@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.liverowing.android.model.messages.DeviceConnectRequest
 import com.liverowing.android.model.messages.DeviceDisconnectRequest
+import com.liverowing.android.model.messages.WorkoutProgramRequest
 import com.liverowing.android.pm.PMDevice
 import com.liverowing.android.pm.ble.PM5BleDevice
 import org.greenrobot.eventbus.EventBus
@@ -24,7 +25,6 @@ class PMService : Service() {
 
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
-        Timber.d("** onStart")
         if (!eventBus.isRegistered(this)) {
             eventBus.register(this)
         }
@@ -32,7 +32,7 @@ class PMService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d("** onDestroy")
+        Timber.d("** PMService was destroyed, unless the app was closed this is a fatal error!! **")
         eventBus.unregister(this)
     }
 
@@ -50,6 +50,11 @@ class PMService : Service() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDeviceDisconnectMainThread(data: DeviceDisconnectRequest) {
+        device?.disconnect()
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onProgramWorkoutRequestMainThread(data: WorkoutProgramRequest) {
+        device?.programWorkout(data.workoutType, data.targetPace)
     }
 }

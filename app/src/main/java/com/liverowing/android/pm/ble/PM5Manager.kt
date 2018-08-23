@@ -8,6 +8,8 @@ import com.liverowing.android.model.messages.DeviceDisconnected
 import com.liverowing.android.model.pm.*
 import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.BleManagerCallbacks
+import no.nordicsemi.android.ble.callback.FailCallback
+import no.nordicsemi.android.ble.callback.SuccessCallback
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.util.*
@@ -70,6 +72,7 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
     private var mForceCurveCharacteristic: BluetoothGattCharacteristic? = null
 
     private var mTransmitCharacteristic: BluetoothGattCharacteristic? = null
+    private var mReceiveCharacteristic: BluetoothGattCharacteristic? = null
 
     private val eventBus = EventBus.getDefault()
 
@@ -99,6 +102,8 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
             enableNotifications(mExtraSplitIntervalDataCharacteristic).enqueue()
             enableNotifications(mRowingSummaryCharacteristic).enqueue()
             enableNotifications(mExtraRowingSummaryCharacteristic).enqueue()
+
+            enableNotifications(mReceiveCharacteristic).enqueue()
         }
 
         override fun onCharacteristicRead(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
@@ -128,6 +133,8 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
                 mRowingSummaryCharacteristic -> eventBus.post(RowingSummary.fromByteArray(characteristic.value))
                 mExtraRowingSummaryCharacteristic -> eventBus.post(ExtraRowingSummary.fromByteArray(characteristic.value))
 
+                mReceiveCharacteristic -> {}
+
                 else -> Timber.d("** (Notification) Unknown characteristic: ${characteristic.uuid}")
             }
         }
@@ -154,6 +161,7 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
             mHeartRateBeltCharacteristic = null
 
             mTransmitCharacteristic = null
+            mReceiveCharacteristic = null
 
             eventBus.post(DeviceDisconnected(bluetoothDevice))
         }
@@ -203,6 +211,7 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
             val controlService = gatt.getService(PM_CONTROL_SERVICE_UUID)
             if (controlService != null) {
                 mTransmitCharacteristic = controlService.getCharacteristic(TRANSMIT_TO_PM_CHARACTERISTIC_UUID)
+                mReceiveCharacteristic = controlService.getCharacteristic(RECEIVE_FROM_PM_CHARACTERISTIC_UUID)
             }
 
             var writeRequest = false
@@ -214,5 +223,28 @@ class PM5Manager(context: Context) : BleManager<BleManagerCallbacks>(context) {
             return supported && writeRequest
         }
 
+        override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int) {
+            super.onMtuChanged(gatt, mtu)
+            Timber.d("** MTU changed to $mtu")
+        }
+
+    }
+
+    fun queueCommands(csafe: ByteArray, fail: FailCallback? = null, success: SuccessCallback? = null) {
+        val request = writeCharacteristic(mTransmitCharacteristic, csafe)
+                .split()
+                .with { _, data -> Timber.d("** SEND> $data") }
+
+        if (fail != null) {
+            request.fail(fail)
+        }
+        if (success != null) {
+            request.done(success)
+        }
+
+        request.enqueue()
+        waitForNotification(mReceiveCharacteristic!!)
+                .with { _, data -> Timber.d("** RECV< $data") }
+                .enqueue()
     }
 }

@@ -103,5 +103,8 @@
             android:name="workoutTypeId"
             android:defaultValue=""
             app:argType="string" />
+        <action
+            android:id="@+id/deviceScanAction"
+            app:destination="@id/deviceScanFragment" />
     </fragment>
 </navigation>

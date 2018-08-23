@@ -1,9 +1,12 @@
 package com.liverowing.android.race
 
 import android.util.Base64
-import com.liverowing.android.LiveRowing
 import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.extensions.roundToDecimals
+import com.liverowing.android.model.messages.DeviceDisconnected
+import com.liverowing.android.model.messages.DeviceReady
+import com.liverowing.android.model.messages.WorkoutProgramRequest
+import com.liverowing.android.model.messages.WorkoutProgrammed
 import com.liverowing.android.model.parse.Affiliate
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.Workout
@@ -31,6 +34,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var mWorkoutFinished = false
     private var mCurrentIntervalOrSplit = 0
 
+    private var mDeviceReady = false
     private var mWorkoutProgrammed = false
     private var mProgrammingWorkout = false
 
@@ -122,6 +126,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onWorkoutTypeMainThread(workoutType: WorkoutType) {
+
         mWorkoutType = workoutType
         mWorkout.workoutType = workoutType
 
@@ -133,16 +138,47 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onWorkoutProgrammedMainThread(data: WorkoutProgrammed) {
+        if (data.success) {
+            mWorkoutProgrammed = true
+            preFlightCheck()
+        } else {
+            ifViewAttached {
+                it.setLoadingMessage("Error programming workout")
+                it.showLoading(false)
+            }
+        }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onDeviceReadyMainThread(data: DeviceReady) {
+        mDeviceReady = true
+        preFlightCheck()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onDeviceDisconnectedMainThread(data: DeviceDisconnected) {
+        mDeviceReady = false
+        preFlightCheck()
+    }
+
     private fun preFlightCheck() {
-        if (!LiveRowing.deviceReady) {
+        if (!mDeviceReady) {
             ifViewAttached {
                 it.setLoadingMessage("Click to connect")
                 it.showLoading(false)
             }
         } else if (!mWorkoutProgrammed && !mProgrammingWorkout) {
-            ifViewAttached {
-                it.setLoadingMessage("Programming workout..")
-                it.showLoading(false)
+            if (mWorkoutType is WorkoutType) {
+                ifViewAttached {
+                    it.setLoadingMessage("Please wait..")
+                    it.showLoading(false)
+
+                    mProgrammingWorkout = true
+                    eventBus.post(WorkoutProgramRequest(mWorkoutType!!, null))
+                }
             }
         } else {
             ifViewAttached {
