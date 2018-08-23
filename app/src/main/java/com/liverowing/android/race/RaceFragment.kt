@@ -2,28 +2,34 @@ package com.liverowing.android.race
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
-import com.hannesdorfmann.mosby3.mvp.lce.MvpLceActivity
+import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
+import com.liverowing.android.LiveRowing
+import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.metric.Metric
 import com.liverowing.android.views.HighlightFirstWordTextView
-import kotlinx.android.synthetic.main.activity_race.*
+import kotlinx.android.synthetic.main.fragment_race.*
 import kotlinx.android.synthetic.main.race_racing.*
+import timber.log.Timber
 
-class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, RacePresenter>(), RaceView {
+class RaceFragment : MvpLceFragment<ConstraintLayout, WorkoutType, RaceView, RacePresenter>(), RaceView {
     private lateinit var workoutType: WorkoutType
 
     override fun createPresenter() = RacePresenter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_race)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_race, container, false)
+    }
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         loadData(false)
 
         // Click on primary metrics
@@ -34,34 +40,32 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
         race_racing_metric_left.setOnClickListener { presenter.switchSecondaryMetricLeft() }
         race_racing_metric_center.setOnClickListener { presenter.switchSecondaryMetricCenter() }
         race_racing_metric_right.setOnClickListener { presenter.switchSecondaryMetricRight() }
+
+        loadingView.setOnClickListener {
+            if (!LiveRowing.deviceReady) {
+
+            }
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-
-        if (hasFocus) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        if (activity is MainActivity) {
+            (activity as MainActivity).setImmersiveModeState(false)
         }
-
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     override fun onResume() {
         super.onResume()
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        Timber.d("** onResume")
+        if (activity is MainActivity) {
+            Timber.d("** isMainActivity")
+            (activity as MainActivity).setImmersiveModeState(true)
+        }
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     }
 
     override fun onStart() {
@@ -79,12 +83,12 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
 
         if (workoutType.image?.url != null) {
             Glide
-                    .with(this@RaceActivity)
+                    .with(this@RaceFragment)
                     .load(workoutType.image?.url)
                     .into(a_race_background)
         } else {
             Glide
-                    .with(this@RaceActivity)
+                    .with(this@RaceFragment)
                     .load("https://stmed.net/sites/default/files/rowing-wallpapers-31335-7292265.jpg")
                     .into(a_race_background)
         }
@@ -92,7 +96,7 @@ class RaceActivity : MvpLceActivity<ConstraintLayout, WorkoutType, RaceView, Rac
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        val workoutTypeId = RaceActivityArgs.fromBundle(intent.extras).workoutTypeId
+        val workoutTypeId = RaceFragmentArgs.fromBundle(arguments).workoutTypeId
         if (workoutTypeId.isNotEmpty()) {
             presenter.loadWorkoutTypeById(workoutTypeId)
         }

@@ -91,7 +91,7 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="raceActivityAction">
+                            <entry key="raceFragmentAction">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -133,8 +133,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="825" />
-                            <option name="y" value="149" />
+                            <option name="x" value="923" />
+                            <option name="y" value="165" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -156,7 +156,7 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="raceActivityAction">
+                            <entry key="raceFragmentAction">
                               <value>
                                 <LayoutPositions />
                               </value>

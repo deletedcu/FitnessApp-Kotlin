@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".race.RaceActivity">
+    tools:context=".race.RaceFragment">
 
     <ImageView
         android:id="@+id/a_race_background"
@@ -34,8 +34,8 @@
 
     <com.liverowing.android.views.HighlightFirstWordTextView
         android:id="@+id/loadingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Loading please wait"
         android:textSize="48sp"
         android:visibility="gone"
@@ -46,8 +46,8 @@
 
     <com.liverowing.android.views.HighlightFirstWordTextView
         android:id="@+id/errorView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Uhoh"
         android:textSize="48sp"
         android:visibility="gone"

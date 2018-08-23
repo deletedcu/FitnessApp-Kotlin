@@ -205,7 +205,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     override fun onWorkoutTypeChoosen(dialog: Dialog, workoutTypeId: String) {
         dialog.dismiss()
 
-        val action = DashboardFragmentDirections.raceActivityAction()
+        val action = DashboardFragmentDirections.raceFragmentAction()
         action.setWorkoutTypeId(workoutTypeId)
         findNavController(view!!).navigate(action)
     }
