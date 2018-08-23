@@ -265,7 +265,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     override fun getData(): List<Workout> = dataSet.toList()
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
-        return "There was an error loading workout history:\n\n${e?.message}"
+        return e?.message!!
     }
 
     // Filter and refresh recyclerView
