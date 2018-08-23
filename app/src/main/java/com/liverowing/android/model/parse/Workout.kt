@@ -8,9 +8,7 @@ import kotlinx.serialization.internal.StringSerializer
 import kotlinx.serialization.json.JSON
 import org.json.JSONException
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.*
-import kotlin.collections.Map
 
 /**
  * Created by henrikmalmberg on 2017-10-01.
@@ -53,7 +51,7 @@ class Workout : ParseObject() {
 
         fun forUser(user: ParseUser): ParseQuery<Workout> {
             val userWorkouts = ParseQuery.getQuery(Workout::class.java)
-            userWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
+            userWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
             userWorkouts.whereEqualTo("createdBy", user)
 
             userWorkouts.include("workoutType.createdBy")
