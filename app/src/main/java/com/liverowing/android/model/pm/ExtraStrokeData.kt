@@ -4,7 +4,6 @@ import com.liverowing.android.extensions.FORMAT_UINT16
 import com.liverowing.android.extensions.FORMAT_UINT8
 import com.liverowing.android.extensions.calcTime
 import com.liverowing.android.extensions.getIntValue
-
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
