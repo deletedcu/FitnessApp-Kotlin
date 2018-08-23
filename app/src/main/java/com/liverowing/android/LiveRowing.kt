@@ -77,7 +77,8 @@ class LiveRowing : Application() {
         val conf = Parse.Configuration.Builder(this)
                 .applicationId("ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo")
                 .clientBuilder(clientBuilder)
-                .server("https://api.liverowing.com")
+                //.server("https://api.liverowing.com")
+                .server("http://192.168.0.105:1337/")
                 .build()
 
         Parse.initialize(conf)

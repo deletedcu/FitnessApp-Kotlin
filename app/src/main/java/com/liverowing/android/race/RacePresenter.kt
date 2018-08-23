@@ -180,10 +180,14 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                     eventBus.post(WorkoutProgramRequest(mWorkoutType!!, null))
                 }
             }
-        } else {
+        } else if (!mWorkoutStarted) {
             ifViewAttached {
                 it.setLoadingMessage("Row to start!")
                 it.showLoading(false)
+            }
+        } else {
+            ifViewAttached {
+                it.showContent()
             }
         }
     }
@@ -205,7 +209,10 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         calendar.add(Calendar.MILLISECOND, -(data.elapsedTime * 1000).toInt())
         mWorkout.startTime = calendar.time
 
-        ifViewAttached { it.workoutStarting() }
+        ifViewAttached {
+            it.workoutStarting()
+            it.showContent()
+        }
     }
 
     private fun workoutResting() {
