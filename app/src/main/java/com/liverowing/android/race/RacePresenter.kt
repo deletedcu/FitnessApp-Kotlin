@@ -542,7 +542,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         val maxSPM = workTimeDataPoints.maxBy { it.strokesPerMinute }!!.strokesPerMinute
         val maxWatt = workTimeDataPoints.maxBy { it.watts }!!.watts
         val fastestPace = workTimeDataPoints.minBy { it.splitTime }!!.splitTime
-        val mSplitsDistance = mSplits.sumByDouble { it.splitDistance }
+        val mSplitsDistance = mSplits.sumByDouble { it.splitDistance.toDouble() }
         val mSplitsStrokeCount = mSplits.sumBy { it.splitStrokeCount }
         val splitAvgDPS = (mSplitsDistance / mSplitsStrokeCount)
         val maxHeartRate = workTimeDataPoints.maxBy { it.heartRate }!!.heartRate
@@ -585,12 +585,12 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
         val avgSplitTime =
                 mSplits
-                        .map { it.splitTime }
+                        .map { it.splitTime.toDouble() }
                         .average()
 
         val totalTime =
                 mSplits
-                        .sumByDouble { it.splitRestTime + it.splitTime }
+                        .sumByDouble { it.splitRestTime.toDouble() + it.splitTime.toDouble() }
 
         val calendar = Calendar.getInstance()
         val endTime = calendar.time
