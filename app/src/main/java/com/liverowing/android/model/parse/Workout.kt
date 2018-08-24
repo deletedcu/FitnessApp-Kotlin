@@ -43,8 +43,7 @@ class Workout : ParseObject() {
     var playbackData = arrayListOf<DataPoint>()
 
     companion object {
-        fun forUser(user: ParseUser, createdAt: Date? = null, isDESC: Boolean = true, page: Int = 0): ParseQuery<Workout> {
-            val limit = 50
+        fun forUser(user: ParseUser, createdAt: Date? = null, isDESC: Boolean = true, page: Int = 0, limit: Int = 50): ParseQuery<Workout> {
             val userWorkouts = ParseQuery.getQuery(Workout::class.java)
             userWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
             userWorkouts.whereEqualTo("createdBy", user)

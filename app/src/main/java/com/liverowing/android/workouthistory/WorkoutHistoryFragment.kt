@@ -52,6 +52,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     )
     private var workoutSortType = SORTTYPE.DESC
     private var page = 0
+    private var limit = 50
 
     // Loadmore variables
     private var isLastPage = false
@@ -214,7 +215,7 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             DATETYPE.DAYS_365 -> Date().addDays(-365)
             DATETYPE.DAYS_ALL -> null
         }
-        presenter.loadWorkouts(createdAt, isDESC, page)
+        presenter.loadWorkouts(createdAt, isDESC, page, limit)
     }
 
     override fun onRefresh() {
@@ -222,11 +223,18 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     }
 
     override fun setData(data: List<Workout>) {
-        if (page == 0)
+        if (page == 0) {
             dataSet.clear()
-        dataSet.addAll(data)
-
-        if (data.size == 0) {
+            dataSet.addAll(data)
+        } else {
+            val ids = dataSet.flatMap { it -> listOf(it.objectId) }
+            data.forEach {
+                if (!ids.contains(it.objectId)) {
+                    dataSet.add(it)
+                }
+            }
+        }
+        if (data.size < limit) {
             isLastPage = true
         }
 

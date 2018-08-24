@@ -13,14 +13,14 @@ import java.util.*
 class WorkoutHistoryPresenter : MvpBasePresenter<WorkoutHistoryView>() {
     private var query: ParseQuery<Workout>? = null
 
-    fun loadWorkouts(createdAt: Date? = Date().addDays(-7), isDESC: Boolean = true, page: Int = 0) {
+    fun loadWorkouts(createdAt: Date? = Date().addDays(-7), isDESC: Boolean = true, page: Int = 0, limit: Int = 50) {
         ifViewAttached { it.showLoading(page == 0) }
 
         if (query !== null && query!!.isRunning) {
             query?.cancel()
         }
 
-        query = Workout.forUser(ParseUser.getCurrentUser(), createdAt, isDESC, page)
+        query = Workout.forUser(ParseUser.getCurrentUser(), createdAt, isDESC, page, limit)
         query?.findInBackground { objects, e ->
             run {
                 if (e != null) {

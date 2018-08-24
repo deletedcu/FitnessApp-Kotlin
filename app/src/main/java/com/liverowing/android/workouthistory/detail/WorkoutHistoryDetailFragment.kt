@@ -8,6 +8,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
+import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.model.parse.Workout
@@ -28,13 +29,18 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
         retainInstance = true
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        LiveRowing.refWatcher(this.activity).watch(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_workout_history_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).setupToolbar(workout_detail_toolbar, workout_detail_collapsing_toolbar)
+        (activity as MainActivity).setupToolbar(f_workout_detail_toolbar)
 
         fragmentAdapter = WorkoutHistoryDetailAdapter(childFragmentManager)
         contentView.adapter = fragmentAdapter
@@ -57,23 +63,23 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
     }
 
     override fun setData(data: Workout?) {
-        workout = data
-        workoutType = workout?.workoutType
-
-        workout_detail_toolbar.title = workoutType?.name
-        workout_detail_collapsing_toolbar.title = workoutType?.name
-        workout_detail_createdby.text = "Created by | ${workoutType?.createdBy?.username}"
-
-        Glide
-                .with(activity!!)
-                .load(workoutType?.image?.url)
-                .into(workout_detail_image)
-
-        Glide
-                .with(activity!!)
-                .load(workoutType?.createdBy?.image?.url)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(workout_detail_createdby_image)
+//        workout = data
+//        workoutType = workout?.workoutType
+//
+//        workout_detail_toolbar.title = workoutType?.name
+//        workout_detail_collapsing_toolbar.title = workoutType?.name
+//        workout_detail_createdby.text = "Created by | ${workoutType?.createdBy?.username}"
+//
+//        Glide
+//                .with(activity!!)
+//                .load(workoutType?.image?.url)
+//                .into(workout_detail_image)
+//
+//        Glide
+//                .with(activity!!)
+//                .load(workoutType?.createdBy?.image?.url)
+//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+//                .into(workout_detail_createdby_image)
     }
 
     override fun loadData(pullToRefresh: Boolean) {
