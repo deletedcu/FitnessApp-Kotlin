@@ -4,6 +4,7 @@ import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.model.messages.DeviceConnected
 import com.liverowing.android.model.messages.DeviceDisconnected
 import com.liverowing.android.model.parse.WorkoutType
+import com.parse.ParseException
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -31,7 +32,9 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         ifViewAttached { it.featuredWorkoutsLoading() }
         query.findInBackground { objects, e ->
             if (e !== null) {
-                ifViewAttached { it.featuredWorkoutsError(e) }
+                if (e.code != ParseException.CACHE_MISS) {
+                    ifViewAttached { it.featuredWorkoutsError(e) }
+                }
             } else {
                 ifViewAttached {
                     it.featuredWorkoutsLoaded(objects)
@@ -47,7 +50,9 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         ifViewAttached { it.recentAndLikedWorkoutsLoading() }
         query.findInBackground { objects, e ->
             if (e !== null) {
-                ifViewAttached { it.recentAndLikedWorkoutsError(e) }
+                if (e.code != ParseException.CACHE_MISS) {
+                    ifViewAttached { it.recentAndLikedWorkoutsError(e) }
+                }
             } else {
                 ifViewAttached {
                     it.recentAndLikedWorkoutsLoaded(objects)

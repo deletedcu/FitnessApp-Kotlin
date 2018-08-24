@@ -16,14 +16,15 @@ import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.R.id.*
+import com.liverowing.android.extensions.addDays
 import com.liverowing.android.model.parse.Workout
-import com.liverowing.android.util.Utils
 import com.liverowing.android.views.PaginationScrollListener
 import com.liverowing.android.workouthistory.bottomSheet.BottomSheetFragment
 import com.liverowing.android.workouthistory.bottomSheet.BottomSheetListener
 import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.fragment_workout_history.*
 import org.greenrobot.eventbus.EventBus
+import java.util.*
 
 enum class DATETYPE {
     DAYS_7, DAYS_30, DAYS_365, DAYS_ALL
@@ -208,9 +209,9 @@ class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         val isDESC = workoutSortType == SORTTYPE.DESC
         val createdAt = when (workoutTabType) {
-            DATETYPE.DAYS_7 -> Utils.getBeforeDate(7)
-            DATETYPE.DAYS_30 -> Utils.getBeforeDate(30)
-            DATETYPE.DAYS_365 -> Utils.getBeforeDate(365)
+            DATETYPE.DAYS_7 -> Date().addDays(-7)
+            DATETYPE.DAYS_30 -> Date().addDays(-30)
+            DATETYPE.DAYS_365 -> Date().addDays(-365)
             DATETYPE.DAYS_ALL -> null
         }
         presenter.loadWorkouts(createdAt, isDESC, page)

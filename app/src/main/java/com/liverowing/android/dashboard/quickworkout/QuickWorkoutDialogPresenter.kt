@@ -2,6 +2,7 @@ package com.liverowing.android.dashboard.quickworkout
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.parse.ParseConfig
+import com.parse.ParseException
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JSON
@@ -29,7 +30,9 @@ class QuickWorkoutDialogPresenter : MvpBasePresenter<QuickWorkoutDialogView>() {
         ParseConfig.getInBackground { config, e ->
             if (e != null) {
                 ifViewAttached {
-                    it.showError(e, false)
+                    if (e.code != ParseException.CACHE_MISS) {
+                        it.showError(e, false)
+                    }
                 }
             } else {
                 val json = config.getJSONArray("DASHBOARD_FAB", JSONArray()).toString()

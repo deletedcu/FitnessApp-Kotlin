@@ -2,6 +2,7 @@ package com.liverowing.android.workouthistory.detail
 
 import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.model.parse.Workout
+import com.parse.ParseException
 import com.parse.ParseQuery
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -19,7 +20,9 @@ class WorkoutHistoryDetailPresenter : EventBusPresenter<WorkoutHistoryDetailView
             query.include("workoutType.createdBy")
             query.getInBackground(workoutId) { workout, e ->
                 if (e !== null) {
-                    ifViewAttached { it.showError(e, false) }
+                    if (e.code != ParseException.CACHE_MISS) {
+                        ifViewAttached { it.showError(e, false) }
+                    }
                 } else {
                     EventBus.getDefault().postSticky(workout)
                 }

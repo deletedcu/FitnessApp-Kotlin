@@ -14,6 +14,7 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FI
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_NEW
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_NOT_COMPLETED
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_POPULAR
+import com.parse.ParseException
 import com.parse.ParseQuery
 import timber.log.Timber
 import java.util.*
@@ -76,7 +77,9 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
         query?.findInBackground { objects, e ->
             run {
                 if (e !== null) {
-                    ifViewAttached { it.showError(e, pullToRefresh) }
+                    if (e.code != ParseException.CACHE_MISS) {
+                        ifViewAttached { it.showError(e, pullToRefresh) }
+                    }
                 } else {
                     ifViewAttached {
                         it.setData(objects)

@@ -63,7 +63,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         query.include("segments")
         query.getInBackground(id) { workoutType: WorkoutType?, e: ParseException? ->
             if (e !== null) {
-                ifViewAttached { it.showError(e, false) }
+                if (e.code != ParseException.CACHE_MISS) {
+                    ifViewAttached { it.showError(e, false) }
+                }
             } else {
                 eventBus.postSticky(workoutType)
             }
