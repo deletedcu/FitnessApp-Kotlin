@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_row">
+    android:background="?android:attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/f_workout_history_item_image"
