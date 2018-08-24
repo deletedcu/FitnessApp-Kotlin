@@ -16,7 +16,6 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FI
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_POPULAR
 import com.parse.ParseException
 import com.parse.ParseQuery
-import timber.log.Timber
 import java.util.*
 
 class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
@@ -38,8 +37,6 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
         if (query !== null && query!!.isRunning) {
             query?.cancel()
         }
-
-        Timber.d("OkHttp(jk) - $category, $filter, $types, $tags")
 
         // Category
         query = when(category) {

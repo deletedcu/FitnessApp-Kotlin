@@ -78,6 +78,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         (activity as MainActivity).setupToolbar(f_workout_browser_toolbar)
 
         val category = WorkoutBrowserFragmentArgs.fromBundle(arguments).category
+        f_workout_browser_filter_tabs.addOnTabSelectedListener(this@WorkoutBrowserFragment)
         f_workout_browser_category_tabs.apply {
             addOnTabSelectedListener(this@WorkoutBrowserFragment)
             getTabAt(category)?.select()

@@ -71,7 +71,7 @@ class LiveRowing : Application() {
 
         val clientBuilder = OkHttpClient.Builder()
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
         clientBuilder.networkInterceptors().add(httpLoggingInterceptor)
 
         val conf = Parse.Configuration.Builder(this)
