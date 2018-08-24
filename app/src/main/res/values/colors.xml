@@ -21,6 +21,8 @@
     <color name="hat_color12">#545454</color>
 
     <color name="backgroundOverlayColor">#fcfcfc</color>
+    <color name="background_color1">#f5f5f5</color>
+    <color name="background_color2">#fafafa</color>
 
     <!-- Primary/gauge metric -->
     <color name="gauge_neutral">#5cc6d1</color>
