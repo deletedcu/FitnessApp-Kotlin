@@ -1,12 +1,10 @@
 package com.liverowing.android.race
 
 import android.util.Base64
+import com.liverowing.android.LiveRowing
 import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.extensions.roundToDecimals
-import com.liverowing.android.model.messages.DeviceDisconnected
-import com.liverowing.android.model.messages.DeviceReady
-import com.liverowing.android.model.messages.WorkoutProgramRequest
-import com.liverowing.android.model.messages.WorkoutProgrammed
+import com.liverowing.android.model.messages.*
 import com.liverowing.android.model.parse.Affiliate
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.Workout
@@ -20,8 +18,8 @@ import com.parse.ParseUser
 import kotlinx.serialization.json.JSON
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 class RacePresenter : EventBusPresenter<RaceView>() {
@@ -37,6 +35,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var mDeviceReady = false
     private var mWorkoutProgrammed = false
     private var mProgrammingWorkout = false
+    private var mTerminatingWorkout = false
 
     private var mOpponentLastIndex = 0
     private var mOpponentWorkout: Workout? = null
@@ -127,6 +126,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onWorkoutTypeMainThread(workoutType: WorkoutType) {
 
+        Timber.d("** onWorkoutTypeMainThread")
         mWorkoutType = workoutType
         mWorkout.workoutType = workoutType
 
@@ -141,6 +141,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWorkoutProgrammedMainThread(data: WorkoutProgrammed) {
         if (data.success) {
+            Timber.d("** onWorkoutProgrammedMainThread")
             mWorkoutProgrammed = true
             preFlightCheck()
         } else {
@@ -151,24 +152,45 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onWorkoutTerminatedMainThread(data: WorkoutTerminated) {
+
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onDeviceReadyMainThread(data: DeviceReady) {
         mDeviceReady = true
+        Timber.d("** onDeviceReadyMainThread")
         preFlightCheck()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onDeviceDisconnectedMainThread(data: DeviceDisconnected) {
         mDeviceReady = false
+        Timber.d("** onDeviceDisconnectedMainThread")
         preFlightCheck()
     }
 
     private fun preFlightCheck() {
+        Timber.d("** STATE IS: ${LiveRowing.workoutState}")
         if (!mDeviceReady) {
             ifViewAttached {
                 it.setLoadingMessage("Click to connect")
                 it.showLoading(false)
+            }
+        } else if (!mWorkoutProgrammed && LiveRowing.workoutState != WorkoutState.WAITTOBEGIN) {
+            ifViewAttached {
+                it.setLoadingMessage("Terminating workout..")
+                it.showLoading(false)
+
+                if (!mTerminatingWorkout) {
+                    mTerminatingWorkout = true
+                    eventBus.post(WorkoutTerminateRequest(true))
+                }
+            }
+        } else if (mTerminatingWorkout) {
+            if (LiveRowing.workoutState == WorkoutState.WAITTOBEGIN) {
+                mTerminatingWorkout = false
             }
         } else if (!mWorkoutProgrammed && !mProgrammingWorkout) {
             if (mWorkoutType is WorkoutType) {
@@ -299,57 +321,47 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastRowingStatus: RowingStatus? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRowingStatusMainThread(data: RowingStatus) {
-        lastRowingStatus = data
-
-        when (data.workoutState) {
-            WorkoutState.WORKOUTROW -> {
-                if (!mWorkoutStarted) {
-                    mWorkoutStarted = true
-                    workoutStarting(data)
-                }
-                logDataPoint()
+        preFlightCheck()
+        if (!mWorkoutStarted && mWorkoutProgrammed) {
+            Timber.d("** onRowingStatusMainThread")
+            if (data.workoutState == WorkoutState.WORKOUTROW || data.workoutState == WorkoutState.INTERVALWORKTIME || data.workoutState == WorkoutState.INTERVALWORKDISTANCE) {
+                mWorkoutStarted = true
+                workoutStarting(data)
             }
+        }
 
-            WorkoutState.INTERVALREST -> {
-                if (!mResting) {
-                    mResting = true
-                    workoutResting()
-                }
-                logDataPoint()
-            }
+        if (mWorkoutStarted && !mWorkoutFinished) {
+            lastRowingStatus = data
+            when (data.workoutState) {
+                WorkoutState.WORKOUTROW -> logDataPoint()
 
-            WorkoutState.INTERVALWORKTIME,
-            WorkoutState.INTERVALWORKDISTANCE -> {
-                if (!mWorkoutStarted) {
-                    mWorkoutStarted = true
-                    workoutStarting(data)
-                } else {
+                WorkoutState.INTERVALREST -> {
+                    if (!mResting) {
+                        mResting = true
+                        workoutResting()
+                    }
                     logDataPoint()
+                }
+
+                WorkoutState.INTERVALWORKTIME,
+                WorkoutState.INTERVALWORKDISTANCE -> {
                     if (mResting) {
                         mResting = false
                         workoutContinuing()
                     }
+                    logDataPoint()
                 }
-            }
 
-            WorkoutState.WORKOUTEND -> {
-                if (!mWorkoutFinished) {
+                WorkoutState.WORKOUTEND -> {
                     logDataPoint()
                     workoutFinished()
                 }
+
+                WorkoutState.TERMINATE -> workoutTerminated()
+
+                else -> {}
             }
 
-            WorkoutState.TERMINATE -> {
-                if (!mWorkoutFinished) {
-                    workoutTerminated()
-                }
-            }
-
-            else -> {
-            }
-        }
-
-        if (mWorkoutStarted) {
             var opponentPlaybackData: Workout.DataPoint? = null
             var personalBestPlaybackData: Workout.DataPoint? = null
             if (mPersonalBestWorkout != null && mPersonalBestWorkout!!.playbackData.size > 0) {
@@ -369,6 +381,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastAdditionalRowingStatus1: ExtraRowingStatus1? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalRowingStatus1(data: ExtraRowingStatus1) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onAdditionalRowingStatus1")
+
         lastAdditionalRowingStatus1 = data
 
         if (mWorkoutStarted) {
@@ -380,6 +395,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastAdditionalRowingStatus2: ExtraRowingStatus2? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalRowingStatus2(data: ExtraRowingStatus2) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onAdditionalRowingStatus2")
+
         lastAdditionalRowingStatus2 = data
 
         if (mCurrentIntervalOrSplit != data.intervalCount) {
@@ -396,6 +414,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private lateinit var lastStrokeData: StrokeData
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onStrokeData(data: StrokeData) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onStrokeData")
+
         lastStrokeData = data
 
         if (lastRowingStatus!!.workoutState != WorkoutState.INTERVALREST) {
@@ -423,6 +444,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastAdditionalStrokeData: ExtraStrokeData? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalStrokeData(data: ExtraStrokeData) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onAdditionalStrokeData")
+
         lastAdditionalStrokeData = data
 
         if (mWorkoutStarted) {
@@ -434,12 +458,18 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private var lastSplitIntervalData: SplitIntervalData? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSplitIntervalData(data: SplitIntervalData) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onSplitIntervalData")
+
         lastSplitIntervalData = data
     }
 
     private var lastAdditionalSplitIntervalData: ExtraSplitIntervalData? = null
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onAdditionalSplitIntervalData(data: ExtraSplitIntervalData) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onAdditionalSplitIntervalData")
+
         lastAdditionalSplitIntervalData = data
 
         var splitStrokeCount = 0
@@ -492,11 +522,17 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     private lateinit var workoutSummary: RowingSummary
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRowingSummary(data: RowingSummary) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onRowingSummary")
+
         workoutSummary = data
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onExtraRowingSummary(data: ExtraRowingSummary) {
+        if (!mWorkoutStarted || mWorkoutFinished) return
+        Timber.d("** onExtraRowingSummary")
+
         // TODO: Unregister EventBus here?
 
         val workTimeDataPoints = mDataPoints.filter { it.workoutState != WorkoutState.INTERVALREST }
@@ -550,6 +586,10 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                         .map { it.splitTime }
                         .average()
 
+        val totalTime =
+                mSplits
+                        .sumByDouble { it.splitRestTime + it.splitTime }
+
         val calendar = Calendar.getInstance()
         val endTime = calendar.time
 
@@ -560,7 +600,7 @@ class RacePresenter : EventBusPresenter<RaceView>() {
         mWorkout.averageSplitTime = workoutSummary.averagePace.toDouble().roundToDecimals(1)
         mWorkout.averageWatts = data.watts
         mWorkout.isDone = true
-        mWorkout.totalTime = TimeUnit.MILLISECONDS.toSeconds(endTime.time - mWorkout.startTime!!.time).toInt()
+        mWorkout.totalTime = totalTime //TimeUnit.MILLISECONDS.toSeconds(endTime.time - mWorkout.startTime!!.time).toInt()
         mWorkout.averageSPM = workoutSummary.averageSpm
         mWorkout.totalStrokeCount = lastStrokeCountInWorkPeriod // TODO: Probably wrong
         mWorkout.caloriesBurned = data.calories

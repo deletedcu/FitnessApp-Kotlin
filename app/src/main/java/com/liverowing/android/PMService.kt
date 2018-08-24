@@ -7,6 +7,7 @@ import android.os.IBinder
 import com.liverowing.android.model.messages.DeviceConnectRequest
 import com.liverowing.android.model.messages.DeviceDisconnectRequest
 import com.liverowing.android.model.messages.WorkoutProgramRequest
+import com.liverowing.android.model.messages.WorkoutTerminateRequest
 import com.liverowing.android.pm.PMDevice
 import com.liverowing.android.pm.ble.PM5BleDevice
 import org.greenrobot.eventbus.EventBus
@@ -56,5 +57,10 @@ class PMService : Service() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onProgramWorkoutRequestMainThread(data: WorkoutProgramRequest) {
         device?.programWorkout(data.workoutType, data.targetPace)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTerminateWorkoutRequestMainThread(data: WorkoutTerminateRequest) {
+        device?.terminateWorkout()
     }
 }

@@ -6,4 +6,5 @@ interface PMDevice {
     fun connect()
     fun disconnect()
     fun programWorkout(workoutType: WorkoutType, targetPace: Int? = null)
+    fun terminateWorkout()
 }

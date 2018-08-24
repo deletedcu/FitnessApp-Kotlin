@@ -79,6 +79,12 @@ class PM5BleDevice(private val ctx: Context, private val device: BluetoothDevice
         configureWorkout(workout)
     }
 
+    override fun terminateWorkout() {
+        val frame = Frame()
+        frame.addCommand(Frame.Command(CSAFE_SETPMCFG_CMD, CSAFE_PM_SET_SCREENSTATE, listOf(SCREENTYPE_WORKOUT, SCREENVALUEWORKOUT_TERMINATEWORKOUT)))
+        manager.queueCommands(frame.formattedFrame(), null, SuccessCallback { eventBus.post(WorkoutTerminated(true)) })
+    }
+
     private fun configureWorkout(workout: PMWorkout) {
         // Check for special case variable interval workout, where the number of intervals is greater than PM_MAX_INTERVALS_PER_CSAFE_MSG.
         // If this is the case we need to setup this workout using multiple commands due to the PM communications interface size limit.
