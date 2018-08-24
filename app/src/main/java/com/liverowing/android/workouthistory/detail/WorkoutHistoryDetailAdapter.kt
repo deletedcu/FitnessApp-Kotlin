@@ -12,15 +12,14 @@ class WorkoutHistoryDetailAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> WorkoutHistoryChartsFragment()
-            1 -> WorkoutHistorySplitsFragment()
-            2 -> WorkoutHistoryChartsFragment()
-            3 -> WorkoutLeaderBoardsFragment()
-            4 -> WorkoutHistoryDetailsFragment()
+            1 -> WorkoutHistoryChartsFragment()
+            2 -> WorkoutLeaderBoardsFragment()
+            3 -> WorkoutHistoryDetailsFragment()
             else -> Fragment()
         }
     }
 
     override fun getCount(): Int {
-        return 5
+        return 4
     }
 }

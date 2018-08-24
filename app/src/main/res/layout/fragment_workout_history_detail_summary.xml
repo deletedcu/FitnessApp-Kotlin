@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".workouthistory.detail.summary.WorkoutHistoryChartsFragment">
+    tools:context=".workouthistory.detail.summary.WorkoutHistoryChartsFragment"
+    android:background="@color/background_color1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/background_color1">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/f_workout_detail_image"
@@ -22,10 +22,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/f_workout_history_detail_summary_card1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,7 +39,6 @@
                         android:id="@+id/f_workout_detail_createdby_image"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_launcher_background"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12dp"
@@ -58,14 +54,12 @@
                             android:id="@+id/f_workout_detail_createdby_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="nsheedy"
                             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"/>
 
                         <TextView
                             android:id="@+id/f_quick_workout_createdby_createdat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="vs"
                             android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"/>
 
                     </LinearLayout>
@@ -88,7 +82,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:padding="12dp"
-                        android:src="@drawable/ic_delete"
+                        android:src="@drawable/ic_arrow_down"
                         android:background="@android:color/transparent"
                         android:tint="@color/textColorDark"
                         android:layout_alignParentEnd="true"
@@ -101,23 +95,46 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:text="SPLITS"
+            android:textColor="@color/textColor"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin_medium"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_medium"/>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/f_workout_history_detail_summary_card2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/f_workout_history_detail_summary_card1">
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="TextView" />
+                android:orientation="vertical">
+                
+                <ImageButton
+                    android:id="@+id/f_workout_detail_summary_more"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_more_horiz"
+                    android:tint="@color/textColor"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/activity_vertical_margin_medium"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin_medium"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/f_workout_detail_summary_splits_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/fragment_workout_history_detail_summary_splits_item"/>
+                
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 

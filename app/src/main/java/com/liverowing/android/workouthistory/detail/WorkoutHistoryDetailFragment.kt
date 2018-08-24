@@ -63,10 +63,10 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
     }
 
     override fun setData(data: Workout?) {
-//        workout = data
-//        workoutType = workout?.workoutType
-//
-//        workout_detail_toolbar.title = workoutType?.name
+        workout = data
+        workoutType = workout?.workoutType
+
+        workout_detail_toolbar.title = workoutType?.name
 //        workout_detail_collapsing_toolbar.title = workoutType?.name
 //        workout_detail_createdby.text = "Created by | ${workoutType?.createdBy?.username}"
 //
