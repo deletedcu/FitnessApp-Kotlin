@@ -17,41 +17,6 @@ import android.graphics.drawable.Drawable
 class Utils {
 
     companion object {
-        fun BitmapToString(bitmap: Bitmap): String? {
-            try {
-                val baos = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-                val b = baos.toByteArray()
-                return android.util.Base64.encodeToString(b, android.util.Base64.DEFAULT)
-            } catch (e: NullPointerException) {
-                return null
-            } catch (e: OutOfMemoryError) {
-                return null
-            }
-
-        }
-
-        fun StringToBitmap(encodedString: String): Bitmap? {
-            try {
-                val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-                return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
-            } catch (e: NullPointerException) {
-                return null
-            } catch (e: OutOfMemoryError) {
-                return null
-            }
-        }
-
-        fun StringToBytes(encodedString: String): ByteArray? {
-            try {
-                val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-                return encodeByte
-            } catch (e: NullPointerException) {
-                return null
-            } catch (e: OutOfMemoryError) {
-                return null
-            }
-        }
 
         fun feetToInch(feet: String): String {
             val values = feet.split("'".toRegex())
@@ -164,34 +129,6 @@ class Utils {
             }
 
             return age
-        }
-
-        fun getBeforeDate(dates: Int): Date {
-            val DAY_IN_MS:Long = 1000 * 60 * 60 * 24
-            val date = Date()
-            val beforeDate = Date(date.time - dates * DAY_IN_MS)
-            return beforeDate
-        }
-
-        fun drawableToBitmap(drawable: Drawable): Bitmap? {
-            var bitmap: Bitmap? = null
-
-            if (drawable is BitmapDrawable) {
-                if (drawable.bitmap != null) {
-                    return drawable.bitmap
-                }
-            }
-
-            if (drawable.intrinsicWidth <= 0 || drawable.intrinsicHeight <= 0) {
-                bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888) // Single color bitmap will be created of 1x1 pixel
-            } else {
-                bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-            }
-
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
-            drawable.draw(canvas)
-            return bitmap
         }
 
     }
