@@ -1,5 +1,6 @@
 package com.liverowing.android.race
 
+import android.os.Handler
 import android.util.Base64
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.base.EventBusPresenter
@@ -156,7 +157,11 @@ class RacePresenter : EventBusPresenter<RaceView>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWorkoutTerminatedMainThread(data: WorkoutTerminated) {
-
+        Timber.d("*** WORKOUT TERMINATED, SHOULD WAIT 1s BEFORE PROGRAMMING NEW")
+        Handler().postDelayed({
+            Timber.d("*** SAFE TO PROGRAM NEW WORKOUT!")
+            mTerminatingWorkout = false
+        }, 3000)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -174,13 +179,14 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     }
 
     private fun preFlightCheck() {
-        Timber.d("** STATE IS: ${LiveRowing.workoutState}")
         if (!mDeviceReady) {
+            Timber.d("*** DEVICE IS NOT READY")
             ifViewAttached {
                 it.setLoadingMessage("Click to connect")
                 it.showLoading(false)
             }
         } else if (!mWorkoutProgrammed && LiveRowing.workoutState != WorkoutState.WAITTOBEGIN) {
+            Timber.d("*** MUST TERMINATE CURRENT WORKOUT")
             ifViewAttached {
                 it.setLoadingMessage("Terminating workout..")
                 it.showLoading(false)
@@ -191,10 +197,9 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                 }
             }
         } else if (mTerminatingWorkout) {
-            if (LiveRowing.workoutState == WorkoutState.WAITTOBEGIN) {
-                mTerminatingWorkout = false
-            }
+            Timber.d("*** STILL TERMINATING WORKOUT")
         } else if (!mWorkoutProgrammed && !mProgrammingWorkout) {
+            Timber.d("*** SHOULD PROGRAM WORKOUT")
             if (mWorkoutType is WorkoutType) {
                 ifViewAttached {
                     it.setLoadingMessage("Please wait..")
@@ -205,11 +210,18 @@ class RacePresenter : EventBusPresenter<RaceView>() {
                 }
             }
         } else if (!mWorkoutStarted) {
+            Timber.d("*** ROW TO START")
             ifViewAttached {
                 it.setLoadingMessage("Row to start!")
                 it.showLoading(false)
             }
+        } else if (mWorkoutFinished) {
+            ifViewAttached {
+                it.setLoadingMessage("Saving workout..")
+                it.showLoading(false)
+            }
         } else {
+            Timber.d("*** SHOW CONTENT")
             ifViewAttached {
                 it.showContent()
             }
