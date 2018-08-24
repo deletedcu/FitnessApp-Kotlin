@@ -11,26 +11,23 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/f_workout_browser_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        </androidx.appcompat.widget.Toolbar>
-
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
+            app:titleEnabled="false"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/f_workout_browser_category_tabs"
                 style="@style/AppTheme.Widget.Toolbar.TabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabMode="scrollable">
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                app:tabIndicatorFullWidth="false"
+                app:tabMode="scrollable"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/f_workout_browser_category_tab_featured"
@@ -62,6 +59,14 @@
                     android:layout_height="wrap_content"
                     android:text="Affiliate" />
             </com.google.android.material.tabs.TabLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/f_workout_browser_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
