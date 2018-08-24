@@ -1,6 +1,7 @@
 package com.liverowing.android.model.parse
 
 import android.util.Base64
+import com.liverowing.android.model.pm.SplitType
 import com.liverowing.android.model.pm.WorkoutState
 import com.parse.*
 import kotlinx.serialization.Serializable
@@ -9,6 +10,7 @@ import kotlinx.serialization.json.JSON
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by henrikmalmberg on 2017-10-01.
@@ -263,6 +265,27 @@ class Workout : ParseObject() {
                         splitNumber = map["splitNumber"] as Int
                 )
             }
+        }
+
+        fun getMap() : MutableMap<SplitType, Number> {
+            var map = mutableMapOf<SplitType, Number>()
+            map.put(SplitType.Number, splitNumber)
+            map.put(SplitType.Time, splitTime)
+            map.put(SplitType.StrokeRate, splitStrokeRate)
+            map.put(SplitType.DPS, splitAvgDPS)
+            map.put(SplitType.Dist, splitDistance)
+            map.put(SplitType.RestTime, splitRestTime)
+            map.put(SplitType.DragFactor, splitAvgDragFactor)
+            map.put(SplitType.Watts, splitAvgWatts)
+            map.put(SplitType.TimeDist, splitTimeDistance)
+            map.put(SplitType.HeartRate, splitHeartRate)
+            map.put(SplitType.Pace, splitAvgPace)
+            map.put(SplitType.RestDist, splitRestDistance)
+            map.put(SplitType.Cals, splitCals)
+            map.put(SplitType.StrokeCount, splitStrokeCount)
+            map.put(SplitType.DriveLength, splitAvgDriveLength)
+
+            return map
         }
     }
 }

@@ -8,18 +8,23 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
+import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
+import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
+import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.model.parse.Workout
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailView
 import kotlinx.android.synthetic.main.fragment_workout_history_detail.*
 import kotlinx.android.synthetic.main.workout_detail_collapsing_toolbar.*
 
-class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutHistoryDetailView, WorkoutHistoryDetailPresenter>(), WorkoutHistoryDetailView {
+class WorkoutHistoryDetailFragment : MvpLceViewStateFragment<ViewPager, Workout, WorkoutHistoryDetailView, WorkoutHistoryDetailPresenter>(), WorkoutHistoryDetailView {
+
     private lateinit var fragmentAdapter: WorkoutHistoryDetailAdapter
-    private var workout: Workout? = null
-    private var workoutType: WorkoutType? = null
+    private lateinit var workout: Workout
+    private lateinit var workoutType: WorkoutType
 
     override fun createPresenter() = WorkoutHistoryDetailPresenter()
 
@@ -62,29 +67,20 @@ class WorkoutHistoryDetailFragment : MvpLceFragment<ViewPager, Workout, WorkoutH
         inflater?.inflate(R.menu.workout_detail, menu)
     }
 
-    override fun setData(data: Workout?) {
+    override fun setData(data: Workout) {
         workout = data
-        workoutType = workout?.workoutType
+        workoutType = workout.workoutType!!
 
-        workout_detail_toolbar.title = workoutType?.name
-//        workout_detail_collapsing_toolbar.title = workoutType?.name
-//        workout_detail_createdby.text = "Created by | ${workoutType?.createdBy?.username}"
-//
-//        Glide
-//                .with(activity!!)
-//                .load(workoutType?.image?.url)
-//                .into(workout_detail_image)
-//
-//        Glide
-//                .with(activity!!)
-//                .load(workoutType?.createdBy?.image?.url)
-//                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-//                .into(workout_detail_createdby_image)
+        f_workout_detail_toolbar.title = workoutType.name
     }
 
     override fun loadData(pullToRefresh: Boolean) {
 
     }
+
+    override fun getData(): Workout = workout
+
+    override fun createViewState(): LceViewState<Workout, WorkoutHistoryDetailView> = RetainingLceViewState()
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
         return e?.message!!

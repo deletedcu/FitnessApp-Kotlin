@@ -6,12 +6,13 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.liverowing.android.workouthistory.detail.details.WorkoutHistoryDetailsFragment
 import com.liverowing.android.workouthistory.detail.summary.WorkoutHistoryChartsFragment
 import com.liverowing.android.workouthistory.detail.summary.WorkoutHistorySplitsFragment
+import com.liverowing.android.workouthistory.detail.summary.WorkoutHistorySummaryFragment
 import com.liverowing.android.workoutshared.leaderboards.WorkoutLeaderBoardsFragment
 
 class WorkoutHistoryDetailAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> WorkoutHistoryChartsFragment()
+            0 -> WorkoutHistorySummaryFragment()
             1 -> WorkoutHistoryChartsFragment()
             2 -> WorkoutLeaderBoardsFragment()
             3 -> WorkoutHistoryDetailsFragment()
