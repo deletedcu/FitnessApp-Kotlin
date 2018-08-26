@@ -34,25 +34,6 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).setupToolbar(workout_detail_toolbar, workout_detail_collapsing_toolbar)
-
-        fragmentAdapter = WorkoutBrowserDetailAdapter(childFragmentManager)
-        contentView.adapter = fragmentAdapter
-        contentView.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(f_workout_browser_detail_tabs))
-        f_workout_browser_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
-
-        f_workout_browser_detail_fab.setOnClickListener {
-            findNavController(view).navigate(R.id.raceFragmentAction)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -73,9 +54,15 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        val workoutTypeId = WorkoutBrowserDetailFragmentArgs.fromBundle(arguments).workoutTypeId
-        if (workoutTypeId.isNotEmpty()) {
-            presenter.loadWorkoutTypeById(workoutTypeId)
+        val args = WorkoutBrowserDetailFragmentArgs.fromBundle(arguments)
+
+        when {
+            args.workoutType != null -> {
+                data = args.workoutType!!
+                showContent()
+            }
+            args.workoutTypeId != null -> presenter.loadWorkoutTypeById(args.workoutTypeId!!)
+            else -> showError(Exception("No workoutType specified."), false)
         }
     }
 
@@ -95,6 +82,16 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
                 .load(workoutType.createdBy?.image?.url)
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(workout_detail_createdby_image)
+
+
+        fragmentAdapter = WorkoutBrowserDetailAdapter(childFragmentManager, workoutType)
+        contentView.adapter = fragmentAdapter
+        contentView.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(f_workout_browser_detail_tabs))
+        f_workout_browser_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
+
+        f_workout_browser_detail_fab.setOnClickListener {
+            findNavController(view!!).navigate(R.id.raceFragmentAction)
+        }
     }
 
     override fun createViewState(): LceViewState<WorkoutType, WorkoutBrowserDetailView> = RetainingLceViewState()

@@ -71,8 +71,14 @@
         tools:layout="@layout/fragment_workout_browser_detail">
         <argument
             android:name="workoutTypeId"
-            android:defaultValue=""
-            app:argType="string" />
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="workoutType"
+            android:defaultValue="@null"
+            app:argType="com.liverowing.android.model.parse.WorkoutType"
+            app:nullable="true" />
         <deepLink
             android:id="@+id/deepLink"
             app:uri="liverowing.com/workout/browser/{workoutTypeId}" />
@@ -101,8 +107,14 @@
         tools:layout="@layout/fragment_race">
         <argument
             android:name="workoutTypeId"
-            android:defaultValue=""
-            app:argType="string" />
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="workoutType"
+            android:defaultValue="@null"
+            app:argType="com.liverowing.android.model.parse.WorkoutType"
+            app:nullable="true" />
         <action
             android:id="@+id/deviceScanAction"
             app:destination="@id/deviceScanFragment" />

@@ -1,13 +1,11 @@
 package com.liverowing.android.workoutbrowser.detail
 
-import com.liverowing.android.base.EventBusPresenter
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.liverowing.android.model.parse.WorkoutType
 import com.parse.ParseException
 import com.parse.ParseQuery
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
-class WorkoutBrowserDetailPresenter : EventBusPresenter<WorkoutBrowserDetailView>() {
+class WorkoutBrowserDetailPresenter : MvpBasePresenter<WorkoutBrowserDetailView>() {
     fun loadWorkoutTypeById(id: String) {
         ifViewAttached { it.showLoading(false) }
         val query = ParseQuery.getQuery(WorkoutType::class.java)
@@ -19,16 +17,11 @@ class WorkoutBrowserDetailPresenter : EventBusPresenter<WorkoutBrowserDetailView
                     ifViewAttached { it.showError(e, false) }
                 }
             } else {
-                eventBus.postSticky(workoutType)
+                ifViewAttached {
+                    it.setData(workoutType)
+                    it.showContent()
+                }
             }
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onWorkoutTypeMainThread(workoutType: WorkoutType) {
-        ifViewAttached {
-            it.setData(workoutType)
-            it.showContent()
         }
     }
 }

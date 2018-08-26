@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
@@ -16,6 +15,15 @@ import com.liverowing.android.model.parse.WorkoutType
 import org.greenrobot.eventbus.EventBus
 
 class WorkoutHistoryFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<Workout>, WorkoutHistoryView, WorkoutHistoryPresenter>() {
+    private lateinit var workoutType: WorkoutType
+    companion object {
+        fun newInstance(workoutType: WorkoutType) : WorkoutHistoryFragment {
+            val fragment = WorkoutHistoryFragment()
+            fragment.workoutType = workoutType
+            return fragment
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         LiveRowing.refWatcher(this.activity).watch(this)

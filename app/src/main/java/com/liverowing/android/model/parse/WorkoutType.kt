@@ -1,6 +1,7 @@
 package com.liverowing.android.model.parse
 
 import com.parse.*
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -56,11 +57,27 @@ class WorkoutType : ParseObject() {
         get() {
             val parts = mutableListOf<String>()
             if (segments != null) {
+                var number = 1
+                var lastSegment: Segment? = null
                 for (segment in segments!!) {
                     if (segment.isDataAvailable) {
+                        if (lastSegment != null && segment.friendlyValue == lastSegment.friendlyValue && segment.friendlyRestValue == lastSegment.friendlyRestValue) {
+                            number++
+                        }
+                        lastSegment = segment
                         parts.add(segment.friendlyValue)
                         parts.add(segment.friendlyRestValue)
                     }
+                }
+
+                Timber.d("$number --- ${segments!!.size}")
+
+                if (segments!!.size == number && lastSegment != null) {
+                    var string = "$number x ${lastSegment.friendlyValue}"
+                    if (lastSegment.restValue != null && lastSegment.restValue!! > 0) {
+                        string += "/${lastSegment.friendlyRestValue}"
+                    }
+                    return string
                 }
             }
 

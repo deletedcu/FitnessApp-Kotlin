@@ -14,40 +14,38 @@ import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
 import com.liverowing.android.LiveRowing
-
 import com.liverowing.android.R
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.UserStats
 import com.liverowing.android.model.parse.WorkoutType
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.fragment_workout_leaderboards.*
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
 class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<UserStats>, WorkoutLeaderBoardsView, WorkoutLeaderBoardsPresenter>(), WorkoutLeaderBoardsView, SwipeRefreshLayout.OnRefreshListener {
+    private lateinit var workoutType: WorkoutType
+    companion object {
+        fun newInstance(workoutType: WorkoutType) : WorkoutLeaderBoardsFragment {
+            val fragment = WorkoutLeaderBoardsFragment()
+            fragment.workoutType = workoutType
+            return fragment
+        }
+    }
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewDividerItemDecoration: DividerItemDecoration
     private val dataSet = mutableListOf<UserStats>()
 
-    private lateinit var workoutType: WorkoutType
-
     override fun createPresenter() = WorkoutLeaderBoardsPresenter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //workoutType = EventBus.getDefault().getStickyEvent(WorkoutType::class.java)
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         LiveRowing.refWatcher(this.activity).watch(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_workout_leaderboards, container, false)
     }
 
@@ -70,7 +68,7 @@ class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, 
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        //presenter.loadUserStats(pullToRefresh, workoutType, ParseUser.getCurrentUser() as User)
+        presenter.loadUserStats(pullToRefresh, workoutType, ParseUser.getCurrentUser() as User)
     }
 
     override fun onRefresh() {
