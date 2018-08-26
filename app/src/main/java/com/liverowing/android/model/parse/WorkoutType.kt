@@ -1,7 +1,12 @@
 package com.liverowing.android.model.parse
 
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.TAG_CARDIO
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.TAG_CROSS_TRAINING
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.TAG_HIIT
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.TAG_POWER
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.TAG_SPEED
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.TAG_WEIGHT_LOSS
 import com.parse.*
-import timber.log.Timber
 import java.util.*
 
 /**
@@ -48,7 +53,22 @@ class WorkoutType : ParseObject() {
 
     var isDone by ParseDelegate<Boolean?>()
     var isPublic by ParseDelegate<Boolean?>()
-    var filterTags by ParseDelegate<List<String>?>()
+    var filterTags by ParseDelegate<List<Int>?>()
+    val filterTagsFriendly: List<String>
+        get() {
+            val mapping =  hashMapOf(
+                    TAG_POWER to "Power",
+                    TAG_CARDIO to "Cardio",
+                    TAG_HIIT to "HIIT",
+                    TAG_CROSS_TRAINING to "Cross Training",
+                    TAG_SPEED to "Speed",
+                    TAG_WEIGHT_LOSS to "Weight loss"
+            )
+            val tags = mutableListOf<String>()
+            filterTags?.forEachIndexed { index, state -> if (state == 1) { tags.add(mapping[index]!!) } }
+
+            return tags
+        }
     var likes by ParseDelegate<Int?>()
     var namedChallenger by ParseDelegate<User?>()
     var fixedChallenge by ParseDelegate<Workout?>()
@@ -69,8 +89,6 @@ class WorkoutType : ParseObject() {
                         parts.add(segment.friendlyRestValue)
                     }
                 }
-
-                Timber.d("$number --- ${segments!!.size}")
 
                 if (segments!!.size == number && lastSegment != null) {
                     var string = "$number x ${lastSegment.friendlyValue}"

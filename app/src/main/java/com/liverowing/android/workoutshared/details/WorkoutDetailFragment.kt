@@ -49,6 +49,13 @@ class WorkoutDetailFragment : Fragment() {
 
         f_workout_detail_intervals.text = workoutType.friendlySegmentDescription
         f_workout_detail_description.text = workoutType.descriptionText
+        f_workout_detail_more_like_user.text = "More from ${workoutType.createdBy?.username}"
+        if (workoutType.filterTags != null && workoutType.filterTags!!.isNotEmpty()) {
+            f_workout_detail_more_like_tags.visibility = View.VISIBLE
+            f_workout_detail_more_like_tags.text = "More ${workoutType.filterTagsFriendly.joinToString(" & ")} workouts"
+        } else {
+            f_workout_detail_more_like_tags.visibility = View.GONE
+        }
 
         f_workout_detail_intervals_title.setOnClickListener {
             f_workout_detail_segments_recyclerview.toggleVisibility()

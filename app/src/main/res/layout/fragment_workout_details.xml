@@ -1,41 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".workoutshared.details.WorkoutDetailFragment">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants">
+        android:orientation="vertical"
+        android:paddingBottom="80dp">
 
         <TextView
-            android:id="@+id/f_workout_detail_description_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="Description"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="@color/textColor"
-            app:layout_constraintBottom_toTopOf="@+id/f_workout_detail_description_card"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="@color/textColor" />
 
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/f_workout_detail_description_card"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/list_item_spacing_half"
-            app:layout_constraintBottom_toTopOf="@+id/f_workout_detail_intervals_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/f_workout_detail_description_title">
+            android:layout_marginBottom="@dimen/list_item_spacing_half">
 
             <TextView
                 android:id="@+id/f_workout_detail_description"
@@ -47,7 +37,7 @@
 
         <TextView
             android:id="@+id/f_workout_detail_intervals_title"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
@@ -55,22 +45,14 @@
             android:drawableEnd="@drawable/ic_arrow_up"
             android:text="Intervals"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="@color/textColor"
-            app:layout_constraintBottom_toTopOf="@+id/f_workout_detail_intervals_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/f_workout_detail_description_card" />
+            android:textColor="@color/textColor" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/f_workout_detail_intervals_card"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/list_item_spacing_half"
-            android:animateLayoutChanges="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/f_workout_detail_intervals_title">
+            android:animateLayoutChanges="true">
 
             <TextView
                 android:id="@+id/f_workout_detail_intervals"
@@ -83,17 +65,47 @@
                 android:id="@+id/f_workout_detail_segments_recyclerview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone">
-
-            </androidx.recyclerview.widget.RecyclerView>
+                android:visibility="gone" />
         </com.google.android.material.card.MaterialCardView>
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/f_workout_detail_intervals_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="More like this"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@color/textColor" />
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/list_item_spacing_half">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/f_workout_detail_more_like_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:padding="@dimen/list_item_spacing_half"
+                    android:text="More by &lt;user&gt;" />
+
+                <TextView
+                    android:id="@+id/f_workout_detail_more_like_tags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:padding="@dimen/list_item_spacing_half"
+                    android:text="More &lt;tags&gt; workouts" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
