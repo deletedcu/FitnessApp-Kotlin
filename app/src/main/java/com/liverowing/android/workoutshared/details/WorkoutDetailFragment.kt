@@ -47,12 +47,27 @@ class WorkoutDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        f_workout_detail_intervals.text = workoutType.friendlySegmentDescription
+        if (workoutType.friendlySegmentDescription.isNotEmpty()) {
+            f_workout_detail_intervals.text = workoutType.friendlySegmentDescription
+            f_workout_detail_intervals_title.visibility = View.VISIBLE
+            f_workout_detail_intervals.visibility = View.VISIBLE
+        } else {
+            f_workout_detail_intervals_title.visibility = View.GONE
+            f_workout_detail_intervals.visibility = View.GONE
+        }
         f_workout_detail_description.text = workoutType.descriptionText
         f_workout_detail_more_like_user.text = "More from ${workoutType.createdBy?.username}"
         if (workoutType.filterTags != null && workoutType.filterTags!!.isNotEmpty()) {
             f_workout_detail_more_like_tags.visibility = View.VISIBLE
             f_workout_detail_more_like_tags.text = "More ${workoutType.filterTagsFriendly.joinToString(" & ")} workouts"
+
+            /* TODO: Eh, not sure..
+            workoutType.filterTagsFriendly.forEach {
+                val chip = Chip(activity)
+                chip.text = it
+                f_workout_detail_tags.addView(chip)
+            }
+            */
         } else {
             f_workout_detail_more_like_tags.visibility = View.GONE
         }
