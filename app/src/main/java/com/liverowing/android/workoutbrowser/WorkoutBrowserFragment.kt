@@ -19,7 +19,6 @@ import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
-import org.greenrobot.eventbus.EventBus
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
@@ -86,9 +85,10 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         viewManager = GridLayoutManager(activity!!, 2)
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
-        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!)) { _, workout ->
-            EventBus.getDefault().postSticky(workout)
-            Navigation.findNavController(view).navigate(R.id.workoutBrowserDetailAction)
+        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!)) { _, workoutType ->
+            val action = WorkoutBrowserFragmentDirections.workoutBrowserDetailAction()
+            action.setWorkoutType(workoutType)
+            Navigation.findNavController(view).navigate(action)
         }
 
         contentView.setOnRefreshListener(this@WorkoutBrowserFragment)
