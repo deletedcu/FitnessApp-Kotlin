@@ -96,13 +96,9 @@ class RaceFragment : MvpLceFragment<ConstraintLayout, WorkoutType, RaceView, Rac
 
     override fun loadData(pullToRefresh: Boolean) {
         val args = RaceFragmentArgs.fromBundle(arguments)
-
         when {
-            args.workoutType != null -> {
-                setData(args.workoutType!!)
-                showContent()
-            }
-            args.workoutTypeId.isNullOrEmpty() -> presenter.loadWorkoutTypeById(args.workoutTypeId!!)
+            args.workoutType != null -> presenter.setWorkoutType(args.workoutType!!)
+            args.workoutTypeId != null -> presenter.loadWorkoutTypeById(args.workoutTypeId!!)
             else -> showError(Exception("No workoutType specified."), false)
         }
     }

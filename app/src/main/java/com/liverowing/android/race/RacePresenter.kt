@@ -59,17 +59,26 @@ class RacePresenter : EventBusPresenter<RaceView>() {
             it.setLoadingMessage("Loading workout..")
             it.showLoading(false)
         }
+
         val query = ParseQuery.getQuery(WorkoutType::class.java)
         query.include("createdBy")
         query.include("segments")
-        query.getInBackground(id) { workoutType: WorkoutType?, e: ParseException? ->
+        query.getInBackground(id) { workoutType: WorkoutType, e: ParseException? ->
             if (e !== null) {
                 if (e.code != ParseException.CACHE_MISS) {
                     ifViewAttached { it.showError(e, false) }
                 }
             } else {
-                eventBus.postSticky(workoutType)
+                setWorkoutType(workoutType)
             }
+        }
+    }
+
+    fun setWorkoutType(workoutType: WorkoutType) {
+        this.mWorkoutType = workoutType
+        ifViewAttached {
+            it.setData(workoutType)
+            preFlightCheck()
         }
     }
 
@@ -124,21 +133,6 @@ class RacePresenter : EventBusPresenter<RaceView>() {
     fun setOpponentWorkout(workout: Workout) {
         mOpponentWorkout = workout
         mWorkout.isChallenge = true
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onWorkoutTypeMainThread(workoutType: WorkoutType) {
-
-        Timber.d("** onWorkoutTypeMainThread")
-        mWorkoutType = workoutType
-        mWorkout.workoutType = workoutType
-
-        ifViewAttached {
-            updateViewMetrics()
-
-            it.setData(workoutType)
-            preFlightCheck()
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

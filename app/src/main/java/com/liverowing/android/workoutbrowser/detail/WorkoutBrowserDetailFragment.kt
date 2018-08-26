@@ -90,7 +90,9 @@ class WorkoutBrowserDetailFragment : MvpLceViewStateFragment<ViewPager, WorkoutT
         f_workout_browser_detail_tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(contentView))
 
         f_workout_browser_detail_fab.setOnClickListener {
-            findNavController(view!!).navigate(R.id.raceFragmentAction)
+            val action = WorkoutBrowserDetailFragmentDirections.raceFragmentAction()
+            action.setWorkoutType(workoutType)
+            findNavController(view!!).navigate(action)
         }
     }
 
