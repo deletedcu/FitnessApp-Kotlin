@@ -72,15 +72,16 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:background="@color/background_color1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/f_workout_history_detail_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_play"
-        app:fabSize="normal" />
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/f_workout_history_detail_fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@drawable/ic_play"-->
+        <!--app:fabSize="normal" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

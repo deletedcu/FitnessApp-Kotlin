@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".workouthistory.detail.summary.WorkoutHistoryChartsFragment"
-    android:background="@color/background_color1">
+    tools:context=".workouthistory.detail.summary.WorkoutHistorySummaryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
         <ImageView
             android:id="@+id/f_workout_history_detail_image"
@@ -20,7 +20,7 @@
             android:src="@drawable/side_nav_bar"/>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/f_workout_history_detail_summary_card1"
+            style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -67,7 +67,7 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -76,7 +76,8 @@
                         android:layout_height="60dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <ImageButton
                         android:id="@+id/f_workout_history_detail_summary_collapse_button"
@@ -86,11 +87,12 @@
                         android:src="@drawable/ic_arrow_down"
                         android:background="@android:color/transparent"
                         android:tint="@color/textColorDark"
-                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="12dp"
-                        android:layout_marginEnd="8dp"/>
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
-                </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 
@@ -107,15 +109,14 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin_medium"/>
 
         <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                
+                android:layout_height="wrap_content">
+
                 <ImageButton
                     android:id="@+id/f_workout_history_detail_summary_more"
                     android:layout_width="48dp"
@@ -124,18 +125,26 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_more_horiz"
                     android:tint="@color/textColor"
-                    android:layout_gravity="right"
                     android:layout_marginTop="@dimen/activity_vertical_margin_medium"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin_medium"/>
+                    android:layout_marginEnd="@dimen/activity_vertical_margin_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/f_workout_history_detail_summary_splits_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/fragment_workout_history_detail_summary_splits_item"/>
-                
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/activity_vertical_margin_medium"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin_medium"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin_medium"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/f_workout_history_detail_summary_more"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
