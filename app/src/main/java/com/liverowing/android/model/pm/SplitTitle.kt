@@ -16,7 +16,7 @@ data class SplitTitle(val type: SplitType,
             data.add(SplitTitle(SplitType.DPS, "DISTANCE / STROKE", "DPS"))
             data.add(SplitTitle(SplitType.Dist, "DISTANCE", "Dist"))
             data.add(SplitTitle(SplitType.RestTime, "REST TIME", "RestTime"))
-            data.add(SplitTitle(SplitType.DragFactor, "DRAG FACTOR", "DragFactor"))
+            data.add(SplitTitle(SplitType.DragFactor, "DRAG", "DragFactor"))
             data.add(SplitTitle(SplitType.Watts, "POWER", "Power"))
             data.add(SplitTitle(SplitType.TimeDist, "TIME DISTANCE", "TimeDist"))
             data.add(SplitTitle(SplitType.HeartRate, "HEART RATE", "HeartRate"))

@@ -190,7 +190,7 @@ class Workout : ParseObject() {
             list.add(SummaryItem("PEAK PACE", fastestPace.toString()))
             list.add(SummaryItem("DISTANCE / STROKE", SplitsAvgDPS.toString()))
             list.add(SummaryItem("RATE", strokeRate.toString()))
-            list.add(SummaryItem("DRAG FACTOR", SplitsAvgDrag.toString()))
+            list.add(SummaryItem("DRAG", SplitsAvgDrag.toString()))
             list.add(SummaryItem("CALORIES", SplitsCals.toString()))
             list.add(SummaryItem("PEAK HEART RATE", maxHeartRate.toString()))
             list.add(SummaryItem("PACE", splitsAvgPace.toString()))
