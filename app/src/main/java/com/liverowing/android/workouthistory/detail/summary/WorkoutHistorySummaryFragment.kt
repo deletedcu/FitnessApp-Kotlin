@@ -82,8 +82,8 @@ class WorkoutHistorySummaryFragment : Fragment() {
                 .apply(RequestOptions.bitmapTransform(CircleCrop()).placeholder(R.drawable.ic_launcher_background))
                 .into(f_workout_history_detail_createdby_image)
 
-        f_workout_history_detail_name.text = workoutType?.createdBy?.userClass
-        f_workout_history_detail_createdat.text = SimpleDateFormat.getDateInstance().format(workout.createdAt)
+        f_workout_history_detail_name.text = workoutType?.createdBy?.username
+        f_workout_history_detail_createdat.text = SimpleDateFormat.getDateTimeInstance().format(workout.createdAt)
 
         summaryDataset.clear()
         if (workout.data.WorkoutData.getData() is List<Workout.SummaryItem>) {
