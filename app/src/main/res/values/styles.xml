@@ -1,7 +1,7 @@
 <resources>
 
 
-    <style name="BaseAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
@@ -114,4 +114,30 @@
         <item name="android:textColor">@color/textColorDark</item>
         <item name="android:letterSpacing">0.0125</item>
     </style>
+
+    <style name="TextAppearanceSmall">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/textColorDark</item>
+    </style>
+
+    <style name="TextAppearanceSmallBold" parent="TextAppearanceSmall">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <!--Dialog animation theme-->
+    <style name="DialogAnimationEnterExit" >
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+    
+    <style name="FullScreenDialog" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
 </resources>
