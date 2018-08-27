@@ -101,7 +101,10 @@ class WorkoutHistorySummaryFragment : Fragment() {
     }
 
     private fun showSplitDialog() {
-        val dialogFragment = SplitDialogFragment(titles)
+        val dialogFragment = SplitDialogFragment(titles, onSelectedItems = { selectedList ->
+            titles = selectedList
+            viewAdapter.notifyDataSetChanged()
+        })
         dialogFragment.show(fragmentManager, dialogFragment.javaClass.toString())
     }
 

@@ -19,7 +19,7 @@ data class SplitTitle(val type: SplitType,
             data.add(SplitTitle(SplitType.DragFactor, "DRAG FACTOR", "DragFactor"))
             data.add(SplitTitle(SplitType.Watts, "POWER", "Power"))
             data.add(SplitTitle(SplitType.TimeDist, "TIME DISTANCE", "TimeDist"))
-            data.add(SplitTitle(SplitType.HeartRate, "Heart Rate", "HeartRate"))
+            data.add(SplitTitle(SplitType.HeartRate, "HEART RATE", "HeartRate"))
             data.add(SplitTitle(SplitType.Pace, "PACE", "Pace"))
             data.add(SplitTitle(SplitType.RestDist, "REST DISTANCE", "RestDist"))
             data.add(SplitTitle(SplitType.Cals, "CALORIES", "Cals"))
@@ -29,7 +29,7 @@ data class SplitTitle(val type: SplitType,
             return data
         }
 
-        fun defaultData(): List<SplitTitle> {
+        fun defaultData(): MutableList<SplitTitle> {
             var data = mutableListOf<SplitTitle>()
             data.add(SplitTitle(SplitType.Dist, "DISTANCE", "Dist"))
             data.add(SplitTitle(SplitType.Time, "TIME", "Time"))
