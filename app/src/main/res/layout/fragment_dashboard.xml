@@ -42,7 +42,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Featured workouts"
-                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +64,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Recent &amp; liked workouts"
-                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/f_dashboard_featured_workouts_recyclerview" />
 
