@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.4"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
         android:textAppearance="@style/TextAppearanceSmallBold"
         android:textStyle="bold"/>
 
@@ -24,8 +24,8 @@
         android:paddingStart="@dimen/activity_horizontal_margin_tiny"
         android:paddingEnd="@dimen/activity_horizontal_margin_tiny"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
         android:textAppearance="@style/TextAppearanceSmallBold"/>
 
     <TextView
@@ -36,8 +36,8 @@
         android:paddingStart="@dimen/activity_horizontal_margin_tiny"
         android:paddingEnd="@dimen/activity_horizontal_margin_tiny"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
         android:textAppearance="@style/TextAppearanceSmallBold"/>
 
     <TextView
@@ -48,8 +48,8 @@
         android:paddingStart="@dimen/activity_horizontal_margin_tiny"
         android:paddingEnd="@dimen/activity_horizontal_margin_tiny"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
         android:textAppearance="@style/TextAppearanceSmallBold"/>
 
     <TextView
@@ -60,8 +60,8 @@
         android:paddingStart="@dimen/activity_horizontal_margin_tiny"
         android:paddingEnd="@dimen/activity_horizontal_margin_tiny"
         android:singleLine="true"
-        android:textAlignment="center"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
         android:textAppearance="@style/TextAppearanceSmallBold"/>
 
 </LinearLayout>
