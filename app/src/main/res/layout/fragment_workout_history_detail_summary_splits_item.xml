@@ -9,7 +9,7 @@
         android:id="@+id/f_workout_history_detail_summary_splits_item_numbrer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.4"
         android:singleLine="true"
         android:textAlignment="center"
         android:layout_gravity="center"

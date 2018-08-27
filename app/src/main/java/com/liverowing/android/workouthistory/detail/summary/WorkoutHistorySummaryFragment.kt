@@ -6,17 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.JustifyContent
 import com.liverowing.android.LiveRowing
 import com.liverowing.android.R
+import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.Workout
 import com.liverowing.android.model.pm.SplitTitle
 import com.liverowing.android.model.pm.SplitType
+import com.liverowing.android.views.LiveRowingFlexboxLayoutManager
 import kotlinx.android.synthetic.main.fragment_workout_history_detail_summary.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -25,11 +29,17 @@ import java.text.SimpleDateFormat
 
 class WorkoutHistorySummaryFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
-    private var titles = SplitTitle.defaultData()
-    private var dataSet = mutableListOf<MutableMap<SplitType, Number>>()
+    private lateinit var summaryRecyclerView: RecyclerView
+    private lateinit var summaryAdapter: WorkoutHistorySummaryAdapter
+    private lateinit var summaryViewManager: LiveRowingFlexboxLayoutManager
+    private var summaryDataset = mutableListOf<Workout.SummaryItem>()
+    private var isSummaryCollapsed = true
+
+    private lateinit var splitRecyclerView: RecyclerView
+    private lateinit var splitViewAdapter: RecyclerView.Adapter<*>
+    private lateinit var splitViewManager: RecyclerView.LayoutManager
+    private var splitTitles = SplitTitle.defaultData()
+    private var splitDataSet = mutableListOf<MutableMap<SplitType, Number>>()
 
     override fun onStart() {
         super.onStart()
@@ -75,35 +85,70 @@ class WorkoutHistorySummaryFragment : Fragment() {
         f_workout_history_detail_name.text = workoutType?.createdBy?.userClass
         f_workout_history_detail_createdat.text = SimpleDateFormat.getDateInstance().format(workout.createdAt)
 
-        dataSet.clear()
+        summaryDataset.clear()
+        if (workout.data.WorkoutData.getData() is List<Workout.SummaryItem>) {
+            summaryDataset.addAll(workout.data.WorkoutData.getData())
+            summaryAdapter.notifyDataSetChanged()
+        }
+
+        splitDataSet.clear()
         if (workout.data.WorkoutData.splits is List<Workout.Split>) {
             val splits = workout.data.WorkoutData.splits
             splits.forEach {
-                dataSet.add(it.getMap())
+                splitDataSet.add(it.getMap())
             }
-            viewAdapter.notifyDataSetChanged()
+            splitViewAdapter.notifyDataSetChanged()
         }
     }
 
     private fun setupUI() {
-        viewManager = LinearLayoutManager(activity!!)
-        viewAdapter = WorkoutHistorySummarySplitsAdapter(dataSet, titles)
+        summaryViewManager = LiveRowingFlexboxLayoutManager(context!!)
+        summaryViewManager.isScrollEnabled = false
+        summaryViewManager.flexDirection = FlexDirection.ROW
+        summaryViewManager.justifyContent = JustifyContent.FLEX_START
+        summaryViewManager.flexWrap = FlexWrap.WRAP
+        summaryAdapter = WorkoutHistorySummaryAdapter(summaryDataset)
+        summaryRecyclerView = f_workout_history_detail_summary_recyclerview.apply {
+            layoutManager = summaryViewManager
+            adapter = summaryAdapter
+        }
 
-        recyclerView = f_workout_history_detail_summary_splits_recyclerview.apply {
+        splitViewManager = LinearLayoutManager(activity!!)
+        splitViewAdapter = WorkoutHistorySummarySplitsAdapter(splitDataSet, splitTitles)
+
+        splitRecyclerView = f_workout_history_detail_summary_splits_recyclerview.apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
+            layoutManager = splitViewManager
+            adapter = splitViewAdapter
         }
 
         f_workout_history_detail_summary_more.setOnClickListener {
             showSplitDialog()
         }
+
+        f_workout_history_detail_summary_collapse_button.setOnClickListener {
+            if (isSummaryCollapsed) {
+                isSummaryCollapsed = false
+                f_workout_history_detail_summary_collapse_button.setImageResource(R.drawable.ic_arrow_up)
+                var layoutparams = f_workout_history_detail_summary_layout.layoutParams
+                layoutparams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                layoutparams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                f_workout_history_detail_summary_layout.layoutParams = layoutparams
+            } else {
+                isSummaryCollapsed = true
+                f_workout_history_detail_summary_collapse_button.setImageResource(R.drawable.ic_arrow_down)
+                var layoutparams = f_workout_history_detail_summary_layout.layoutParams
+                layoutparams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                layoutparams.height = 75.dpToPx()
+                f_workout_history_detail_summary_layout.layoutParams = layoutparams
+            }
+        }
     }
 
     private fun showSplitDialog() {
-        val dialogFragment = SplitDialogFragment(titles, onSelectedItems = { selectedList ->
-            titles = selectedList
-            viewAdapter.notifyDataSetChanged()
+        val dialogFragment = SplitDialogFragment(splitTitles, onSelectedItems = { selectedList ->
+            splitTitles = selectedList
+            splitViewAdapter.notifyDataSetChanged()
         })
         dialogFragment.show(fragmentManager, dialogFragment.javaClass.toString())
     }

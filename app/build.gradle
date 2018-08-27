@@ -88,4 +88,5 @@ dependencies {
     implementation 'com.lapism:searchview:27.1.1.0.0'
 
     implementation 'no.nordicsemi.android:ble:2.0-alpha6'
+    implementation 'com.google.android:flexbox:1.0.0'
 }

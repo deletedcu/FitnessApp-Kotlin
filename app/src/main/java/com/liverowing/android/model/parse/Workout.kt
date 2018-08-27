@@ -180,7 +180,33 @@ class Workout : ParseObject() {
                 )
             }
         }
+
+        fun getData() : MutableList<SummaryItem> {
+            var list = mutableListOf<SummaryItem>()
+            list.add(SummaryItem("PEAK RATE", maxSPM.toString()))
+            list.add(SummaryItem("PEAK POWER", maxWatt.toString()))
+            list.add(SummaryItem("HEART RATE", heartRate.toString()))
+            list.add(SummaryItem("POWER", SplitsWatts.toString()))
+            list.add(SummaryItem("PEAK PACE", fastestPace.toString()))
+            list.add(SummaryItem("DISTANCE / STROKE", SplitsAvgDPS.toString()))
+            list.add(SummaryItem("RATE", strokeRate.toString()))
+            list.add(SummaryItem("DRAG FACTOR", SplitsAvgDrag.toString()))
+            list.add(SummaryItem("CALORIES", SplitsCals.toString()))
+            list.add(SummaryItem("PEAK HEART RATE", maxHeartRate.toString()))
+            list.add(SummaryItem("PACE", splitsAvgPace.toString()))
+            list.add(SummaryItem("STROKES", strokeCount.toString()))
+            list.add(SummaryItem("TIME", workTime.toString()))
+            list.add(SummaryItem("STROKE LENGTH", SplitsAvgDriveLength.toString()))
+            list.add(SummaryItem("SPLIT SIZE", splitSize.toString()))
+            list.add(SummaryItem("DISTANCE", workDistance.toString()))
+            return list
+        }
     }
+
+    data class SummaryItem (
+            val key: String,
+            val value: String
+    )
 
     @Serializable
     data class DataPointWrapper(
