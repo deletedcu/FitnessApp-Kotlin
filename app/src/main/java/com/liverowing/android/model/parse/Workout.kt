@@ -1,6 +1,7 @@
 package com.liverowing.android.model.parse
 
 import android.util.Base64
+import com.liverowing.android.extensions.secondsToTimespan
 import com.liverowing.android.model.pm.SplitType
 import com.liverowing.android.model.pm.WorkoutState
 import com.parse.*
@@ -187,15 +188,15 @@ class Workout : ParseObject() {
             list.add(SummaryItem("PEAK POWER", maxWatt.toString()))
             list.add(SummaryItem("HEART RATE", heartRate.toString()))
             list.add(SummaryItem("POWER", SplitsWatts.toString()))
-            list.add(SummaryItem("PEAK PACE", fastestPace.toString()))
+            list.add(SummaryItem("PEAK PACE", fastestPace.secondsToTimespan()))
             list.add(SummaryItem("DISTANCE / STROKE", SplitsAvgDPS.toString()))
             list.add(SummaryItem("RATE", strokeRate.toString()))
             list.add(SummaryItem("DRAG", SplitsAvgDrag.toString()))
             list.add(SummaryItem("CALORIES", SplitsCals.toString()))
             list.add(SummaryItem("PEAK HEART RATE", maxHeartRate.toString()))
-            list.add(SummaryItem("PACE", splitsAvgPace.toString()))
+            list.add(SummaryItem("PACE", splitsAvgPace.secondsToTimespan()))
             list.add(SummaryItem("STROKES", strokeCount.toString()))
-            list.add(SummaryItem("TIME", workTime.toString()))
+            list.add(SummaryItem("TIME", workTime.secondsToTimespan()))
             list.add(SummaryItem("STROKE LENGTH", SplitsAvgDriveLength.toString()))
             list.add(SummaryItem("SPLIT SIZE", splitSize.toString()))
             list.add(SummaryItem("DISTANCE", workDistance.toString()))
@@ -293,23 +294,23 @@ class Workout : ParseObject() {
             }
         }
 
-        fun getMap() : MutableMap<SplitType, Number> {
-            var map = mutableMapOf<SplitType, Number>()
-            map.put(SplitType.Number, splitNumber)
-            map.put(SplitType.Time, splitTime)
-            map.put(SplitType.StrokeRate, splitStrokeRate)
-            map.put(SplitType.DPS, splitAvgDPS)
-            map.put(SplitType.Dist, splitDistance)
-            map.put(SplitType.RestTime, splitRestTime)
-            map.put(SplitType.DragFactor, splitAvgDragFactor)
-            map.put(SplitType.Watts, splitAvgWatts)
-            map.put(SplitType.TimeDist, splitTimeDistance)
-            map.put(SplitType.HeartRate, splitHeartRate)
-            map.put(SplitType.Pace, splitAvgPace)
-            map.put(SplitType.RestDist, splitRestDistance)
-            map.put(SplitType.Cals, splitCals)
-            map.put(SplitType.StrokeCount, splitStrokeCount)
-            map.put(SplitType.DriveLength, splitAvgDriveLength)
+        fun getMap() : MutableMap<SplitType, String> {
+            var map = mutableMapOf<SplitType, String>()
+            map.put(SplitType.Number, splitNumber.toString())
+            map.put(SplitType.Time, splitTime.secondsToTimespan())
+            map.put(SplitType.StrokeRate, splitStrokeRate.toString())
+            map.put(SplitType.DPS, splitAvgDPS.toString())
+            map.put(SplitType.Dist, splitDistance.toInt().toString())
+            map.put(SplitType.RestTime, splitRestTime.secondsToTimespan())
+            map.put(SplitType.DragFactor, splitAvgDragFactor.toString())
+            map.put(SplitType.Watts, splitAvgWatts.toString())
+            map.put(SplitType.TimeDist, splitTimeDistance.toString())
+            map.put(SplitType.HeartRate, splitHeartRate.toString())
+            map.put(SplitType.Pace, splitAvgPace.secondsToTimespan())
+            map.put(SplitType.RestDist, splitRestDistance.toString())
+            map.put(SplitType.Cals, splitCals.toString())
+            map.put(SplitType.StrokeCount, splitStrokeCount.toString())
+            map.put(SplitType.DriveLength, splitAvgDriveLength.toString())
 
             return map
         }

@@ -10,7 +10,7 @@ import com.liverowing.android.model.pm.SplitType
 import kotlinx.android.synthetic.main.fragment_workout_history_detail_summary_splits_item.view.*
 import kotlinx.android.synthetic.main.fragment_workout_history_detail_summary_splits_item_title.view.*
 
-class WorkoutHistorySummarySplitsAdapter(private val items: List<MutableMap<SplitType, Number>>, private val titles: List<SplitTitle>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WorkoutHistorySummarySplitsAdapter(private val items: List<MutableMap<SplitType, String>>, private val titles: List<SplitTitle>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TYPE_TITLE = 0
@@ -54,12 +54,12 @@ class WorkoutHistorySummarySplitsAdapter(private val items: List<MutableMap<Spli
     }
 
     class ItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        fun bind(position: Int, item: MutableMap<SplitType, Number>, titles: List<SplitTitle>) = with(itemView) {
+        fun bind(position: Int, item: MutableMap<SplitType, String>, titles: List<SplitTitle>) = with(itemView) {
             f_workout_history_detail_summary_splits_item_numbrer.text = position.toString()
-            f_workout_history_detail_summary_splits_item_column1.text = item.get(titles[0].type).toString()
-            f_workout_history_detail_summary_splits_item_column2.text = item.get(titles[1].type).toString()
-            f_workout_history_detail_summary_splits_item_column3.text = item.get(titles[2].type).toString()
-            f_workout_history_detail_summary_splits_item_column4.text = item.get(titles[3].type).toString()
+            f_workout_history_detail_summary_splits_item_column1.text = item.get(titles[0].type)
+            f_workout_history_detail_summary_splits_item_column2.text = item.get(titles[1].type)
+            f_workout_history_detail_summary_splits_item_column3.text = item.get(titles[2].type)
+            f_workout_history_detail_summary_splits_item_column4.text = item.get(titles[3].type)
         }
     }
 }

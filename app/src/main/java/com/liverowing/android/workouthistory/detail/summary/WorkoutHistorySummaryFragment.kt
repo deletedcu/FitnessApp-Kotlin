@@ -39,7 +39,7 @@ class WorkoutHistorySummaryFragment : Fragment() {
     private lateinit var splitViewAdapter: RecyclerView.Adapter<*>
     private lateinit var splitViewManager: RecyclerView.LayoutManager
     private var splitTitles = SplitTitle.defaultData()
-    private var splitDataSet = mutableListOf<MutableMap<SplitType, Number>>()
+    private var splitDataSet = mutableListOf<MutableMap<SplitType, String>>()
 
     override fun onStart() {
         super.onStart()
