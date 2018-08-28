@@ -78,11 +78,11 @@ class WorkoutHistorySummaryFragment : Fragment() {
 
         Glide
                 .with(activity!!)
-                .load(workoutType?.createdBy?.image?.url)
+                .load(workout.createdBy?.image?.url)
                 .apply(RequestOptions.bitmapTransform(CircleCrop()).placeholder(R.drawable.ic_launcher_background))
                 .into(f_workout_history_detail_createdby_image)
 
-        f_workout_history_detail_name.text = workoutType?.createdBy?.username
+        f_workout_history_detail_name.text = workout.createdBy?.username
         f_workout_history_detail_createdat.text = SimpleDateFormat.getDateTimeInstance().format(workout.createdAt)
 
         summaryDataset.clear()

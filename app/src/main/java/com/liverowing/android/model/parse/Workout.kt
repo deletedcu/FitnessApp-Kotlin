@@ -55,6 +55,7 @@ class Workout : ParseObject() {
                 userWorkouts.whereGreaterThan("createdAt", createdAt)
             }
 
+            userWorkouts.include("createdBy")
             userWorkouts.include("workoutType.createdBy")
 
             if (isDESC) {
