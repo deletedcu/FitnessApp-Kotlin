@@ -13,8 +13,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textColor="@android:color/black"/>
+        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textColor="@color/text_color4"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_column1"
@@ -26,8 +26,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/textColorDark"/>
+        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textColor="@color/text_color5"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_column2"
@@ -39,8 +39,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/textColorDark"/>
+        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textColor="@color/text_color5"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_column3"
@@ -52,8 +52,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/textColorDark"/>
+        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textColor="@color/text_color5"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_column4"
@@ -65,7 +65,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/textColorDark"/>
+        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textColor="@color/text_color5"/>
 
 </LinearLayout>

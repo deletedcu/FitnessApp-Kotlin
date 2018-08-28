@@ -48,4 +48,13 @@
     <color name="stroke_ratio_stroke">#58ba59</color>
     <color name="stroke_ratio_recovery">#d05c5c</color>
 
+    <color name="text_color1">#DE000000</color>
+    <color name="text_color2">#67000000</color>
+    <color name="text_color3">#4B000000</color>
+    <color name="text_color4">#DE373737</color>
+    <color name="text_color5">#DE909090</color>
+    <color name="text_color6">#8A000000</color>
+
+    <color name="text_color_white1">#e8e8e8</color>
+
 </resources>

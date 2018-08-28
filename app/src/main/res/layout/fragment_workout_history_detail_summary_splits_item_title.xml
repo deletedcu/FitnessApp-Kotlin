@@ -13,8 +13,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textColor="@android:color/black"/>
+        android:textAppearance="@style/TextAppearanceCustomBody3"
+        android:textColor="@color/text_color4"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_title1"
@@ -26,8 +26,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textColor="@android:color/black"/>
+        android:textAppearance="@style/TextAppearanceCustomBody3"
+        android:textColor="@color/text_color4"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_title2"
@@ -39,8 +39,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textColor="@android:color/black"/>
+        android:textAppearance="@style/TextAppearanceCustomBody3"
+        android:textColor="@color/text_color4"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_title3"
@@ -52,8 +52,8 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textColor="@android:color/black"/>
+        android:textAppearance="@style/TextAppearanceCustomBody3"
+        android:textColor="@color/text_color4"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_splits_item_title4"
@@ -65,7 +65,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-        android:textColor="@android:color/black"/>
+        android:textAppearance="@style/TextAppearanceCustomBody3"
+        android:textColor="@color/text_color4"/>
 
 </LinearLayout>

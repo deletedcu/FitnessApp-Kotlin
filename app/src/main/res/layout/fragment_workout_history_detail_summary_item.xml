@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/textColor"/>
+        android:textAppearance="@style/TextAppearanceCustomBody3"
+        android:textColor="@color/text_color3"/>
 
     <TextView
         android:id="@+id/f_workout_history_detail_summary_item_value"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin_small"
         android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        android:textStyle="bold"/>
+        android:textAppearance="@style/TextAppearanceCustomBody1"
+        android:textColor="@color/text_color1"/>
 
 </LinearLayout>
