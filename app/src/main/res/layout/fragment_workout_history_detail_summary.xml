@@ -17,6 +17,7 @@
             android:id="@+id/f_workout_history_detail_image"
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:scaleType="center"
             android:src="@drawable/side_nav_bar"/>
 
         <com.google.android.material.card.MaterialCardView

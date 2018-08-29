@@ -120,7 +120,7 @@ class Workout : ParseObject() {
             fun fromMap(map: Map<String, Any>): Data {
                 return Data(
                         WorkoutData.fromMap(map["WorkoutData"] as Map<String, Any>),
-                        (map["StrokeData"] as List<Map<String, Any>>).map { Stroke.fromMap(it) },
+                        ((map["StrokeData"] ?: mutableListOf<Map<String, Any>>())as List<Map<String, Any>>).map { Stroke.fromMap(it) },
                         map["workoutMachineType"] as String
                 )
             }
@@ -131,54 +131,58 @@ class Workout : ParseObject() {
     @Serializable
     class WorkoutData
     (
-            @Serializable(with = StringSerializer::class) val SplitsWatts: Double,
+            val strokeRate: Int,
+            @Serializable(with = StringSerializer::class) val SplitsAvgDPS: Double,
+            @Serializable(with = StringSerializer::class) val heartRateNormalZoneTime: Double,
             @Serializable(with = StringSerializer::class) val SplitsCals: Double,
+            @Serializable(with = StringSerializer::class) val heartRateZone1Time: Double,
             @Serializable(with = StringSerializer::class) val SplitsAvgDrag: Double,
             @Serializable(with = StringSerializer::class) val SplitsAvgDriveLength: Double,
-            @Serializable(with = StringSerializer::class) val SplitsAvgDPS: Double,
-            val workDistance: Int,
-            @Serializable(with = StringSerializer::class) val fastestPace: Double,
-            @Serializable(with = StringSerializer::class) val splitsAvgPace: Double,
-            val splitType: Int,
-            val maxWatt: Int,
-            val heartRate: Int,
-            @Serializable(with = StringSerializer::class) val maxHeartRate: Double,
-            @Serializable(with = StringSerializer::class) val heartRateNormalZoneTime: Double,
-            @Serializable(with = StringSerializer::class) val heartRateZone1Time: Double,
             @Serializable(with = StringSerializer::class) val heartRateZone2Time: Double,
+            val maxWatt: Int,
+            @Serializable(with = StringSerializer::class) val splitsAvgPace: Double,
+            @Serializable(with = StringSerializer::class) val fastestPace: Double,
             @Serializable(with = StringSerializer::class) val heartRateZone3Time: Double,
-            val strokeRate: Int,
-            @Serializable(with = StringSerializer::class) val workTime: Double,
-            val maxSPM: Int,
-            val strokeCount: Int,
+            @Serializable(with = StringSerializer::class) val maxHeartRate: Double,
             val splitSize: Int,
+            @Serializable(with = StringSerializer::class) val SplitsWatts: Double,
+            val maxSPM: Int,
+            val workDistance: Int,
+            val heartRate: Int,
+            @Serializable(with = StringSerializer::class) val workTime: Double,
+            val strokeCount: Int,
+            val splitType: Int,
             val splits: List<Split>
     ) {
         companion object {
             fun fromMap(map: Map<String, Any>): WorkoutData {
+                var splitsKey = "splits"
+                if (!map.containsKey("splits") && map.containsKey("intervals")) {
+                    splitsKey = "intervals"
+                }
                 return WorkoutData(
-                        SplitsWatts = map["SplitsWatts"].toString().toDouble(),
-                        SplitsCals = map["SplitsCals"].toString().toDouble(),
-                        SplitsAvgDrag = map["SplitsAvgDrag"].toString().toDouble(),
-                        SplitsAvgDriveLength = map["SplitsAvgDriveLength"].toString().toDouble(),
-                        SplitsAvgDPS = map["SplitsAvgDPS"].toString().toDouble(),
-                        workDistance = map["workDistance"] as Int,
-                        fastestPace = map["fastestPace"].toString().toDouble(),
-                        splitsAvgPace = map["splitsAvgPace"].toString().toDouble(),
-                        splitType = map["splitType"] as Int,
-                        maxWatt = map["maxWatt"] as Int,
-                        heartRate = map["heartRate"] as Int,
-                        maxHeartRate = map["maxHeartRate"].toString().toDouble(),
-                        heartRateNormalZoneTime = map["heartRateNormalZoneTime"].toString().toDouble(),
-                        heartRateZone1Time = map["heartRateZone1Time"].toString().toDouble(),
-                        heartRateZone2Time = map["heartRateZone2Time"].toString().toDouble(),
-                        heartRateZone3Time = map["heartRateZone3Time"].toString().toDouble(),
-                        strokeRate = map["strokeRate"] as Int,
-                        workTime = map["workTime"].toString().toDouble(),
-                        maxSPM = map["maxSPM"] as Int,
-                        strokeCount = map["strokeCount"] as Int,
-                        splitSize = map["splitSize"] as Int,
-                        splits = (map["splits"] as List<Map<String, Any>>).map { Split.fromMap(it) }
+                        strokeRate = (map["strokeRate"] ?: "0").toString().toDouble().toInt(),
+                        SplitsAvgDPS = (map["SplitsAvgDPS"] ?: "0").toString().toDouble(),
+                        heartRateNormalZoneTime = (map["heartRateNormalZoneTime"] ?: "0").toString().toDouble(),
+                        SplitsCals = (map["SplitsCals"] ?: "0").toString().toDouble(),
+                        heartRateZone1Time = (map["heartRateZone1Time"] ?: "0").toString().toDouble(),
+                        SplitsAvgDrag = (map["SplitsAvgDrag"] ?: "0").toString().toDouble(),
+                        SplitsAvgDriveLength = (map["SplitsAvgDriveLength"] ?: "0").toString().toDouble(),
+                        heartRateZone2Time = (map["heartRateZone2Time"] ?: "0").toString().toDouble(),
+                        maxWatt = (map["maxWatt"] ?: "0").toString().toDouble().toInt(),
+                        splitsAvgPace = (map["splitsAvgPace"] ?: "0").toString().toDouble(),
+                        fastestPace = (map["fastestPace"] ?: "0").toString().toDouble(),
+                        heartRateZone3Time = (map["heartRateZone3Time"] ?: "0").toString().toDouble(),
+                        maxHeartRate = (map["maxHeartRate"] ?: "0").toString().toDouble(),
+                        splitSize = (map["splitSize"] ?: "0").toString().toDouble().toInt(),
+                        SplitsWatts = (map["SplitsWatts"] ?: "0").toString().toDouble(),
+                        maxSPM = (map["maxSPM"] ?: "0").toString().toDouble().toInt(),
+                        workDistance = (map["workDistance"] ?: "0").toString().toDouble().toInt(),
+                        heartRate = (map["heartRate"] ?: "0").toString().toDouble().toInt(),
+                        workTime = (map["workTime"] ?: "0").toString().toDouble(),
+                        strokeCount = (map["strokeCount"] ?: "0").toString().toDouble().toInt(),
+                        splitType = (map["splitType"] ?: "0").toString().toDouble().toInt(),
+                        splits = ((map[splitsKey] ?: mutableListOf<Map<String, Any>>()) as List<Map<String, Any>>).map { Split.fromMap(it) }
                 )
             }
         }
@@ -257,40 +261,40 @@ class Workout : ParseObject() {
 
     @Serializable
     data class Split(
-            @Serializable(with = StringSerializer::class) val splitDistance: Double,
-            @Serializable(with = StringSerializer::class) val splitHeartRate: Double,
-            val splitStrokeRate: Int,
-            @Serializable(with = StringSerializer::class) val splitTimeDistance: Double,
-            @Serializable(with = StringSerializer::class) val splitRestDistance: Double,
-            @Serializable(with = StringSerializer::class) val splitRestTime: Double,
-            @Serializable(with = StringSerializer::class) val splitAvgDPS: Double,
-            @Serializable(with = StringSerializer::class) val splitCals: Double,
+            val splitNumber: Int,
             @Serializable(with = StringSerializer::class) val splitTime: Double,
-            @Serializable(with = StringSerializer::class) val splitAvgWatts: Double,
+            val splitStrokeRate: Int,
+            @Serializable(with = StringSerializer::class) val splitAvgDPS: Double,
+            @Serializable(with = StringSerializer::class) val splitDistance: Double,
+            @Serializable(with = StringSerializer::class) val splitRestTime: Double,
             val splitAvgDragFactor: Int,
+            @Serializable(with = StringSerializer::class) val splitAvgWatts: Double,
+            @Serializable(with = StringSerializer::class) val splitTimeDistance: Double,
+            @Serializable(with = StringSerializer::class) val splitHeartRate: Double,
             @Serializable(with = StringSerializer::class) val splitAvgPace: Double,
-            @Serializable(with = StringSerializer::class) val splitAvgDriveLength: Double,
+            @Serializable(with = StringSerializer::class) val splitRestDistance: Double,
+            @Serializable(with = StringSerializer::class) val splitCals: Double,
             val splitStrokeCount: Int,
-            val splitNumber: Int
+            @Serializable(with = StringSerializer::class) val splitAvgDriveLength: Double
     ) {
         companion object {
             fun fromMap(map: Map<String, Any>): Split {
                 return Split(
-                        splitDistance = map["splitDistance"].toString().toDouble(),
-                        splitHeartRate = map["splitHeartRate"].toString().toDouble(),
-                        splitStrokeRate = map["splitStrokeRate"] as Int,
-                        splitTimeDistance = map["splitTimeDistance"].toString().toDouble(),
-                        splitRestDistance = map["splitRestDistance"].toString().toDouble(),
-                        splitRestTime = map["splitRestTime"].toString().toDouble(),
-                        splitAvgDPS = map["splitAvgDPS"].toString().toDouble(),
-                        splitCals = map["splitCals"].toString().toDouble(),
-                        splitTime = map["splitTime"].toString().toDouble(),
-                        splitAvgWatts = map["splitAvgWatts"].toString().toDouble(),
-                        splitAvgDragFactor = map["splitAvgDragFactor"] as Int,
-                        splitAvgPace = map["splitAvgPace"].toString().toDouble(),
-                        splitAvgDriveLength = map["splitAvgDriveLength"].toString().toDouble(),
-                        splitStrokeCount = map["splitStrokeCount"] as Int,
-                        splitNumber = map["splitNumber"] as Int
+                        splitNumber = (map["splitNumber"] ?: "0").toString().toDouble().toInt(),
+                        splitTime = (map["splitTime"] ?: "0").toString().toDouble(),
+                        splitStrokeRate = (map["splitStrokeRate"] ?: "0").toString().toDouble().toInt(),
+                        splitAvgDPS = (map["splitAvgDPS"] ?: "0").toString().toDouble(),
+                        splitDistance = (map["splitDistance"] ?: "0").toString().toDouble(),
+                        splitRestTime = (map["splitRestTime"] ?: "0").toString().toDouble(),
+                        splitAvgDragFactor = (map["splitAvgDragFactor"] ?: "0").toString().toDouble().toInt(),
+                        splitAvgWatts = (map["splitAvgWatts"] ?: "0").toString().toDouble(),
+                        splitTimeDistance = (map["splitTimeDistance"] ?: "0").toString().toDouble(),
+                        splitHeartRate = (map["splitHeartRate"] ?: "0").toString().toDouble(),
+                        splitAvgPace = (map["splitAvgPace"] ?: "0").toString().toDouble(),
+                        splitRestDistance = (map["splitRestDistance"] ?: "0").toString().toDouble(),
+                        splitCals = (map["splitCals"] ?: "0").toString().toDouble(),
+                        splitStrokeCount = (map["splitStrokeCount"] ?: "0").toString().toDouble().toInt(),
+                        splitAvgDriveLength = (map["splitAvgDriveLength"] ?: "0").toString().toDouble()
                 )
             }
         }
