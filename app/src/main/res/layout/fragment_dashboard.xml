@@ -5,6 +5,7 @@
     android:id="@+id/f_dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color3"
     tools:context=".dashboard.DashboardFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -36,48 +37,100 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/f_dashboard_featured_workouts_title"
+                android:id="@+id/f_dashboard_featured_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Featured workouts"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="Featured"
+                android:textAppearance="@style/TextAppearanceCustomSection"
+                android:textColor="@color/text_color7"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/f_dashboard_featured_filter"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_down"
+                android:background="@android:color/transparent"
+                android:tint="@color/text_color6"
+                android:padding="@dimen/activity_vertical_margin_medium"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_medium"
+                android:layout_marginTop="@dimen/activity_vertical_margin_medium"
+                app:layout_constraintStart_toEndOf="@id/f_dashboard_featured_title"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/f_dashboard_featured_workouts_recyclerview"
+                android:id="@+id/f_dashboard_featured_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:padding="@dimen/activity_horizontal_margin_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_featured_workouts_title" />
+                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_featured_title" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_featured_recyclerview"/>
 
             <TextView
-                android:id="@+id/f_dashboard_recent_and_liked_workouts_title"
+                android:id="@+id/f_dashboard_popular_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="Recent &amp; liked workouts"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="Popular from the community"
+                android:textAppearance="@style/TextAppearanceCustomSection"
+                android:textColor="@color/text_color7"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_featured_workouts_recyclerview" />
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/f_dashboard_recent_and_liked_workouts_recyclerview"
+                android:id="@+id/f_dashboard_popular_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:padding="@dimen/activity_horizontal_margin_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_recent_and_liked_workouts_title" />
+                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_popular_title" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_popular_recyclerview"/>
+
+            <TextView
+                android:id="@+id/f_dashboard_recent_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="Recent"
+                android:textAppearance="@style/TextAppearanceCustomSection"
+                android:textColor="@color/text_color7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/f_dashboard_recent_recyclerview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_vertical_margin_medium"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/f_dashboard_recent_title" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

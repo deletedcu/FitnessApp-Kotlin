@@ -18,6 +18,7 @@ import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
+import com.liverowing.android.workouthistory.CardType
 import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import timber.log.Timber
@@ -27,14 +28,14 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     private lateinit var itemDecoration: GridSpanDecoration
 
     private val featuredWorkouts = mutableListOf<WorkoutType>()
-    private lateinit var featuredWorkoutsViewManager: RecyclerView.LayoutManager
-    private lateinit var featuredWorkoutsRecyclerView: RecyclerView
-    private lateinit var featuredWorkoutsViewAdapter: RecyclerView.Adapter<*>
+    private lateinit var featuredViewManager: RecyclerView.LayoutManager
+    private lateinit var featuredRecyclerView: RecyclerView
+    private lateinit var featuredViewAdapter: RecyclerView.Adapter<*>
 
-    private val recentAndLikedWorkouts = mutableListOf<WorkoutType>()
-    private lateinit var recentAndLikedWorkoutsViewManager: RecyclerView.LayoutManager
-    private lateinit var recentAndLikedWorkoutsRecyclerView: RecyclerView
-    private lateinit var recentAndLikedWorkoutsViewAdapter: RecyclerView.Adapter<*>
+    private val recentWorkouts = mutableListOf<WorkoutType>()
+    private lateinit var recentViewManager: RecyclerView.LayoutManager
+    private lateinit var recentRecyclerView: RecyclerView
+    private lateinit var recentViewAdapter: RecyclerView.Adapter<*>
 
     override fun createPresenter() = DashboardPresenter()
 
@@ -92,37 +93,42 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             dialog.show(childFragmentManager, dialog.javaClass.toString())
         }
 
-        f_dashboard_featured_workouts_title.setOnClickListener { v -> titleOnClick(v); }
-        f_dashboard_recent_and_liked_workouts_title.setOnClickListener { v -> titleOnClick(v); }
-
+        f_dashboard_featured_title.setOnClickListener { v -> titleOnClick(v) }
+        f_dashboard_popular_title.setOnClickListener { v -> titleOnClick(v) }
+        f_dashboard_recent_title.setOnClickListener { v -> titleOnClick(v) }
+        f_dashboard_featured_filter.setOnClickListener { v -> filterOnClick(v) }
 
         itemDecoration = GridSpanDecoration(8.dpToPx())
 
-        featuredWorkoutsViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
-        featuredWorkoutsViewAdapter = DashboardAdapter(580, featuredWorkouts, Glide.with(this)) { _, workoutType ->
+        featuredViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+        featuredViewAdapter = DashboardAdapter(CardType.TYPE_FEATURED, featuredWorkouts, Glide.with(this), onClick =  { _, workoutType ->
             val action = DashboardFragmentDirections.workoutBrowserDetailAction()
             action.setWorkoutType(workoutType)
             findNavController(view).navigate(action)
-        }
+        }, onMoreClick = { _, workoutType ->
 
-        featuredWorkoutsRecyclerView = f_dashboard_featured_workouts_recyclerview.apply {
+        })
+
+        featuredRecyclerView = f_dashboard_featured_recyclerview.apply {
             addItemDecoration(itemDecoration)
-            layoutManager = featuredWorkoutsViewManager
-            adapter = featuredWorkoutsViewAdapter
+            layoutManager = featuredViewManager
+            adapter = featuredViewAdapter
         }
 
 
-        recentAndLikedWorkoutsViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
-        recentAndLikedWorkoutsViewAdapter = DashboardAdapter(400, recentAndLikedWorkouts, Glide.with(this)) { _, workoutType ->
+        recentViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+        recentViewAdapter = DashboardAdapter(CardType.TYPE_WORKOUT, recentWorkouts, Glide.with(this), onClick = { _, workoutType ->
             val action = DashboardFragmentDirections.workoutBrowserDetailAction()
             action.setWorkoutType(workoutType)
             findNavController(view).navigate(action)
-        }
+        }, onMoreClick = { _, _ ->
 
-        recentAndLikedWorkoutsRecyclerView = f_dashboard_recent_and_liked_workouts_recyclerview.apply {
+        })
+
+        recentRecyclerView = f_dashboard_recent_recyclerview.apply {
             addItemDecoration(itemDecoration)
-            layoutManager = recentAndLikedWorkoutsViewManager
-            adapter = recentAndLikedWorkoutsViewAdapter
+            layoutManager = recentViewManager
+            adapter = recentViewAdapter
         }
     }
 
@@ -133,7 +139,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     override fun featuredWorkoutsLoaded(workouts: List<WorkoutType>) {
         featuredWorkouts.clear()
         featuredWorkouts.addAll(workouts)
-        featuredWorkoutsViewAdapter.notifyDataSetChanged()
+        featuredViewAdapter.notifyDataSetChanged()
     }
 
     override fun featuredWorkoutsError(e: Exception) {
@@ -145,9 +151,9 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     }
 
     override fun recentAndLikedWorkoutsLoaded(workouts: List<WorkoutType>) {
-        recentAndLikedWorkouts.clear()
-        recentAndLikedWorkouts.addAll(workouts)
-        recentAndLikedWorkoutsViewAdapter.notifyDataSetChanged()
+        recentWorkouts.clear()
+        recentWorkouts.addAll(workouts)
+        recentViewAdapter.notifyDataSetChanged()
     }
 
     override fun recentAndLikedWorkoutsError(e: Exception) {
@@ -188,14 +194,19 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     private fun titleOnClick(v: View) {
         val category = when (v.id) {
-            R.id.f_dashboard_featured_workouts_title -> WorkoutBrowserFragment.CATEGORY_FEATURED
-            R.id.f_dashboard_recent_and_liked_workouts_title -> WorkoutBrowserFragment.CATEGORY_RECENT_AND_LIKED
+            R.id.f_dashboard_featured_title -> WorkoutBrowserFragment.CATEGORY_FEATURED
+            R.id.f_dashboard_popular_title -> WorkoutBrowserFragment.CATEGORY_RECENT_AND_LIKED
+            R.id.f_dashboard_recent_title -> WorkoutBrowserFragment.CATEGORY_RECENT_AND_LIKED
             else -> WorkoutBrowserFragment.CATEGORY_FEATURED
         }
 
         val action = DashboardFragmentDirections.workoutBrowserAction()
         action.setCategory(category)
         findNavController(v).navigate(action)
+    }
+
+    private fun filterOnClick(v: View) {
+
     }
 
     // QuickWorkoutDialogListener
