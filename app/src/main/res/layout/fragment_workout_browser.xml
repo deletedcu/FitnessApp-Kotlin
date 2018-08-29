@@ -13,52 +13,99 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            app:titleEnabled="false"
+            android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:titleEnabled="false"
+            app:expandedTitleGravity="top"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/f_workout_browser_category_tabs"
-                style="@style/AppTheme.Widget.Toolbar.TabLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="bottom"
-                app:tabIndicatorFullWidth="false"
-                app:tabMode="scrollable"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="?attr/actionBarSize"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5">
+                app:layout_collapseParallaxMultiplier="0.8">
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/f_workout_browser_category_tab_featured"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/f_workout_browser_category_tabs"
+                    style="@style/AppTheme.Widget.Toolbar.TabLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Featured" />
+                    app:tabIndicatorFullWidth="false"
+                    app:tabMode="scrollable">
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/f_workout_browser_category_tab_community"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Community" />
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_category_tab_featured"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Featured" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/f_workout_browser_category_tab_recent_and_liked"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Recent &amp; Liked" />
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_category_tab_community"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Community" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/f_workout_browser_category_tab_my_custom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="My Custom" />
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_category_tab_recent_and_liked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recent &amp; Liked" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/f_workout_browser_category_tab_affiliate"
-                    android:layout_width="wrap_content"
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_category_tab_my_custom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My Custom" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_category_tab_affiliate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Affiliate" />
+                </com.google.android.material.tabs.TabLayout>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/f_workout_browser_filter_tabs"
+                    style="@style/AppTheme.Widget.TabLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Affiliate" />
-            </com.google.android.material.tabs.TabLayout>
+                    app:tabIndicatorFullWidth="false"
+                    app:tabMode="scrollable">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_filter_tab_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="All" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_filter_tab_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_filter_tab_popular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Popular" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_filter_tab_completed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Completed" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/f_workout_browser_filter_tab_never_completed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Never Completed" />
+                </com.google.android.material.tabs.TabLayout>
+
+            </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/f_workout_browser_toolbar"
@@ -69,44 +116,6 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/f_workout_browser_filter_tabs"
-            style="@style/AppTheme.Widget.TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorFullWidth="false"
-            app:tabMode="scrollable">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_filter_tab_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_filter_tab_new"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_filter_tab_popular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Popular" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_filter_tab_completed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Completed" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/f_workout_browser_filter_tab_never_completed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Never Completed" />
-        </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/loading_view" />
