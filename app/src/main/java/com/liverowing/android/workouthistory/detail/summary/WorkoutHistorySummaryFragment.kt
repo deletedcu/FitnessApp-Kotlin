@@ -105,7 +105,7 @@ class WorkoutHistorySummaryFragment : Fragment() {
         summaryViewManager = LiveRowingFlexboxLayoutManager(context!!)
         summaryViewManager.isScrollEnabled = false
         summaryViewManager.flexDirection = FlexDirection.ROW
-        summaryViewManager.justifyContent = JustifyContent.FLEX_START
+        summaryViewManager.justifyContent = JustifyContent.SPACE_BETWEEN
         summaryViewManager.flexWrap = FlexWrap.WRAP
         summaryAdapter = WorkoutHistorySummaryAdapter(summaryDataset)
         summaryRecyclerView = f_workout_history_detail_summary_recyclerview.apply {
@@ -131,15 +131,13 @@ class WorkoutHistorySummaryFragment : Fragment() {
                 isSummaryCollapsed = false
                 f_workout_history_detail_summary_collapse_button.setImageResource(R.drawable.ic_arrow_up)
                 var layoutparams = f_workout_history_detail_summary_layout.layoutParams
-                layoutparams.width = ViewGroup.LayoutParams.MATCH_PARENT
                 layoutparams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                 f_workout_history_detail_summary_layout.layoutParams = layoutparams
             } else {
                 isSummaryCollapsed = true
                 f_workout_history_detail_summary_collapse_button.setImageResource(R.drawable.ic_arrow_down)
                 var layoutparams = f_workout_history_detail_summary_layout.layoutParams
-                layoutparams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                layoutparams.height = 75.dpToPx()
+                layoutparams.height = 70.dpToPx()
                 f_workout_history_detail_summary_layout.layoutParams = layoutparams
             }
         }

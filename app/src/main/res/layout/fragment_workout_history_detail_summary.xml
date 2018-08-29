@@ -41,10 +41,10 @@
                         android:id="@+id/f_workout_history_detail_createdby_image"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:layout_marginEnd="16dp"/>
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/activity_vertical_margin_medium"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin_medium"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -70,38 +70,33 @@
 
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/f_workout_history_detail_summary_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp">
+                    android:layout_height="70dp"
+                    android:orientation="horizontal">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/f_workout_history_detail_summary_recyclerview"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:layout_weight="1"
+                        android:paddingStart="@dimen/activity_horizontal_margin_medium"
+                        android:paddingEnd="@dimen/activity_horizontal_margin_medium"
                         android:paddingTop="@dimen/activity_vertical_margin_medium"
-                        android:paddingBottom="@dimen/activity_vertical_margin_medium"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        android:paddingBottom="@dimen/activity_vertical_margin_medium"/>
 
                     <ImageButton
                         android:id="@+id/f_workout_history_detail_summary_collapse_button"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:padding="12dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_down"
                         android:background="@android:color/transparent"
                         android:tint="@color/text_color6"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        android:layout_marginTop="@dimen/activity_vertical_margin_large"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -130,14 +125,14 @@
 
                 <ImageButton
                     android:id="@+id/f_workout_history_detail_summary_more"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="12dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_more_horiz"
                     android:tint="@color/textColor"
-                    android:layout_marginTop="@dimen/activity_vertical_margin_medium"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin_medium"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -145,8 +140,6 @@
                     android:id="@+id/f_workout_history_detail_summary_splits_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_vertical_margin_medium"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin_medium"
                     android:layout_marginBottom="@dimen/activity_vertical_margin_medium"
                     android:paddingStart="@dimen/activity_horizontal_margin"
                     app:layout_constraintBottom_toBottomOf="parent"

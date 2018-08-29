@@ -13,7 +13,7 @@ data class SplitTitle(val type: SplitType,
             var data = mutableListOf<SplitTitle>()
             data.add(SplitTitle(SplitType.Time, "TIME", "Time"))
             data.add(SplitTitle(SplitType.StrokeRate, "RATE", "Rate"))
-            data.add(SplitTitle(SplitType.DPS, "DISTANCE / STROKE", "DPS"))
+            data.add(SplitTitle(SplitType.DPS, "DIST./STROKE", "DPS"))
             data.add(SplitTitle(SplitType.Dist, "DISTANCE", "Dist"))
             data.add(SplitTitle(SplitType.RestTime, "REST TIME", "RestTime"))
             data.add(SplitTitle(SplitType.DragFactor, "DRAG", "DragFactor"))
