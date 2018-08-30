@@ -119,14 +119,32 @@ class WorkoutType : ParseObject() {
         const val REST_TYPE_NORMAL = 0
         const val REST_TYPE_VARIABLE = 1
 
-        fun featuredWorkouts(featuredUsers: MutableList<User>? = null): ParseQuery<WorkoutType> {
+        fun featuredWorkoutsForFilter(featuredUsers: MutableList<User>? = null): ParseQuery<WorkoutType> {
             val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
             featuredWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
+
+            featuredWorkouts.whereEqualTo("isFeatured", true)
+            featuredWorkouts.whereNotEqualTo("isDeleted", true)
+
+            featuredWorkouts.include("segments")
+            featuredWorkouts.include("createdBy")
+            
+
+            featuredWorkouts.addDescendingOrder("createdAt")
 
             if (featuredUsers != null && featuredUsers.size > 0) {
                 val userIds = featuredUsers.map { item -> item.objectId }
                 featuredWorkouts.whereContainedIn("createdBy", userIds)
+
             }
+
+            return featuredWorkouts
+        }
+
+        fun featuredWorkouts(): ParseQuery<WorkoutType> {
+            val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            featuredWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
+
             featuredWorkouts.whereEqualTo("isFeatured", true)
             featuredWorkouts.whereNotEqualTo("isDeleted", true)
 

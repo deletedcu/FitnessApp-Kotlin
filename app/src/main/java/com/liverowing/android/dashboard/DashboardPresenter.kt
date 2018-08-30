@@ -27,8 +27,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
     }
 
     fun loadFeaturedWorkouts(featuredUsers: MutableList<User>? = null) {
-        val query = WorkoutType.featuredWorkouts(featuredUsers)
-        query.limit = 15
+        val query = WorkoutType.featuredWorkoutsForFilter(featuredUsers)
 
         ifViewAttached { it.featuredWorkoutsLoading() }
         query.findInBackground { objects, e ->
