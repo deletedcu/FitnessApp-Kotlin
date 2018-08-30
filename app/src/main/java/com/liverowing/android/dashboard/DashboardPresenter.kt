@@ -3,14 +3,15 @@ package com.liverowing.android.dashboard
 import com.liverowing.android.base.EventBusPresenter
 import com.liverowing.android.model.messages.DeviceConnected
 import com.liverowing.android.model.messages.DeviceDisconnected
+import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.WorkoutType
 import com.parse.ParseException
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 class DashboardPresenter : EventBusPresenter<DashboardView>() {
-    fun loadDashboard() {
-        loadFeaturedWorkouts()
+    fun loadDashboard(featuredUsers: MutableList<User>? = null) {
+        loadFeaturedWorkouts(featuredUsers)
         loadRecentAndLikedWorkouts()
         loadMyCustomWorkouts()
     }
@@ -25,9 +26,9 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         ifViewAttached { it.deviceDisconnected(data.device) }
     }
 
-    private fun loadFeaturedWorkouts() {
-        val query = WorkoutType.featuredWorkouts()
-        query.limit = 10
+    fun loadFeaturedWorkouts(featuredUsers: MutableList<User>? = null) {
+        val query = WorkoutType.featuredWorkouts(featuredUsers)
+        query.limit = 15
 
         ifViewAttached { it.featuredWorkoutsLoading() }
         query.findInBackground { objects, e ->
@@ -45,7 +46,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
 
     private fun loadRecentAndLikedWorkouts() {
         val query = WorkoutType.recentAndLikedWorkouts()
-        query.limit = 10
+        query.limit = 15
 
         ifViewAttached { it.recentAndLikedWorkoutsLoading() }
         query.findInBackground { objects, e ->

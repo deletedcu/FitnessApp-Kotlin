@@ -15,6 +15,7 @@ import com.liverowing.android.R
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogFragment
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogListener
 import com.liverowing.android.extensions.dpToPx
+import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
@@ -31,11 +32,14 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     private lateinit var featuredViewManager: RecyclerView.LayoutManager
     private lateinit var featuredRecyclerView: RecyclerView
     private lateinit var featuredViewAdapter: RecyclerView.Adapter<*>
+    private var featuredUsers = mutableListOf<User>()
 
     private val recentWorkouts = mutableListOf<WorkoutType>()
     private lateinit var recentViewManager: RecyclerView.LayoutManager
     private lateinit var recentRecyclerView: RecyclerView
     private lateinit var recentViewAdapter: RecyclerView.Adapter<*>
+
+    private var selectedFeaturedUsers = mutableListOf<User>()
 
     override fun createPresenter() = DashboardPresenter()
 
@@ -139,7 +143,30 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     override fun featuredWorkoutsLoaded(workouts: List<WorkoutType>) {
         featuredWorkouts.clear()
         featuredWorkouts.addAll(workouts)
+        if (selectedFeaturedUsers.size == 0) {
+            getFeaturedUsers(featuredWorkouts)
+        }
         featuredViewAdapter.notifyDataSetChanged()
+    }
+
+    private fun getFeaturedUsers(workouts: List<WorkoutType>) {
+        featuredUsers.clear()
+        var maxRotationRank = 0
+        var userIds = mutableListOf<String>()
+        workouts.forEach { workoutType ->
+            val isFeatured = workoutType.createdBy?.isFeatured ?: false
+
+            if (isFeatured && !userIds.contains(workoutType.createdBy!!.objectId)) {
+                val rank = workoutType.createdBy!!.rotationRank ?: 0
+                if (rank > maxRotationRank) {
+                    maxRotationRank = rank
+                    featuredUsers.add(0, workoutType.createdBy!!)
+                } else {
+                    featuredUsers.add(workoutType.createdBy!!)
+                }
+                userIds.add(workoutType.createdBy!!.objectId)
+            }
+        }
     }
 
     override fun featuredWorkoutsError(e: Exception) {
@@ -206,7 +233,12 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     }
 
     private fun filterOnClick(v: View) {
-
+        val dialogFragment = FeaturedChooseDialogFragment(featuredUsers, selectedFeaturedUsers, onApplyClick = { items ->
+            selectedFeaturedUsers.clear()
+            selectedFeaturedUsers.addAll(items)
+            presenter.loadFeaturedWorkouts(selectedFeaturedUsers)
+        })
+        dialogFragment.show(fragmentManager, dialogFragment.javaClass.toString())
     }
 
     // QuickWorkoutDialogListener

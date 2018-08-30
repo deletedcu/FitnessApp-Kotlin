@@ -164,7 +164,7 @@
         <item name="android:letterSpacing">0.08</item>
     </style>
 
-    <style name="TextAppearanceCustomCard1" parent="TextAppearanceCustomTitle1">
+    <style name="TextAppearanceCustomCard1">
         <item name="fontFamily">@font/roboto_black</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">20sp</item>
@@ -172,7 +172,7 @@
         <item name="android:textColor">@color/text_color1</item>
     </style>
 
-    <style name="TextAppearanceCustomCard2" parent="TextAppearanceCustomTitle1">
+    <style name="TextAppearanceCustomCard2">
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
@@ -180,12 +180,25 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="TextAppearanceCustomCardName" parent="TextAppearanceCustomTitle1">
+    <style name="TextAppearanceCustomCardName">
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.3</item>
         <item name="android:textColor">@color/text_color2</item>
+    </style>
+
+    <style name="TextAppearanceCustomItemLabel">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearanceCustomTitle">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0.025</item>
     </style>
 
 

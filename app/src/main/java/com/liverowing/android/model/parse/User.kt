@@ -14,7 +14,7 @@ class User : ParseUser() {
     var boatColor by ParseDelegate<Int>()
     var hatColor by ParseDelegate<Int>()
     var gender by ParseDelegate<String?>()
-    var height by ParseDelegate<Double?>()
+    var height by ParseDelegate<Number?>()
     var dob by ParseDelegate<Date?>()
     var weight by ParseDelegate<Int?>()
     var description by ParseDelegate<String?>()
@@ -64,15 +64,15 @@ class User : ParseUser() {
             var value: Boolean
             if (gender!!.toLowerCase().equals("male")) {
                 if (isMetric!!) {
-                    value = height!! > 75
+                    value = weight!! > 75
                 } else {
-                    value = height!! > 165
+                    value = weight!! > 165
                 }
             } else {
                 if (isMetric!!) {
-                    value = height!! > 61.5
+                    value = weight!! > 61.5
                 } else {
-                    value = height!! > 135
+                    value = weight!! > 135
                 }
             }
             isHeavyweight = value

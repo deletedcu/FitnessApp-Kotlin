@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp">
+
+    <ImageView
+        android:id="@+id/dialog_choose_featured_item_image"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:scaleType="fitXY"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"/>
+
+    <CheckBox
+        android:id="@+id/dialog_choose_featured_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Strava"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/TextAppearanceCustomItemLabel"
+        android:textColor="@color/text_color1"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:buttonTint="@color/text_color1"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/dialog_choose_featured_item_image"/>
+
+</RelativeLayout>
