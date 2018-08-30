@@ -120,10 +120,13 @@ class WorkoutType : ParseObject() {
         const val REST_TYPE_VARIABLE = 1
 
         fun featuredWorkouts(): ParseQuery<WorkoutType> {
+            var featuredUsers = ParseQuery.getQuery(User::class.java)
+            featuredUsers.whereEqualTo("isFeatured", true)
+
             val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
             featuredWorkouts.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
 
-            featuredWorkouts.whereEqualTo("isFeatured", true)
+            featuredWorkouts.whereMatchesKeyInQuery("createdBy", "objectId", featuredUsers)
             featuredWorkouts.whereNotEqualTo("isDeleted", true)
 
             featuredWorkouts.include("segments")
@@ -140,10 +143,27 @@ class WorkoutType : ParseObject() {
             popularWorkouts.whereEqualTo("isPublic", true)
 
             popularWorkouts.include("createdBy")
+            popularWorkouts.include("segments")
             popularWorkouts.addDescendingOrder("likes")
             popularWorkouts.limit = 15
 
             return popularWorkouts
+        }
+
+        fun recentWorkouts(): ParseQuery<WorkoutType> {
+            val workouts = ParseQuery.getQuery(Workout::class.java)
+            workouts.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+
+            val recentWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            recentWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            recentWorkouts.whereMatchesKeyInQuery("objectId", "workoutType", workouts)
+
+            recentWorkouts.include("createdBy")
+            recentWorkouts.include("segments")
+
+            recentWorkouts.addDescendingOrder("createdAt")
+
+            return recentWorkouts
         }
 
         fun recentAndLikedWorkouts(): ParseQuery<WorkoutType> {
@@ -153,7 +173,7 @@ class WorkoutType : ParseObject() {
 
             val recentAndLikedWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
             recentAndLikedWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            recentAndLikedWorkouts.whereMatchesKeyInQuery("objectId", "workoutType.objectId", completedWorkouts)
+            recentAndLikedWorkouts.whereMatchesKeyInQuery("objectId", "workoutType", completedWorkouts)
 
             recentAndLikedWorkouts.include("createdBy")
             recentAndLikedWorkouts.include("segments")

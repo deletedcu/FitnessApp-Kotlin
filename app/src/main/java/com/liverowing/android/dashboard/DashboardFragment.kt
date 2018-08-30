@@ -32,6 +32,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     private lateinit var featuredViewManager: RecyclerView.LayoutManager
     private lateinit var featuredRecyclerView: RecyclerView
     private lateinit var featuredViewAdapter: RecyclerView.Adapter<*>
+    private var allFeaturedWorkouts = mutableListOf<WorkoutType>()
     private var featuredUsers = mutableListOf<User>()
     private var selectedFeaturedUsers = mutableListOf<User>()
 
@@ -159,33 +160,54 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
-    override fun featuredWorkoutsLoaded(workouts: List<WorkoutType>) {
-        featuredWorkouts.clear()
-        featuredWorkouts.addAll(workouts)
-        if (selectedFeaturedUsers.size == 0) {
-            getFeaturedUsers(featuredWorkouts)
-        }
-        featuredViewAdapter.notifyDataSetChanged()
+    override fun featuredWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
+        allFeaturedWorkouts.clear()
+        allFeaturedWorkouts.addAll(workouts)
+        updateFeaturedWorkouts()
     }
 
-    private fun getFeaturedUsers(workouts: List<WorkoutType>) {
-        featuredUsers.clear()
-        var maxRotationRank = 0
-        var userIds = mutableListOf<String>()
-        workouts.forEach { workoutType ->
-            val isFeatured = workoutType.createdBy?.isFeatured ?: false
+    private fun updateFeaturedWorkouts() {
+        featuredWorkouts.clear()
+        if (selectedFeaturedUsers.size == 0) {
 
-            if (isFeatured && !userIds.contains(workoutType.createdBy!!.objectId)) {
-                val rank = workoutType.createdBy!!.rotationRank ?: 0
-                if (rank > maxRotationRank) {
-                    maxRotationRank = rank
-                    featuredUsers.add(0, workoutType.createdBy!!)
-                } else {
-                    featuredUsers.add(workoutType.createdBy!!)
+            // Reset the featuredUsers for featured filter
+            featuredUsers.clear()
+
+            var maxRotationRank = 0
+            var userIds = mutableListOf<String>()
+
+            allFeaturedWorkouts.forEach { item ->
+
+                // add 1 of the most recent featuredUser
+                if (!userIds.contains(item.createdBy!!.objectId)) {
+
+                    // set order by rotationRank
+                    val rank = item.createdBy!!.rotationRank ?: 0
+                    if (rank > maxRotationRank) {
+                        maxRotationRank = rank
+                        featuredUsers.add(0, item.createdBy!!)
+                    } else {
+                        featuredUsers.add(item.createdBy!!)
+                    }
+                    userIds.add(item.createdBy!!.objectId)
+
+                    // add 1 of the most recent workoutType from each featuredUser
+                    featuredWorkouts.add(item)
                 }
-                userIds.add(workoutType.createdBy!!.objectId)
+            }
+        } else {
+
+            // get featuredWorkoutTypes by filtering
+            val selectedIds = selectedFeaturedUsers.map { item -> item.objectId }
+
+            allFeaturedWorkouts.forEach { item ->
+                if (selectedIds.contains(item.createdBy!!.objectId)) {
+                    featuredWorkouts.add(item)
+                }
             }
         }
+
+        featuredViewAdapter.notifyDataSetChanged()
     }
 
     override fun featuredWorkoutsError(e: Exception) {
@@ -194,7 +216,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     override fun popularWorkoutsLoading() {}
 
-    override fun popularWorkoutsLoaded(workouts: List<WorkoutType>) {
+    override fun popularWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
         popularWorkouts.clear()
         popularWorkouts.addAll(workouts)
         popularViewAdapter.notifyDataSetChanged()
@@ -204,29 +226,17 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
-    override fun recentAndLikedWorkoutsLoading() {
+    override fun recentWorkoutsLoading() {
 
     }
 
-    override fun recentAndLikedWorkoutsLoaded(workouts: List<WorkoutType>) {
+    override fun recentWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
         recentWorkouts.clear()
         recentWorkouts.addAll(workouts)
         recentViewAdapter.notifyDataSetChanged()
     }
 
-    override fun recentAndLikedWorkoutsError(e: Exception) {
-
-    }
-
-    override fun myCustomWorkoutsLoading() {
-
-    }
-
-    override fun myCustomWorkoutsLoaded(workouts: List<WorkoutType>) {
-
-    }
-
-    override fun myCustomWorkoutsError(e: Exception) {
+    override fun recentWorkoutsError(e: Exception) {
 
     }
 
@@ -267,6 +277,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         val dialogFragment = FeaturedChooseDialogFragment(featuredUsers, selectedFeaturedUsers, onApplyClick = { items ->
             selectedFeaturedUsers.clear()
             selectedFeaturedUsers.addAll(items)
+            updateFeaturedWorkouts()
         })
         dialogFragment.show(fragmentManager, dialogFragment.javaClass.toString())
     }

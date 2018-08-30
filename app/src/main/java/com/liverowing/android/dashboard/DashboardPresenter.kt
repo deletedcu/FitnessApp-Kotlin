@@ -13,7 +13,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
     fun loadDashboard() {
         loadFeaturedWorkouts()
         loadPopularWorkouts()
-        loadRecentAndLikedWorkouts()
+        loadRecentWorkouts()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -28,6 +28,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
 
     private fun loadFeaturedWorkouts() {
         val query = WorkoutType.featuredWorkouts()
+        query.limit = 1000
 
         ifViewAttached { it.featuredWorkoutsLoading() }
         query.findInBackground { objects, e ->
@@ -59,19 +60,19 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         }
     }
 
-    private fun loadRecentAndLikedWorkouts() {
-        val query = WorkoutType.recentAndLikedWorkouts()
+    private fun loadRecentWorkouts() {
+        val query = WorkoutType.recentWorkouts()
         query.limit = 15
 
-        ifViewAttached { it.recentAndLikedWorkoutsLoading() }
+        ifViewAttached { it.recentWorkoutsLoading() }
         query.findInBackground { objects, e ->
             if (e !== null) {
                 if (e.code != ParseException.CACHE_MISS) {
-                    ifViewAttached { it.recentAndLikedWorkoutsError(e) }
+                    ifViewAttached { it.recentWorkoutsError(e) }
                 }
             } else {
                 ifViewAttached {
-                    it.recentAndLikedWorkoutsLoaded(objects)
+                    it.recentWorkoutsLoaded(objects)
                 }
             }
         }
