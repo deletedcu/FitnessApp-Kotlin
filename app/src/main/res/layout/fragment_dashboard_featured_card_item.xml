@@ -5,8 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    app:cardElevation="1dp"
+    app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="240dp"
@@ -23,6 +23,14 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="120dp"
+            android:background="@drawable/gray_gradient"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <TextView
             android:id="@+id/fragment_dashboard_featured_card_item_name"
             android:layout_width="0dp"
@@ -38,11 +46,10 @@
 
         <ImageView
             android:id="@+id/fragment_dashboard_featured_card_item_more"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_more_vert"
             android:tint="@color/text_color6"
-            android:padding="@dimen/activity_horizontal_margin_tiny"
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
             android:layout_marginEnd="@dimen/activity_horizontal_margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +64,7 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin_medium"
             android:singleLine="true"
             android:text="TextView"
-            android:textAppearance="@style/TextAppearanceCustomCardName"
+            android:textAppearance="@style/TextAppearanceCustomCardName1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
