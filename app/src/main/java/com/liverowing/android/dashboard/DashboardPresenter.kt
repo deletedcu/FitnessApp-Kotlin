@@ -10,10 +10,10 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 class DashboardPresenter : EventBusPresenter<DashboardView>() {
-    fun loadDashboard(featuredUsers: MutableList<User>? = null) {
-        loadFeaturedWorkouts(featuredUsers)
+    fun loadDashboard() {
+        loadFeaturedWorkouts()
+        loadPopularWorkouts()
         loadRecentAndLikedWorkouts()
-        loadMyCustomWorkouts()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -26,8 +26,8 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         ifViewAttached { it.deviceDisconnected(data.device) }
     }
 
-    fun loadFeaturedWorkouts(featuredUsers: MutableList<User>? = null) {
-        val query = WorkoutType.featuredWorkoutsForFilter(featuredUsers)
+    private fun loadFeaturedWorkouts() {
+        val query = WorkoutType.featuredWorkouts()
 
         ifViewAttached { it.featuredWorkoutsLoading() }
         query.findInBackground { objects, e ->
@@ -38,6 +38,22 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
             } else {
                 ifViewAttached {
                     it.featuredWorkoutsLoaded(objects)
+                }
+            }
+        }
+    }
+
+    private fun loadPopularWorkouts() {
+        val query = WorkoutType.popularWorkouts()
+        ifViewAttached { it.popularWorkoutsLoading() }
+        query.findInBackground { objects, e ->
+            if (e !== null) {
+                if (e.code != ParseException.CACHE_MISS) {
+                    ifViewAttached { it.popularWorkoutsError(e) }
+                }
+            } else {
+                ifViewAttached {
+                    it.popularWorkoutsLoaded(objects)
                 }
             }
         }
@@ -59,10 +75,6 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
                 }
             }
         }
-    }
-
-    private fun loadMyCustomWorkouts() {
-
     }
 
 }

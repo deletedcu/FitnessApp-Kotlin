@@ -33,13 +33,18 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     private lateinit var featuredRecyclerView: RecyclerView
     private lateinit var featuredViewAdapter: RecyclerView.Adapter<*>
     private var featuredUsers = mutableListOf<User>()
+    private var selectedFeaturedUsers = mutableListOf<User>()
+
+    private var popularWorkouts = mutableListOf<WorkoutType>()
+    private lateinit var popularViewManager: RecyclerView.LayoutManager
+    private lateinit var popularRecyclerView: RecyclerView
+    private lateinit var popularViewAdapter: RecyclerView.Adapter<*>
 
     private val recentWorkouts = mutableListOf<WorkoutType>()
     private lateinit var recentViewManager: RecyclerView.LayoutManager
     private lateinit var recentRecyclerView: RecyclerView
     private lateinit var recentViewAdapter: RecyclerView.Adapter<*>
 
-    private var selectedFeaturedUsers = mutableListOf<User>()
 
     override fun createPresenter() = DashboardPresenter()
 
@@ -119,6 +124,20 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             adapter = featuredViewAdapter
         }
 
+        popularViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+        popularViewAdapter = DashboardAdapter(CardType.TYPE_WORKOUT, popularWorkouts, Glide.with(this), onClick = { _, workoutType ->
+            val action = DashboardFragmentDirections.workoutBrowserDetailAction()
+            action.setWorkoutType(workoutType)
+            findNavController(view).navigate(action)
+        }, onMoreClick = { _, _ ->
+
+        })
+
+        popularRecyclerView = f_dashboard_popular_recyclerview.apply {
+            addItemDecoration(itemDecoration)
+            layoutManager = popularViewManager
+            adapter = popularViewAdapter
+        }
 
         recentViewManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
         recentViewAdapter = DashboardAdapter(CardType.TYPE_WORKOUT, recentWorkouts, Glide.with(this), onClick = { _, workoutType ->
@@ -170,6 +189,18 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     }
 
     override fun featuredWorkoutsError(e: Exception) {
+
+    }
+
+    override fun popularWorkoutsLoading() {}
+
+    override fun popularWorkoutsLoaded(workouts: List<WorkoutType>) {
+        popularWorkouts.clear()
+        popularWorkouts.addAll(workouts)
+        popularViewAdapter.notifyDataSetChanged()
+    }
+
+    override fun popularWorkoutsError(e: Exception) {
 
     }
 
@@ -236,7 +267,6 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         val dialogFragment = FeaturedChooseDialogFragment(featuredUsers, selectedFeaturedUsers, onApplyClick = { items ->
             selectedFeaturedUsers.clear()
             selectedFeaturedUsers.addAll(items)
-            presenter.loadFeaturedWorkouts(selectedFeaturedUsers)
         })
         dialogFragment.show(fragmentManager, dialogFragment.javaClass.toString())
     }

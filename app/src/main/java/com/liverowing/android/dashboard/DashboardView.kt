@@ -8,6 +8,10 @@ interface DashboardView : MvpView {
     fun featuredWorkoutsLoaded(workouts: List<WorkoutType>)
     fun featuredWorkoutsError(e: Exception)
 
+    fun popularWorkoutsLoading()
+    fun popularWorkoutsLoaded(workouts: List<WorkoutType>)
+    fun popularWorkoutsError(e: Exception)
+
     fun recentAndLikedWorkoutsLoading()
     fun recentAndLikedWorkoutsLoaded(workouts: List<WorkoutType>)
     fun recentAndLikedWorkoutsError(e: Exception)
