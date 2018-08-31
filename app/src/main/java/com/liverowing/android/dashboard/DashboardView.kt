@@ -1,6 +1,7 @@
 package com.liverowing.android.dashboard
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
+import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.WorkoutType
 
 interface DashboardView : MvpView {
@@ -20,4 +21,6 @@ interface DashboardView : MvpView {
     fun deviceConnecting(device: Any?)
     fun deviceDisconnected(device: Any?)
     fun deviceReady(device: Any?, name: String)
+
+    fun featuredWorkoutsUpdated(workouts: MutableList<WorkoutType>, users: MutableList<User>)
 }

@@ -163,48 +163,15 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     override fun featuredWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
         allFeaturedWorkouts.clear()
         allFeaturedWorkouts.addAll(workouts)
-        updateFeaturedWorkouts()
+        presenter.updateFeaturedWorkouts(allFeaturedWorkouts, selectedFeaturedUsers)
     }
 
-    private fun updateFeaturedWorkouts() {
+    override fun featuredWorkoutsUpdated(workouts: MutableList<WorkoutType>, users: MutableList<User>) {
         featuredWorkouts.clear()
-        if (selectedFeaturedUsers.size == 0) {
-
-            // Reset the featuredUsers for featured filter
+        featuredWorkouts.addAll(workouts)
+        if (users.size > 0) {
             featuredUsers.clear()
-
-            var maxRotationRank = 0
-            var userIds = mutableListOf<String>()
-
-            allFeaturedWorkouts.forEach { item ->
-
-                // add 1 of the most recent featuredUser
-                if (!userIds.contains(item.createdBy!!.objectId)) {
-
-                    // set order by rotationRank
-                    val rank = item.createdBy!!.rotationRank ?: 0
-                    if (rank > maxRotationRank) {
-                        maxRotationRank = rank
-                        featuredUsers.add(0, item.createdBy!!)
-                    } else {
-                        featuredUsers.add(item.createdBy!!)
-                    }
-                    userIds.add(item.createdBy!!.objectId)
-
-                    // add 1 of the most recent workoutType from each featuredUser
-                    featuredWorkouts.add(item)
-                }
-            }
-        } else {
-
-            // get featuredWorkoutTypes by filtering
-            val selectedIds = selectedFeaturedUsers.map { item -> item.objectId }
-
-            allFeaturedWorkouts.forEach { item ->
-                if (selectedIds.contains(item.createdBy!!.objectId)) {
-                    featuredWorkouts.add(item)
-                }
-            }
+            featuredUsers.addAll(users)
         }
 
         featuredViewAdapter.notifyDataSetChanged()
@@ -277,7 +244,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         val dialogFragment = FeaturedChooseDialogFragment(featuredUsers, selectedFeaturedUsers, onApplyClick = { items ->
             selectedFeaturedUsers.clear()
             selectedFeaturedUsers.addAll(items)
-            updateFeaturedWorkouts()
+            presenter.updateFeaturedWorkouts(allFeaturedWorkouts, selectedFeaturedUsers)
         })
         dialogFragment.show(fragmentManager, dialogFragment.javaClass.toString())
     }

@@ -44,6 +44,53 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         }
     }
 
+    fun updateFeaturedWorkouts(workouts: MutableList<WorkoutType>, selectedFeaturedUsers: MutableList<User>) {
+
+        var featuredWorkouts = mutableListOf<WorkoutType>()
+        val featuredUsers = mutableListOf<User>()
+
+        if (selectedFeaturedUsers.size == 0) {
+
+            var maxRotationRank = 0
+            var userIds = mutableListOf<String>()
+
+            workouts.forEach { item ->
+
+                // add 1 of the most recent featuredUser
+                if (!userIds.contains(item.createdBy!!.objectId)) {
+
+                    // set order by rotationRank
+                    val rank = item.createdBy!!.rotationRank ?: 0
+                    if (rank > maxRotationRank) {
+                        maxRotationRank = rank
+                        featuredUsers.add(0, item.createdBy!!)
+                    } else {
+                        featuredUsers.add(item.createdBy!!)
+                    }
+                    userIds.add(item.createdBy!!.objectId)
+
+                    // add 1 of the most recent workoutType from each featuredUser
+                    featuredWorkouts.add(item)
+                }
+            }
+
+        } else {
+
+            // get featuredWorkoutTypes by filtering
+            val selectedIds = selectedFeaturedUsers.map { item -> item.objectId }
+
+            workouts.forEach { item ->
+                if (selectedIds.contains(item.createdBy!!.objectId)) {
+                    featuredWorkouts.add(item)
+                }
+            }
+        }
+
+        ifViewAttached {
+            it.featuredWorkoutsUpdated(featuredWorkouts, featuredUsers)
+        }
+    }
+
     private fun loadPopularWorkouts() {
         val query = WorkoutType.popularWorkouts()
         ifViewAttached { it.popularWorkoutsLoading() }
