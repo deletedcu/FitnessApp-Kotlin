@@ -18,13 +18,13 @@ import kotlin.collections.HashMap
  */
 @ParseClassName("Workout")
 class Workout : ParseObject() {
-    var caloriesBurned by ParseDelegate<Int?>()
+    var caloriesBurned by ParseDelegate<Number?>()
     var finishTime by ParseDelegate<Date?>()
     var workoutType by ParseDelegate<WorkoutType?>()
     var averageSPM by ParseDelegate<Number?>()
     var startTime by ParseDelegate<Date?>()
     var averageWatts by ParseDelegate<Int?>()
-    var duration by ParseDelegate<Double?>()
+    var duration by ParseDelegate<Number?>()
     var averageSplitTime by ParseDelegate<Number?>()
     var isDone by ParseDelegate<Boolean?>()
     var averageHeartRate by ParseDelegate<Int?>()

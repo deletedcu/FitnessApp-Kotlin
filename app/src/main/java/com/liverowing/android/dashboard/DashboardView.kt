@@ -6,15 +6,15 @@ import com.liverowing.android.model.parse.WorkoutType
 
 interface DashboardView : MvpView {
     fun featuredWorkoutsLoading()
-    fun featuredWorkoutsLoaded(workouts: MutableList<WorkoutType>)
+    fun featuredWorkoutsLoaded(workouts: List<WorkoutType>)
     fun featuredWorkoutsError(e: Exception)
 
     fun popularWorkoutsLoading()
-    fun popularWorkoutsLoaded(workouts: MutableList<WorkoutType>)
+    fun popularWorkoutsLoaded(workouts: List<WorkoutType>)
     fun popularWorkoutsError(e: Exception)
 
     fun recentWorkoutsLoading()
-    fun recentWorkoutsLoaded(workouts: MutableList<WorkoutType>)
+    fun recentWorkoutsLoaded(workouts: List<WorkoutType>)
     fun recentWorkoutsError(e: Exception)
 
     fun deviceConnected(device: Any?)

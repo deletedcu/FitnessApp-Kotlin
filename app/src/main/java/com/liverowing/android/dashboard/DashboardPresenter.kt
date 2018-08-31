@@ -108,6 +108,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
 
     private fun loadRecentWorkouts() {
         val query = WorkoutType.recentWorkouts()
+        query.limit = 15
 
         ifViewAttached { it.recentWorkoutsLoading() }
         query.findInBackground { objects, e ->
@@ -117,18 +118,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
                 }
             } else {
                 ifViewAttached {
-                    var recents = mutableListOf<WorkoutType>()
-                    var ids = mutableListOf<String>()
-                    objects.forEach { workout ->
-                        if (workout.workoutType != null  && !ids.contains(workout.workoutType!!.objectId)) {
-                            recents.add(workout.workoutType!!)
-                            ids.add(workout.workoutType!!.objectId)
-                        }
-                        if (recents.size == 15) {
-                            return@forEach
-                        }
-                    }
-                    it.recentWorkoutsLoaded(recents)
+                    it.recentWorkoutsLoaded(objects)
                 }
             }
         }

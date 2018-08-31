@@ -160,7 +160,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
-    override fun featuredWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
+    override fun featuredWorkoutsLoaded(workouts: List<WorkoutType>) {
         allFeaturedWorkouts.clear()
         allFeaturedWorkouts.addAll(workouts)
         presenter.updateFeaturedWorkouts(allFeaturedWorkouts, selectedFeaturedUsers)
@@ -183,7 +183,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     override fun popularWorkoutsLoading() {}
 
-    override fun popularWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
+    override fun popularWorkoutsLoaded(workouts: List<WorkoutType>) {
         popularWorkouts.clear()
         popularWorkouts.addAll(workouts)
         popularViewAdapter.notifyDataSetChanged()
@@ -197,7 +197,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     }
 
-    override fun recentWorkoutsLoaded(workouts: MutableList<WorkoutType>) {
+    override fun recentWorkoutsLoaded(workouts: List<WorkoutType>) {
         recentWorkouts.clear()
         recentWorkouts.addAll(workouts)
         recentViewAdapter.notifyDataSetChanged()
