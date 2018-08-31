@@ -19,7 +19,6 @@ import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
-import timber.log.Timber
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
@@ -105,13 +104,14 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     }
 
     override fun onNewViewStateInstance() {
-        Timber.d("OkHttp -- onNewViewStateInstance")
         val args = WorkoutBrowserFragmentArgs.fromBundle(arguments)
 
+        args.tags?.split(",")?.forEach { presenter.tags.add(it.toInt()) }
+        args.types?.split(",")?.forEach { presenter.types.add(it.toInt()) }
         f_workout_browser_category_tabs.getTabAt(args.category)?.select()
         f_workout_browser_filter_tabs.getTabAt(args.filter)?.select()
 
-        if (args.category + args.filter == 0) {
+        if (args.category + args.filter == 0 || args.tags != null || args.types != null) {
             loadData(false)
         }
     }
