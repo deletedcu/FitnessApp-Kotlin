@@ -32,10 +32,11 @@ class DashboardAdapter(val cardType: CardType, private val items: List<WorkoutTy
 
     class FeaturedViewHolder(view: View, private val glide: RequestManager) : RecyclerView.ViewHolder(view) {
         fun bind(item: WorkoutType, onClick: (View, WorkoutType) -> Unit, onMoreClick: (View, WorkoutType) -> Unit) = with(itemView) {
-            glide
-                    .load(item.image?.url)
-                    .apply(RequestOptions.placeholderOf(R.drawable.side_nav_bar))
-                    .into(fragment_dashboard_featured_card_item_image)
+            if (item.image != null) {
+                glide
+                        .load(item.image?.url)
+                        .into(fragment_dashboard_featured_card_item_image)
+            }
 
             fragment_dashboard_featured_card_item_name.text = item.name
             fragment_dashboard_featured_card_item_createdby.text = item.createdBy?.username
@@ -47,10 +48,11 @@ class DashboardAdapter(val cardType: CardType, private val items: List<WorkoutTy
 
     class WorkoutViewHolder(view: View, private val glide: RequestManager) : RecyclerView.ViewHolder(view) {
         fun bind(item: WorkoutType, onClick: (View, WorkoutType) -> Unit) = with(itemView) {
-            glide
-                    .load(item.image?.url)
-                    .apply(RequestOptions.placeholderOf(R.drawable.side_nav_bar))
-                    .into(fragment_dashboard_workout_card_item_image)
+            if (item.image != null) {
+                glide
+                        .load(item.image?.url)
+                        .into(fragment_dashboard_workout_card_item_image)
+            }
 
             fragment_dashboard_workout_card_item_name.text = item.name
             fragment_dashboard_workout_card_item_createdby.text = item.createdBy?.username
