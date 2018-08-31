@@ -48,10 +48,10 @@
                         android:text="Community" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/f_workout_browser_category_tab_recent_and_liked"
+                        android:id="@+id/f_workout_browser_category_tab_recent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Recent &amp; Liked" />
+                        android:text="Recent" />
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/f_workout_browser_category_tab_my_custom"

@@ -230,13 +230,19 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     private fun titleOnClick(v: View) {
         val category = when (v.id) {
             R.id.f_dashboard_featured_title -> WorkoutBrowserFragment.CATEGORY_FEATURED
-            R.id.f_dashboard_popular_title -> WorkoutBrowserFragment.CATEGORY_RECENT_AND_LIKED
-            R.id.f_dashboard_recent_title -> WorkoutBrowserFragment.CATEGORY_RECENT_AND_LIKED
+            R.id.f_dashboard_popular_title -> WorkoutBrowserFragment.CATEGORY_COMMUNITY
+            R.id.f_dashboard_recent_title -> WorkoutBrowserFragment.CATEGORY_RECENT
             else -> WorkoutBrowserFragment.CATEGORY_FEATURED
+        }
+
+        val filter = when (v.id) {
+            R.id.f_dashboard_popular_title -> WorkoutBrowserFragment.FILTER_POPULAR
+            else -> WorkoutBrowserFragment.FILTER_ALL
         }
 
         val action = DashboardFragmentDirections.workoutBrowserAction()
         action.setCategory(category)
+        action.setFilter(filter)
         findNavController(v).navigate(action)
     }
 

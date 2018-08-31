@@ -8,7 +8,7 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.CA
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.CATEGORY_COMMUNITY
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.CATEGORY_FEATURED
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.CATEGORY_MY_CUSTOM
-import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.CATEGORY_RECENT_AND_LIKED
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.CATEGORY_RECENT
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_ALL
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_COMPLETED
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_NEW
@@ -16,6 +16,7 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FI
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_POPULAR
 import com.parse.ParseException
 import com.parse.ParseQuery
+import timber.log.Timber
 import java.util.*
 
 class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
@@ -38,11 +39,13 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
             query?.cancel()
         }
 
+        Timber.d("OkHttp -- $category, $filter, $types, $tags")
+
         // Category
         query = when(category) {
             CATEGORY_FEATURED -> WorkoutType.featuredWorkouts()
             CATEGORY_COMMUNITY -> WorkoutType.communityWorkouts()
-            CATEGORY_RECENT_AND_LIKED -> WorkoutType.recentAndLikedWorkouts()
+            CATEGORY_RECENT -> WorkoutType.recentWorkouts()
             CATEGORY_MY_CUSTOM -> WorkoutType.myCustomWorkouts()
             CATEGORY_AFFILIATE -> WorkoutType.affiliateWorkouts()
             else -> WorkoutType.featuredWorkouts()

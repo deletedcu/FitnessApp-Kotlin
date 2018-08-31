@@ -19,13 +19,14 @@ import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
+import timber.log.Timber
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
     companion object {
         const val CATEGORY_FEATURED = 0
         const val CATEGORY_COMMUNITY = 1
-        const val CATEGORY_RECENT_AND_LIKED = 2
+        const val CATEGORY_RECENT = 2
         const val CATEGORY_MY_CUSTOM = 3
         const val CATEGORY_AFFILIATE = 4
 
@@ -59,7 +60,6 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        retainInstance = true
     }
 
     override fun onDestroy() {
@@ -76,11 +76,14 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         (activity as MainActivity).setupToolbar(f_workout_browser_toolbar)
 
-        val category = WorkoutBrowserFragmentArgs.fromBundle(arguments).category
-        f_workout_browser_filter_tabs.addOnTabSelectedListener(this@WorkoutBrowserFragment)
-        f_workout_browser_category_tabs.apply {
+        f_workout_browser_filter_tabs.apply {
+            getTabAt(presenter.filter)?.select()
             addOnTabSelectedListener(this@WorkoutBrowserFragment)
-            getTabAt(category)?.select()
+        }
+
+        f_workout_browser_category_tabs.apply {
+            getTabAt(presenter.category)?.select()
+            addOnTabSelectedListener(this@WorkoutBrowserFragment)
         }
 
         viewManager = GridLayoutManager(activity!!, 2)
@@ -98,8 +101,20 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
     }
 
+    override fun onNewViewStateInstance() {
+        Timber.d("OkHttp -- onNewViewStateInstance")
+        val args = WorkoutBrowserFragmentArgs.fromBundle(arguments)
+
+        f_workout_browser_category_tabs.getTabAt(args.category)?.select()
+        f_workout_browser_filter_tabs.getTabAt(args.filter)?.select()
+
+        if (args.category + args.filter == 0) {
+            loadData(false)
+        }
+    }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)

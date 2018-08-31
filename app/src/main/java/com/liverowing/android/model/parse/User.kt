@@ -1,9 +1,11 @@
 package com.liverowing.android.model.parse
 
 import android.content.Context
-import android.content.res.Resources
 import com.liverowing.android.R.array.hat_colors
-import com.parse.*
+import com.parse.ParseFile
+import com.parse.ParseQuery
+import com.parse.ParseRelation
+import com.parse.ParseUser
 import java.util.*
 
 /**
@@ -89,11 +91,20 @@ class User : ParseUser() {
 
     companion object {
         fun completedWorkouts(): ParseQuery<Workout> {
-            val completedWorkouts = ParseQuery.getQuery(Workout::class.java)
-            completedWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            completedWorkouts.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+            val query = ParseQuery.getQuery(Workout::class.java)
+            query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            query.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+            query.whereEqualTo("isDone", true)
 
-            return completedWorkouts
+            return query
+        }
+
+        fun featuredUsers(): ParseQuery<User> {
+            val query = ParseQuery.getQuery(User::class.java)
+            query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            query.whereEqualTo("isFeatured", true)
+
+            return query
         }
     }
 }

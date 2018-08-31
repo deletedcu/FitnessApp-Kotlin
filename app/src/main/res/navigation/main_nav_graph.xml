@@ -49,6 +49,20 @@
             android:name="category"
             android:defaultValue="1"
             app:argType="integer" />
+        <argument
+            android:name="tags"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="string" />
+        <argument
+            android:name="types"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="string" />
+        <argument
+            android:name="filter"
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/workoutBrowserDetailAction"
             app:destination="@id/workoutBrowserDetail"
