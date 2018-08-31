@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,8 @@ import com.liverowing.android.R
 import com.liverowing.android.extensions.toggleVisibility
 import com.liverowing.android.model.parse.Segment
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
+import com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragmentDirections
 import kotlinx.android.synthetic.main.fragment_workout_details.*
 import timber.log.Timber
 
@@ -56,10 +59,17 @@ class WorkoutDetailFragment : Fragment() {
             f_workout_detail_intervals.visibility = View.GONE
         }
         f_workout_detail_description.text = workoutType.descriptionText
+
         f_workout_detail_more_like_user.text = "More from ${workoutType.createdBy?.username}"
         if (workoutType.filterTags != null && workoutType.filterTags!!.isNotEmpty()) {
             f_workout_detail_more_like_tags.visibility = View.VISIBLE
             f_workout_detail_more_like_tags.text = "More ${workoutType.filterTagsFriendly.joinToString(" & ")} workouts"
+            f_workout_detail_more_like_tags.setOnClickListener {
+                val action = WorkoutBrowserDetailFragmentDirections.workoutBrowserAction()
+                action.setCategory(WorkoutBrowserFragment.CATEGORY_FEATURED)
+                action.setTags(workoutType.filterTagsActiveIndexes.joinToString(","))
+                findNavController().navigate(action)
+            }
 
             /* TODO: Eh, not sure..
             workoutType.filterTagsFriendly.forEach {

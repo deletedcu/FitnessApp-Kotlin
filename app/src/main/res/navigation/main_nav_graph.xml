@@ -99,6 +99,9 @@
         <action
             android:id="@+id/raceFragmentAction"
             app:destination="@id/raceFragment" />
+        <action
+            android:id="@+id/workoutBrowserAction"
+            app:destination="@id/workoutBrowserFragment" />
     </fragment>
     <fragment
         android:id="@+id/workoutHistoryFragment"

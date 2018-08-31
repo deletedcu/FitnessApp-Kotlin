@@ -54,9 +54,20 @@ class WorkoutType : ParseObject() {
     var isDone by ParseDelegate<Boolean?>()
     var isPublic by ParseDelegate<Boolean?>()
     var filterTags by ParseDelegate<List<Int>?>()
+    val filterTagsActiveIndexes: List<Int>
+        get() {
+            val tags = mutableListOf<Int>()
+            filterTags?.forEachIndexed { index, state ->
+                if (state == 1) {
+                    tags.add(index)
+                }
+            }
+
+            return tags
+        }
     val filterTagsFriendly: List<String>
         get() {
-            val mapping =  hashMapOf(
+            val mapping = hashMapOf(
                     TAG_POWER to "Power",
                     TAG_CARDIO to "Cardio",
                     TAG_HIIT to "HIIT",
@@ -65,7 +76,11 @@ class WorkoutType : ParseObject() {
                     TAG_WEIGHT_LOSS to "Weight loss"
             )
             val tags = mutableListOf<String>()
-            filterTags?.forEachIndexed { index, state -> if (state == 1) { tags.add(mapping[index]!!) } }
+            filterTags?.forEachIndexed { index, state ->
+                if (state == 1) {
+                    tags.add(mapping[index]!!)
+                }
+            }
 
             return tags
         }

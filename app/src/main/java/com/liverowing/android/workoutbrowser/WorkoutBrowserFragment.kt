@@ -125,7 +125,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         }
 
         for (i in 0..5) {
-            items[4 + i].isChecked = presenter.tags.contains(i)
+            items[5 + i].isChecked = presenter.tags.contains(i)
         }
     }
 
