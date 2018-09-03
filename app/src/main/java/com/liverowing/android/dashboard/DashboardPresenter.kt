@@ -37,7 +37,14 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
                 }
             } else {
                 ifViewAttached {
-                    it.featuredWorkoutsLoaded(objects)
+                    var result = mutableListOf<WorkoutType>()
+                    objects.forEach { item ->
+                        item.createdBy!!.rotationRank = item.createdBy!!.rotationRank ?: 9999
+                        result.add(item)
+                    }
+                    val comparator = compareBy<WorkoutType>{ it.createdBy!!.rotationRank }.thenByDescending { it.createdAt }
+                    val sortedResult = result.sortedWith(comparator)
+                    it.featuredWorkoutsLoaded(sortedResult)
                 }
             }
         }
@@ -49,8 +56,6 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
         val featuredUsers = mutableListOf<User>()
 
         if (selectedFeaturedUsers.size == 0) {
-
-            var maxRotationRank = 0
             var userIds = mutableListOf<String>()
 
             workouts.forEach { item ->
@@ -58,14 +63,7 @@ class DashboardPresenter : EventBusPresenter<DashboardView>() {
                 // add 1 of the most recent featuredUser
                 if (!userIds.contains(item.createdBy!!.objectId)) {
 
-                    // set order by rotationRank
-                    val rank = item.createdBy!!.rotationRank ?: 0
-                    if (rank > maxRotationRank) {
-                        maxRotationRank = rank
-                        featuredUsers.add(0, item.createdBy!!)
-                    } else {
-                        featuredUsers.add(item.createdBy!!)
-                    }
+                    featuredUsers.add(item.createdBy!!)
                     userIds.add(item.createdBy!!.objectId)
 
                     // add 1 of the most recent workoutType from each featuredUser

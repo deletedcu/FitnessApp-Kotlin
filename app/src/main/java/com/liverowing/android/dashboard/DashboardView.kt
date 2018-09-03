@@ -22,5 +22,5 @@ interface DashboardView : MvpView {
     fun deviceDisconnected(device: Any?)
     fun deviceReady(device: Any?, name: String)
 
-    fun featuredWorkoutsUpdated(workouts: MutableList<WorkoutType>, users: MutableList<User>)
+    fun featuredWorkoutsUpdated(workouts: List<WorkoutType>, users: List<User>)
 }

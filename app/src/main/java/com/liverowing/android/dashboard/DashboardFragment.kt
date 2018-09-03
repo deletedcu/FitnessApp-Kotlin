@@ -166,7 +166,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         presenter.updateFeaturedWorkouts(allFeaturedWorkouts, selectedFeaturedUsers)
     }
 
-    override fun featuredWorkoutsUpdated(workouts: MutableList<WorkoutType>, users: MutableList<User>) {
+    override fun featuredWorkoutsUpdated(workouts: List<WorkoutType>, users: List<User>) {
         featuredWorkouts.clear()
         featuredWorkouts.addAll(workouts)
         if (users.size > 0) {

@@ -130,6 +130,7 @@ class WorkoutType : ParseObject() {
             query.include("segments")
             query.include("createdBy")
 
+            query.orderByAscending("createdBy.rotationRank")
             query.addDescendingOrder("createdAt")
 
             return query
