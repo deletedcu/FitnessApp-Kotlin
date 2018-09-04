@@ -95,6 +95,7 @@ class User : ParseUser() {
             query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
             query.whereEqualTo("createdBy", ParseUser.getCurrentUser())
             query.whereEqualTo("isDone", true)
+            query.whereExists("workoutType")
 
             return query
         }
