@@ -1,6 +1,7 @@
 package com.liverowing.android.model.parse
 
 import android.util.Base64
+import com.liverowing.android.extensions.roundToDecimals
 import com.liverowing.android.extensions.secondsToTimespan
 import com.liverowing.android.model.pm.SplitType
 import com.liverowing.android.model.pm.WorkoutState
@@ -162,20 +163,20 @@ class Workout : ParseObject() {
                 }
                 return WorkoutData(
                         strokeRate = (map["strokeRate"] ?: "0").toString().toDouble().toInt(),
-                        SplitsAvgDPS = (map["SplitsAvgDPS"] ?: "0").toString().toDouble(),
+                        SplitsAvgDPS = (map["SplitsAvgDPS"] ?: "0").toString().toDouble().roundToDecimals(2),
                         heartRateNormalZoneTime = (map["heartRateNormalZoneTime"] ?: "0").toString().toDouble(),
-                        SplitsCals = (map["SplitsCals"] ?: "0").toString().toDouble(),
+                        SplitsCals = (map["SplitsCals"] ?: "0").toString().toDouble().roundToDecimals(2),
                         heartRateZone1Time = (map["heartRateZone1Time"] ?: "0").toString().toDouble(),
-                        SplitsAvgDrag = (map["SplitsAvgDrag"] ?: "0").toString().toDouble(),
-                        SplitsAvgDriveLength = (map["SplitsAvgDriveLength"] ?: "0").toString().toDouble(),
+                        SplitsAvgDrag = (map["SplitsAvgDrag"] ?: "0").toString().toDouble().roundToDecimals(2),
+                        SplitsAvgDriveLength = (map["SplitsAvgDriveLength"] ?: "0").toString().toDouble().roundToDecimals(2),
                         heartRateZone2Time = (map["heartRateZone2Time"] ?: "0").toString().toDouble(),
                         maxWatt = (map["maxWatt"] ?: "0").toString().toDouble().toInt(),
                         splitsAvgPace = (map["splitsAvgPace"] ?: "0").toString().toDouble(),
                         fastestPace = (map["fastestPace"] ?: "0").toString().toDouble(),
                         heartRateZone3Time = (map["heartRateZone3Time"] ?: "0").toString().toDouble(),
-                        maxHeartRate = (map["maxHeartRate"] ?: "0").toString().toDouble(),
+                        maxHeartRate = (map["maxHeartRate"] ?: "0").toString().toDouble().roundToDecimals(2),
                         splitSize = (map["splitSize"] ?: "0").toString().toDouble().toInt(),
-                        SplitsWatts = (map["SplitsWatts"] ?: "0").toString().toDouble(),
+                        SplitsWatts = (map["SplitsWatts"] ?: "0").toString().toDouble().roundToDecimals(2),
                         maxSPM = (map["maxSPM"] ?: "0").toString().toDouble().toInt(),
                         workDistance = (map["workDistance"] ?: "0").toString().toDouble().toInt(),
                         heartRate = (map["heartRate"] ?: "0").toString().toDouble().toInt(),
@@ -192,17 +193,17 @@ class Workout : ParseObject() {
             list.add(SummaryItem("PEAK RATE", maxSPM.toString()))
             list.add(SummaryItem("PEAK POWER", maxWatt.toString()))
             list.add(SummaryItem("HEART RATE", heartRate.toString()))
-            list.add(SummaryItem("POWER", SplitsWatts.toString()))
+            list.add(SummaryItem("POWER", SplitsWatts.roundToDecimals(2).toString()))
             list.add(SummaryItem("PEAK PACE", fastestPace.secondsToTimespan(true)))
-            list.add(SummaryItem("DIST./STROKE", SplitsAvgDPS.toString()))
+            list.add(SummaryItem("DIST./STROKE", SplitsAvgDPS.roundToDecimals(2).toString()))
             list.add(SummaryItem("RATE", strokeRate.toString()))
-            list.add(SummaryItem("DRAG", SplitsAvgDrag.toString()))
-            list.add(SummaryItem("CALORIES", SplitsCals.toString()))
-            list.add(SummaryItem("PEAK HR", maxHeartRate.toString()))
+            list.add(SummaryItem("DRAG", SplitsAvgDrag.roundToDecimals(2).toString()))
+            list.add(SummaryItem("CALORIES", SplitsCals.roundToDecimals(2).toString()))
+            list.add(SummaryItem("PEAK HR", maxHeartRate.roundToDecimals(2).toString()))
             list.add(SummaryItem("PACE", splitsAvgPace.secondsToTimespan(true)))
             list.add(SummaryItem("STROKES", strokeCount.toString()))
             list.add(SummaryItem("TIME", workTime.secondsToTimespan(true)))
-            list.add(SummaryItem("STROKE LNGT", SplitsAvgDriveLength.toString()))
+            list.add(SummaryItem("STROKE LNGT", SplitsAvgDriveLength.roundToDecimals(2).toString()))
             list.add(SummaryItem("SPLIT SIZE", splitSize.toString()))
             list.add(SummaryItem("DISTANCE", workDistance.toString()))
             return list
@@ -304,18 +305,18 @@ class Workout : ParseObject() {
             map.put(SplitType.Number, splitNumber.toString())
             map.put(SplitType.Time, splitTime.secondsToTimespan(true))
             map.put(SplitType.StrokeRate, splitStrokeRate.toString())
-            map.put(SplitType.DPS, splitAvgDPS.toString())
+            map.put(SplitType.DPS, splitAvgDPS.roundToDecimals(2).toString())
             map.put(SplitType.Dist, splitDistance.toInt().toString())
             map.put(SplitType.RestTime, splitRestTime.secondsToTimespan(true))
             map.put(SplitType.DragFactor, splitAvgDragFactor.toString())
-            map.put(SplitType.Watts, splitAvgWatts.toString())
-            map.put(SplitType.TimeDist, splitTimeDistance.toString())
-            map.put(SplitType.HeartRate, splitHeartRate.toString())
+            map.put(SplitType.Watts, splitAvgWatts.roundToDecimals(2).toString())
+            map.put(SplitType.TimeDist, splitTimeDistance.roundToDecimals(2).toString())
+            map.put(SplitType.HeartRate, splitHeartRate.roundToDecimals(2).toString())
             map.put(SplitType.Pace, splitAvgPace.secondsToTimespan(true))
-            map.put(SplitType.RestDist, splitRestDistance.toString())
-            map.put(SplitType.Cals, splitCals.toString())
+            map.put(SplitType.RestDist, splitRestDistance.roundToDecimals(2).toString())
+            map.put(SplitType.Cals, splitCals.roundToDecimals(2).toString())
             map.put(SplitType.StrokeCount, splitStrokeCount.toString())
-            map.put(SplitType.DriveLength, splitAvgDriveLength.toString())
+            map.put(SplitType.DriveLength, splitAvgDriveLength.roundToDecimals(2).toString())
 
             return map
         }
