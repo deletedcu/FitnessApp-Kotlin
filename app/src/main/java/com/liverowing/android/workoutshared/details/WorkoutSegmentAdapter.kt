@@ -22,7 +22,7 @@ class WorkoutSegmentAdapter(private val items: List<Segment>, private val glide:
         fun bind(item: Segment, onClick: (View, Segment) -> Unit) = with(itemView) {
             glide
                     .load(item.image?.url)
-                    .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_item_placeholder))
                     .into(f_workout_segment_image)
 
             val segmentDetails = StringBuilder()
@@ -33,6 +33,7 @@ class WorkoutSegmentAdapter(private val items: List<Segment>, private val glide:
 
             f_workout_segment_title.text = if (item.name.isNullOrEmpty()) "Interval " + (adapterPosition + 1) else item.name
             f_workout_segment_details.text = segmentDetails
+            f_workout_segment_description.text = item.restDescription
 
             setOnClickListener { onClick(itemView, item) }
         }

@@ -4,9 +4,9 @@ import android.view.View
 
 fun View.toggleVisibility() : View {
     visibility = if (visibility == View.VISIBLE) {
-        View.INVISIBLE
+        View.GONE
     } else {
-        View.INVISIBLE
+        View.VISIBLE
     }
     return this
 }

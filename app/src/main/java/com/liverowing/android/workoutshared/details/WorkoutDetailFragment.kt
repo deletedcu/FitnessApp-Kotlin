@@ -1,10 +1,12 @@
 package com.liverowing.android.workoutshared.details
 
 
+import android.animation.LayoutTransition
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -83,7 +85,14 @@ class WorkoutDetailFragment : Fragment() {
         }
 
         f_workout_detail_intervals_title.setOnClickListener {
+            if (f_workout_detail_segments_recyclerview.isVisible) {
+                f_workout_detail_intervals_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_right, 0)
+            } else {
+                f_workout_detail_intervals_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+            }
+            f_workout_detail_segments_divider.toggleVisibility()
             f_workout_detail_segments_recyclerview.toggleVisibility()
+            f_workout_detail_intervals_card.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
 
         viewManager = LinearLayoutManager(activity!!)
