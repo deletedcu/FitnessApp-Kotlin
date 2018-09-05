@@ -19,22 +19,27 @@
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="scrollable">
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            app:tabMode="scrollable"
+            app:tabTextAppearance="@style/TextAppearanceCustomBody1"
+            app:tabTextColor="@color/text_color6"
+            app:tabSelectedTextColor="@color/text_color1">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Workout details" />
+                android:text="WORKOUT DETAILS"/>
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Leaders &amp; Stats" />
+                android:text="LEADERS &amp; STATS" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your History" />
+                android:text="YOUR HISTORY" />
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,6 +47,7 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_color1"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include layout="@layout/loading_view" />
