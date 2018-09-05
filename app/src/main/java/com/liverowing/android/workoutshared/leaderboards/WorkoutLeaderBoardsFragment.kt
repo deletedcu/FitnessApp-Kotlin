@@ -19,6 +19,7 @@ import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.UserStats
 import com.liverowing.android.model.parse.WorkoutType
 import com.parse.ParseUser
+import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.fragment_workout_leaderboards.*
 import timber.log.Timber
 
@@ -84,6 +85,11 @@ class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, 
     override fun showContent() {
         super.showContent()
         contentView.isRefreshing = false
+        if (dataSet.size == 0) {
+            emptyView.visibility = View.VISIBLE
+        } else {
+            emptyView.visibility = View.GONE
+        }
     }
 
     override fun showError(e: Throwable?, pullToRefresh: Boolean) {
