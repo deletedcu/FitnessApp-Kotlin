@@ -9,14 +9,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.liverowing.android.R
 import com.liverowing.android.extensions.inflate
 import com.liverowing.android.model.parse.UserStats
+import com.liverowing.android.util.metric.MetricFormatter
 import kotlinx.android.synthetic.main.fragment_workout_browser_detail_leaders_and_stats_item.view.*
 
-class WorkoutLeaderBoardsAdapter(private val items: List<UserStats>, private val glide: RequestManager, private val onClick: (View, UserStats) -> Unit) : RecyclerView.Adapter<WorkoutLeaderBoardsAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.fragment_workout_browser_detail_leaders_and_stats_item), glide)
+class WorkoutLeaderBoardsAdapter(private val items: List<UserStats>, private val valueFormatter: MetricFormatter, private val glide: RequestManager, private val onClick: (View, UserStats) -> Unit) : RecyclerView.Adapter<WorkoutLeaderBoardsAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.fragment_workout_browser_detail_leaders_and_stats_item), glide, valueFormatter)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { holder.bind(position, items[position], onClick) }
     override fun getItemCount() = items.size
 
-    class ViewHolder(view: View, private val glide: RequestManager) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val glide: RequestManager, private val valueFormatter: MetricFormatter) : RecyclerView.ViewHolder(view) {
         fun bind(position: Int, item: UserStats, onClick: (View, UserStats) -> Unit) = with(itemView) {
 
             glide
@@ -27,7 +28,7 @@ class WorkoutLeaderBoardsAdapter(private val items: List<UserStats>, private val
 
             f_workout_browser_detail_leaders_and_stats_item_number.text = item.record.rank.toString()
             f_workout_browser_detail_leaders_and_stats_item_user.text = item.user?.username
-            f_workout_browser_detail_leaders_and_stats_item_metric.text = item.record.value.toString()
+            f_workout_browser_detail_leaders_and_stats_item_metric.text = valueFormatter.format(item.record.value.toFloat())
 
             setOnClickListener { onClick(itemView, item) }
         }

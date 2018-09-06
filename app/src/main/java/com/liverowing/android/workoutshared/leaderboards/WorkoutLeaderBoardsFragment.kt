@@ -18,6 +18,9 @@ import com.liverowing.android.R
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.UserStats
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.model.parse.WorkoutType.Companion.VALUE_TYPE_TIMED
+import com.liverowing.android.util.metric.NumericMetricFormatter
+import com.liverowing.android.util.metric.TimeMetricFormatter
 import com.parse.ParseUser
 import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.fragment_workout_leaderboards.*
@@ -53,9 +56,15 @@ class WorkoutLeaderBoardsFragment : MvpLceViewStateFragment<SwipeRefreshLayout, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val valueFormatter = if (workoutType.valueType == VALUE_TYPE_TIMED) {
+            NumericMetricFormatter("%.1fm")
+        } else {
+            TimeMetricFormatter(true)
+        }
+
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutLeaderBoardsAdapter(dataSet, Glide.with(activity!!)) { _, workout ->
+        viewAdapter = WorkoutLeaderBoardsAdapter(dataSet, valueFormatter, Glide.with(activity!!)) { _, workout ->
             Timber.d("Clicked a userstats row: %s", workout)
         }
 
