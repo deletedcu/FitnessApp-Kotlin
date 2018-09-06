@@ -75,32 +75,31 @@ class WorkoutType : ParseObject() {
     var isAutoCompete by ParseDelegate<Boolean?>()
     val friendlySegmentDescription: String
         get() {
-            val parts = mutableListOf<String>()
+            val parts = mutableListOf<Pair<String, Int>>()
+
             if (segments != null) {
-                var number = 1
                 var lastSegment: Segment? = null
                 for (segment in segments!!) {
-                    if (segment.isDataAvailable) {
-                        if (lastSegment != null && segment.friendlyValue == lastSegment.friendlyValue && segment.friendlyRestValue == lastSegment.friendlyRestValue) {
-                            number++
+                    if (segment.value == lastSegment?.value && segment.restValue == lastSegment?.restValue) {
+                        val part = parts.removeAt(parts.size - 1)
+                        parts.add(Pair(part.first, part.second + 1))
+                    } else {
+                        var part = segment.friendlyValue
+                        if (segment.restValue != null && segment.restValue!! > 0) {
+                            part += "/${segment.friendlyRestValue}"
                         }
-                        lastSegment = segment
-                        parts.add(segment.friendlyValue)
-                        parts.add(segment.friendlyRestValue)
+                        parts.add(Pair(part, 1))
                     }
-                }
 
-                if (segments!!.size == number && lastSegment != null) {
-                    var string = "$number x ${lastSegment.friendlyValue}"
-                    if (lastSegment.restValue != null && lastSegment.restValue!! > 0) {
-                        string += "/${lastSegment.friendlyRestValue}"
-                    }
-                    return string
+                    lastSegment = segment
                 }
             }
 
-            return parts.joinToString("/")
+            return parts.joinToString(", ") {
+                if (it.second > 1) "${it.second} x ${it.first}" else it.first
+            }
         }
+
     val hasLeaderboards: Boolean
         get() {
             return isFeatured == true || affiliate != null
