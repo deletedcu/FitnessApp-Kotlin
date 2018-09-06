@@ -25,7 +25,7 @@ class WorkoutLeaderBoardsAdapter(private val items: List<UserStats>, private val
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_item_placeholder))
                     .into(f_workout_browser_detail_leaders_and_stats_item_image)
 
-            f_workout_browser_detail_leaders_and_stats_item_number.text = (position + 1).toString()
+            f_workout_browser_detail_leaders_and_stats_item_number.text = item.record.rank.toString()
             f_workout_browser_detail_leaders_and_stats_item_user.text = item.user?.username
             f_workout_browser_detail_leaders_and_stats_item_metric.text = item.record.value.toString()
 
