@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:clipToPadding="false"
-        android:paddingBottom="80dp"
+        android:paddingBottom="@dimen/fab_margin_bottom"
         >
 
         <TextView
