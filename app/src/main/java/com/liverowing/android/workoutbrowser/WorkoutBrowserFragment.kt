@@ -150,7 +150,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         f_workout_browser_filter.setOnClickListener {
             if (backdropShown) {
-
+                resetFilters()
             } else {
                 onToggleBackdropMenu()
             }
@@ -342,6 +342,20 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             f_workout_browser_toolbar.setNavigationIcon(R.drawable.ic_back)
             f_workout_browser_filter.setImageResource(R.drawable.ic_tune)
         }
+    }
 
+    private fun resetFilters() {
+        filterGroupBySelectedItems.clear()
+        filterGroupBySelectedItems.add(FilterItem.defaultGroupByItem())
+        filterCreatedBySelectedItems.clear()
+        filterWorkoutTypesSelectedItems.clear()
+        filterShowOnlySelectedItems.clear()
+        filterTagsSelectedItems.clear()
+
+        filterGroupByAdapter.notifyDataSetChanged()
+//        filterCreatedByAdapter.notifyDataSetChanged()
+        filterWorkoutTypesAdapter.notifyDataSetChanged()
+        filterShowOnlyAdapter.notifyDataSetChanged()
+        filterTagsAdapter.notifyDataSetChanged()
     }
 }
