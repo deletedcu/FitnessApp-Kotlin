@@ -1,7 +1,11 @@
 package com.liverowing.android.workoutbrowser
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.get
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,6 +20,7 @@ import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
+import com.liverowing.android.extensions.toggleVisibility
 import com.liverowing.android.util.GridSpanDecoration
 import com.parse.ParseObject
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
@@ -54,11 +59,21 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
     private var dataSet = mutableListOf<ParseObject>()
 
+    // Backdrop menu values
+    private var backdropShown = false
+    private val animatorSet = AnimatorSet()
+    private val interpolator = AccelerateDecelerateInterpolator()
+    private var height: Int = 0
+
+
     override fun createPresenter() = WorkoutBrowserPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(true)
+        val displayMetrics = DisplayMetrics()
+        activity!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        height = displayMetrics.heightPixels
     }
 
     override fun onDestroy() {
@@ -75,15 +90,15 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         (activity as MainActivity).setupToolbar(f_workout_browser_toolbar)
 
-        f_workout_browser_filter_tabs.apply {
-            getTabAt(presenter.filter)?.select()
-            addOnTabSelectedListener(this@WorkoutBrowserFragment)
-        }
-
-        f_workout_browser_category_tabs.apply {
-            getTabAt(presenter.category)?.select()
-            addOnTabSelectedListener(this@WorkoutBrowserFragment)
-        }
+//        f_workout_browser_filter_tabs.apply {
+//            getTabAt(presenter.filter)?.select()
+//            addOnTabSelectedListener(this@WorkoutBrowserFragment)
+//        }
+//
+//        f_workout_browser_category_tabs.apply {
+//            getTabAt(presenter.category)?.select()
+//            addOnTabSelectedListener(this@WorkoutBrowserFragment)
+//        }
 
         viewManager = GridLayoutManager(activity!!, 2)
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
@@ -102,6 +117,26 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             adapter = viewAdapter
         }
 
+        f_workout_browser_toolbar.setNavigationOnClickListener {
+            if (backdropShown) {
+                onToggleBackdropMenu()
+            } else {
+                fragmentManager!!.popBackStack()
+            }
+        }
+
+        f_workout_browser_filter.setOnClickListener {
+            if (backdropShown) {
+
+            } else {
+                onToggleBackdropMenu()
+            }
+        }
+
+        f_workout_browser_subtitle.setOnClickListener {
+            onToggleBackdropMenu()
+        }
+
     }
 
     override fun onNewViewStateInstance() {
@@ -109,8 +144,8 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         args.tags?.split(",")?.forEach { presenter.tags.add(it.toInt()) }
         args.types?.split(",")?.forEach { presenter.types.add(it.toInt()) }
-        f_workout_browser_category_tabs.getTabAt(args.category)?.select()
-        f_workout_browser_filter_tabs.getTabAt(args.filter)?.select()
+//        f_workout_browser_category_tabs.getTabAt(args.category)?.select()
+//        f_workout_browser_filter_tabs.getTabAt(args.filter)?.select()
 
         if (args.category + args.filter == 0 || args.tags != null || args.types != null) {
             loadData(false)
@@ -120,18 +155,18 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
 
-        val items = menu.findItem(R.id.action_filter).subMenu!!
-        for (i in 0..2) {
-            items[i].isChecked = presenter.types.contains(i)
-        }
-
-        for (i in 0..5) {
-            items[5 + i].isChecked = presenter.tags.contains(i)
-        }
+//        val items = menu.findItem(R.id.action_filter).subMenu!!
+//        for (i in 0..2) {
+//            items[i].isChecked = presenter.types.contains(i)
+//        }
+//
+//        for (i in 0..5) {
+//            items[5 + i].isChecked = presenter.tags.contains(i)
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.workout_browser, menu)
+//        inflater?.inflate(R.menu.workout_browser, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -194,19 +229,54 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
     override fun onTabUnselected(tab: TabLayout.Tab) {}
     override fun onTabSelected(tab: TabLayout.Tab) {
-        if (tab.parent.id == R.id.f_workout_browser_category_tabs) {
-            presenter.reset()
-            activity?.invalidateOptionsMenu()
-            presenter.category = tab.position
+//        if (tab.parent.id == R.id.f_workout_browser_category_tabs) {
+//            presenter.reset()
+//            activity?.invalidateOptionsMenu()
+//            presenter.category = tab.position
+//
+//            f_workout_browser_filter_tabs.apply {
+//                removeOnTabSelectedListener(this@WorkoutBrowserFragment)
+//                getTabAt(0)?.select()
+////                addOnTabSelectedListener(this@WorkoutBrowserFragment)
+//            }
+//        } else if (tab.parent.id == R.id.f_workout_browser_filter_tabs) {
+//            presenter.filter = tab.position
+//        }
+//        presenter.loadWorkoutTypes(false)
+    }
 
-            f_workout_browser_filter_tabs.apply {
-                removeOnTabSelectedListener(this@WorkoutBrowserFragment)
-                getTabAt(0)?.select()
-                addOnTabSelectedListener(this@WorkoutBrowserFragment)
-            }
-        } else if (tab.parent.id == R.id.f_workout_browser_filter_tabs) {
-            presenter.filter = tab.position
+    private fun onToggleBackdropMenu() {
+        backdropShown = !backdropShown
+
+        // Cancel the existing animations
+        animatorSet.removeAllListeners()
+        animatorSet.end()
+        animatorSet.cancel()
+
+        updateIcon()
+
+        val translateY = height - context!!.resources.getDimensionPixelSize(R.dimen.product_grid_reveal_height)
+
+        val animator = ObjectAnimator.ofFloat(product_grid, "translationY", (if (backdropShown) translateY else 0).toFloat())
+        animator.duration = 500
+        if (interpolator != null) {
+            animator.interpolator = interpolator
         }
-        presenter.loadWorkoutTypes(false)
+        animatorSet.play(animator)
+        animator.start()
+    }
+
+    private fun updateIcon() {
+        f_workout_browser_subtitle.toggleVisibility()
+        if (backdropShown) {
+            f_workout_browser_toolbar.title = "FILTERS"
+            f_workout_browser_toolbar.setNavigationIcon(R.drawable.ic_close)
+            f_workout_browser_filter.setImageResource(R.drawable.ic_delete)
+        } else {
+            f_workout_browser_toolbar.title = "WORKOUTS"
+            f_workout_browser_toolbar.setNavigationIcon(R.drawable.ic_back)
+            f_workout_browser_filter.setImageResource(R.drawable.ic_tune)
+        }
+
     }
 }

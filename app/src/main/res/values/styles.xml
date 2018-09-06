@@ -215,4 +215,8 @@
         <item name="android:letterSpacing">0.025</item>
     </style>
 
+    <style name="Widget.WorkoutBrowser.Backdrop" parent="">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
 </resources>
