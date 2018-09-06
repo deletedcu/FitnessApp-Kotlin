@@ -21,7 +21,6 @@ import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
 import com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragmentDirections
 import kotlinx.android.synthetic.main.fragment_workout_details.*
-import timber.log.Timber
 
 class WorkoutDetailFragment : Fragment() {
     private lateinit var workoutType: WorkoutType
@@ -97,9 +96,7 @@ class WorkoutDetailFragment : Fragment() {
 
         viewManager = LinearLayoutManager(activity!!)
         viewDividerItemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        viewAdapter = WorkoutSegmentAdapter(dataSet, Glide.with(context!!)) { _, segment ->
-            Timber.d("Clicked a segment row: %s", segment)
-        }
+        viewAdapter = WorkoutSegmentAdapter(dataSet, Glide.with(context!!))
 
         recyclerView = f_workout_detail_segments_recyclerview.apply {
             addItemDecoration(viewDividerItemDecoration)
