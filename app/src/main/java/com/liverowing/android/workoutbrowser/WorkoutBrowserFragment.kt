@@ -16,12 +16,12 @@ import com.liverowing.android.LiveRowing
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
-import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.util.GridSpanDecoration
+import com.parse.ParseObject
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
 
 
-class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<WorkoutType>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
+class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<ParseObject>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
     companion object {
         const val CATEGORY_FEATURED = 0
         const val CATEGORY_COMMUNITY = 1
@@ -48,11 +48,11 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     }
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter: WorkoutBrowserAdapter
     private lateinit var viewManager: GridLayoutManager
     private lateinit var viewDividerItemDecoration: GridSpanDecoration
 
-    private var dataSet = mutableListOf<WorkoutType>()
+    private var dataSet = mutableListOf<ParseObject>()
 
     override fun createPresenter() = WorkoutBrowserPresenter()
 
@@ -92,6 +92,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
             action.setWorkoutType(workoutType)
             Navigation.findNavController(view).navigate(action)
         }
+        viewManager.spanSizeLookup = viewAdapter.spanSizeLookup
 
         contentView.setOnRefreshListener(this@WorkoutBrowserFragment)
         recyclerView = f_workout_browser_recyclerview.apply {
@@ -168,15 +169,15 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         contentView.isRefreshing = pullToRefresh
     }
 
-    override fun createViewState(): LceViewState<List<WorkoutType>, WorkoutBrowserView> = RetainingLceViewState()
+    override fun createViewState(): LceViewState<List<ParseObject>, WorkoutBrowserView> = RetainingLceViewState()
 
-    override fun setData(data: List<WorkoutType>) {
+    override fun setData(data: List<ParseObject>) {
         dataSet.clear()
         dataSet.addAll(data)
         viewAdapter.notifyDataSetChanged()
     }
 
-    override fun getData(): List<WorkoutType> {
+    override fun getData(): List<ParseObject> {
         return dataSet.toList()
     }
 

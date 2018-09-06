@@ -16,7 +16,6 @@ import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FI
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment.Companion.FILTER_POPULAR
 import com.parse.ParseException
 import com.parse.ParseQuery
-import timber.log.Timber
 import java.util.*
 
 class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
@@ -38,8 +37,6 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
         if (query !== null && query!!.isRunning) {
             query?.cancel()
         }
-
-        Timber.d("OkHttp -- $category, $filter, $types, $tags")
 
         // Category
         query = when(category) {
@@ -81,6 +78,17 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
                         ifViewAttached { it.showError(e, pullToRefresh) }
                     }
                 } else {
+                    if (category == CATEGORY_FEATURED) {
+                        val result = mutableListOf<WorkoutType>()
+                        objects.forEach { item ->
+                            item.createdBy!!.rotationRank = item.createdBy!!.rotationRank ?: 9999
+                            result.add(item)
+                        }
+                        val comparator = compareBy<WorkoutType>{ it.createdBy!!.rotationRank }.thenByDescending { it.createdAt }
+                        objects.clear()
+                        objects.addAll(result.sortedWith(comparator))
+                    }
+
                     ifViewAttached {
                         it.setData(objects)
                         it.showContent()
