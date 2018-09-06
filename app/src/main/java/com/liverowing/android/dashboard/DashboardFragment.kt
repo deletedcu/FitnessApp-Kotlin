@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
+import com.liverowing.android.dashboard.bottomSheet.DashboardBottomSheet
+import com.liverowing.android.dashboard.bottomSheet.DashboardBottomSheetListener
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogFragment
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogListener
 import com.liverowing.android.extensions.dpToPx
@@ -25,7 +27,8 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
 import timber.log.Timber
 
 
-class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener {
+class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener, DashboardBottomSheetListener {
+
     private lateinit var itemDecoration: GridSpanDecoration
 
     private val featuredWorkouts = mutableListOf<WorkoutType>()
@@ -116,7 +119,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             action.setWorkoutType(workoutType)
             findNavController(view).navigate(action)
         }, onMoreClick = { _, workoutType ->
-
+            showBottomSheet(workoutType)
         })
 
         featuredRecyclerView = f_dashboard_featured_recyclerview.apply {
@@ -154,6 +157,11 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
             layoutManager = recentViewManager
             adapter = recentViewAdapter
         }
+    }
+
+    private fun showBottomSheet(workoutType: WorkoutType) {
+        val bottomSheet = DashboardBottomSheet(workoutType, this)
+        bottomSheet.show(fragmentManager, bottomSheet.javaClass.toString())
     }
 
     override fun featuredWorkoutsLoading() {
@@ -266,5 +274,18 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         val action = DashboardFragmentDirections.raceFragmentAction()
         action.setWorkoutTypeId(workoutTypeId)
         findNavController(view!!).navigate(action)
+    }
+
+    // DashboardBottomSheet Listener
+    override fun onBookMarkClick(workoutType: WorkoutType) {
+
+    }
+
+    override fun onShareClick(workoutType: WorkoutType) {
+
+    }
+
+    override fun onSendClick(workoutType: WorkoutType) {
+
     }
 }
