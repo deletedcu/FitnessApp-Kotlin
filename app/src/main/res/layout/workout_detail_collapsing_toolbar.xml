@@ -43,7 +43,7 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="BY | LiveRowing"
         android:textColor="#ffffff"
-        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textAppearance="@style/TextAppearanceCustomCaption"
         app:layout_collapseMode="parallax"
         app:layout_collapseParallaxMultiplier="0.2" />
 

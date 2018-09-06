@@ -41,7 +41,9 @@
             android:layout_marginTop="@dimen/activity_vertical_margin_medium"
             android:maxLines="2"
             android:text=""
-            android:textAppearance="@style/TextAppearanceCustomCard1"
+            android:textAppearance="@style/TextAppearanceCustomHeaderline7"
+            android:textColor="@color/text_color1"
+            android:letterSpacing="0.05"
             app:layout_constraintEnd_toStartOf="@id/fragment_dashboard_featured_card_item_more"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_dashboard_featured_card_item_image" />
@@ -66,7 +68,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin_medium"
             android:singleLine="true"
             android:text="TextView"
-            android:textAppearance="@style/TextAppearanceCustomCardName1"
+            android:textAppearance="@style/TextAppearanceCustomOverline"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

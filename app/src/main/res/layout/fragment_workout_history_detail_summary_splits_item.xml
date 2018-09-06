@@ -13,7 +13,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textAppearance="@style/TextAppearanceCustomCaption"
         android:textColor="@color/text_color4"/>
 
     <TextView
@@ -26,7 +26,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textAppearance="@style/TextAppearanceCustomCaption"
         android:textColor="@color/text_color5"/>
 
     <TextView
@@ -39,7 +39,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textAppearance="@style/TextAppearanceCustomCaption"
         android:textColor="@color/text_color5"/>
 
     <TextView
@@ -52,7 +52,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textAppearance="@style/TextAppearanceCustomCaption"
         android:textColor="@color/text_color5"/>
 
     <TextView
@@ -65,7 +65,7 @@
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearanceCustomBody2"
+        android:textAppearance="@style/TextAppearanceCustomCaption"
         android:textColor="@color/text_color5"/>
 
 </LinearLayout>

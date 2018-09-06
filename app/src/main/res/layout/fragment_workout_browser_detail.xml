@@ -22,7 +22,7 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             app:tabMode="scrollable"
-            app:tabTextAppearance="@style/TextAppearanceCustomBody1"
+            app:tabTextAppearance="@style/TextAppearanceCustomSubtitle2"
             app:tabTextColor="@color/text_color6"
             app:tabSelectedTextColor="@color/text_color1">
 

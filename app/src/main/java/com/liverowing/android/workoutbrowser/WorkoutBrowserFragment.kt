@@ -3,6 +3,7 @@ package com.liverowing.android.workoutbrowser
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -21,9 +22,11 @@ import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.extensions.toggleVisibility
+import com.liverowing.android.model.pm.FilterItem
 import com.liverowing.android.util.GridSpanDecoration
 import com.parse.ParseObject
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
+import kotlinx.android.synthetic.main.workout_browser_backdrop.*
 
 
 class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<ParseObject>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
@@ -58,6 +61,26 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     private lateinit var viewDividerItemDecoration: GridSpanDecoration
 
     private var dataSet = mutableListOf<ParseObject>()
+
+    private lateinit var filterItemDecoration: GridSpanDecoration
+
+    private lateinit var filterGroupByRecyclerView: RecyclerView
+    private lateinit var filterCreatedByRecyclerView: RecyclerView
+    private lateinit var filterWorkoutTypesRecyclerView: RecyclerView
+    private lateinit var filterShowOnlyRecyclerView: RecyclerView
+    private lateinit var filterTagsRecyclerView: RecyclerView
+
+    private lateinit var filterGroupByAdapter: WorkoutBrowserFilterAdapter
+    private lateinit var filterCreatedByAdapter: WorkoutBrowserFilterAdapter
+    private lateinit var filterWorkoutTypesAdapter: WorkoutBrowserFilterAdapter
+    private lateinit var filterShowOnlyAdapter: WorkoutBrowserFilterAdapter
+    private lateinit var filterTagsAdapter: WorkoutBrowserFilterAdapter
+
+    private var filterGroupBySelectedItems = mutableListOf<FilterItem>(FilterItem.defaultGroupByItem())
+    private var filterCreatedBySelectedItems = mutableListOf<FilterItem>()
+    private var filterWorkoutTypesSelectedItems = mutableListOf<FilterItem>()
+    private var filterShowOnlySelectedItems = mutableListOf<FilterItem>()
+    private var filterTagsSelectedItems = mutableListOf<FilterItem>()
 
     // Backdrop menu values
     private var backdropShown = false
@@ -135,6 +158,48 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         f_workout_browser_subtitle.setOnClickListener {
             onToggleBackdropMenu()
+        }
+
+        filterItemDecoration = GridSpanDecoration(0, 0, 8.dpToPx(), 0)
+
+        filterGroupByAdapter = WorkoutBrowserFilterAdapter(FilterItem.groupByItems(), filterGroupBySelectedItems, false, onSelectChanged = { selectedItems ->
+            filterGroupBySelectedItems = selectedItems
+        })
+
+        filterWorkoutTypesAdapter = WorkoutBrowserFilterAdapter(FilterItem.workoutTypeItems(), filterWorkoutTypesSelectedItems, true, onSelectChanged = { selectedItems ->
+            filterWorkoutTypesSelectedItems = selectedItems
+        })
+
+        filterShowOnlyAdapter = WorkoutBrowserFilterAdapter(FilterItem.showItems(), filterShowOnlySelectedItems, true, onSelectChanged = { selectedItems ->
+            filterShowOnlySelectedItems = selectedItems
+        })
+
+        filterTagsAdapter = WorkoutBrowserFilterAdapter(FilterItem.tagItems(), filterTagsSelectedItems, true, onSelectChanged = { selectedItems ->
+            filterTagsSelectedItems = selectedItems
+        })
+
+        filterGroupByRecyclerView = backdrop_groupby_recyclerview.apply {
+            addItemDecoration(filterItemDecoration)
+            layoutManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+            adapter = filterGroupByAdapter
+        }
+
+        filterWorkoutTypesRecyclerView = backdrop_workouttypes_recyclerview.apply {
+            addItemDecoration(filterItemDecoration)
+            layoutManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+            adapter = filterWorkoutTypesAdapter
+        }
+
+        filterShowOnlyRecyclerView = backdrop_showonly_recyclerview.apply {
+            addItemDecoration(filterItemDecoration)
+            layoutManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+            adapter = filterShowOnlyAdapter
+        }
+
+        filterTagsRecyclerView = backdrop_tags_recyclerview.apply {
+            addItemDecoration(filterItemDecoration)
+            layoutManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+            adapter = filterTagsAdapter
         }
 
     }

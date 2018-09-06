@@ -20,7 +20,7 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:text="Description"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearanceCustomBody2"
+            android:textAppearance="@style/TextAppearanceCustomCaption"
             android:textColor="@color/text_color3" />
 
 
@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="&lt;description&gt;"
-                    android:textAppearance="@style/TextAppearanceCustomBody1"
+                    android:textAppearance="@style/TextAppearanceCustomSubtitle2"
                     android:textColor="@color/text_color6" />
 
             </LinearLayout>
@@ -63,7 +63,7 @@
             android:gravity="center_vertical"
             android:text="Interval details"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearanceCustomBody2"
+            android:textAppearance="@style/TextAppearanceCustomCaption"
             android:textColor="@color/text_color3" />
 
         <com.google.android.material.card.MaterialCardView
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:textAppearance="@style/TextAppearanceCustomBody1"
+                    android:textAppearance="@style/TextAppearanceCustomSubtitle2"
                     android:textColor="@color/text_color6" />
 
                 <View
@@ -111,7 +111,7 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:text="More workouts like this"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearanceCustomBody2"
+            android:textAppearance="@style/TextAppearanceCustomCaption"
             android:textColor="@color/text_color3" />
 
         <com.google.android.material.card.MaterialCardView
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_arrow_right"
                     android:text="More by &lt;user&gt;"
-                    android:textAppearance="@style/TextAppearanceCustomBody1"
+                    android:textAppearance="@style/TextAppearanceCustomSubtitle2"
                     android:textColor="@color/text_color6" />
 
                 <TextView
@@ -141,7 +141,7 @@
                     android:drawableEnd="@drawable/ic_arrow_right"
                     android:paddingTop="@dimen/activity_vertical_margin_medium"
                     android:text="More &lt;tags&gt; workouts"
-                    android:textAppearance="@style/TextAppearanceCustomBody1"
+                    android:textAppearance="@style/TextAppearanceCustomSubtitle2"
                     android:textColor="@color/text_color6" />
             </LinearLayout>
 

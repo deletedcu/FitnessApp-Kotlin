@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="Strava"
         android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearanceCustomItemLabel"
+        android:textAppearance="@style/TextAppearanceCustomSubtitle1"
         android:textColor="@color/text_color1"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"

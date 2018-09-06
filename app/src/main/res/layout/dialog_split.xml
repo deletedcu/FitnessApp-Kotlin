@@ -30,7 +30,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:text="METRIC PICKER"
             android:textColor="@color/text_color_white1"
-            android:textAppearance="@style/TextAppearanceCustomTitle1"/>
+            android:textAppearance="@style/TextAppearanceCustomHeadline6"/>
 
     </LinearLayout>
 
