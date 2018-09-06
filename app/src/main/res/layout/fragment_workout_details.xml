@@ -10,16 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="80dp">
+        android:clipToPadding="false"
+        android:paddingBottom="80dp"
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:text="Description"
+            android:textAllCaps="true"
             android:textAppearance="@style/TextAppearanceCustomBody2"
-            android:textColor="@color/text_color3"
-            android:textAllCaps="true"/>
+            android:textColor="@color/text_color3" />
 
 
         <com.google.android.material.card.MaterialCardView
@@ -38,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/activity_vertical_margin"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/f_workout_detail_description"
@@ -46,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:text="&lt;description&gt;"
                     android:textAppearance="@style/TextAppearanceCustomBody1"
-                    android:textColor="@color/text_color6"/>
+                    android:textColor="@color/text_color6" />
 
             </LinearLayout>
 
@@ -58,11 +60,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:drawableEnd="@drawable/ic_arrow_right"
+            android:gravity="center_vertical"
             android:text="Interval details"
-            android:textAppearance="@style/TextAppearanceCustomBody2"
-            android:textColor="@color/text_color3"
             android:textAllCaps="true"
-            android:gravity="center_vertical"/>
+            android:textAppearance="@style/TextAppearanceCustomBody2"
+            android:textColor="@color/text_color3" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/f_workout_detail_intervals_card"
@@ -83,15 +85,15 @@
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textAppearance="@style/TextAppearanceCustomBody1"
-                    android:textColor="@color/text_color6"/>
+                    android:textColor="@color/text_color6" />
 
                 <View
                     android:id="@+id/f_workout_detail_segments_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/divider_color1"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:visibility="gone"/>
+                    android:background="@color/divider_color1"
+                    android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/f_workout_detail_segments_recyclerview"
@@ -106,11 +108,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="More workouts like this"
             android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="More workouts like this"
+            android:textAllCaps="true"
             android:textAppearance="@style/TextAppearanceCustomBody2"
-            android:textColor="@color/text_color3"
-            android:textAllCaps="true" />
+            android:textColor="@color/text_color3" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -130,17 +132,17 @@
                     android:drawableEnd="@drawable/ic_arrow_right"
                     android:text="More by &lt;user&gt;"
                     android:textAppearance="@style/TextAppearanceCustomBody1"
-                    android:textColor="@color/text_color6"/>
+                    android:textColor="@color/text_color6" />
 
                 <TextView
                     android:id="@+id/f_workout_detail_more_like_tags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_arrow_right"
+                    android:paddingTop="@dimen/activity_vertical_margin_medium"
                     android:text="More &lt;tags&gt; workouts"
                     android:textAppearance="@style/TextAppearanceCustomBody1"
-                    android:textColor="@color/text_color6"
-                    android:paddingTop="@dimen/activity_vertical_margin_medium"/>
+                    android:textColor="@color/text_color6" />
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
