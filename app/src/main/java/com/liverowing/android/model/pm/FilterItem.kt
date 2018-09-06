@@ -11,12 +11,6 @@ data class FilterItem(
         const val CATEGORY_MY_CUSTOM = 3
         const val CATEGORY_AFFILIATE = 4
 
-        const val FILTER_ALL = 0
-        const val FILTER_NEW = 1
-        const val FILTER_POPULAR = 2
-        const val FILTER_COMPLETED = 3
-        const val FILTER_NOT_COMPLETED = 4
-
         const val TYPE_SINGLE_DISTANCE = 1
         const val TYPE_SINGLE_TIME = 2
         const val TYPE_INTERVALS = 4
@@ -24,6 +18,7 @@ data class FilterItem(
         const val SHOW_NEW = 0
         const val SHOW_POPULAR = 1
         const val SHOW_COMPLETED = 2
+        const val SHOW_NOT_COMPLETED = 3
 
         const val TAG_POWER = 0
         const val TAG_CARDIO = 1
@@ -54,12 +49,13 @@ data class FilterItem(
             return list
         }
 
-        fun showItems(): List<FilterItem> {
+        fun showOnlyItems(): List<FilterItem> {
             var list = mutableListOf<FilterItem>()
 
             list.add(FilterItem(SHOW_NEW, "NEW"))
             list.add(FilterItem(SHOW_POPULAR, "POPULAR"))
             list.add(FilterItem(SHOW_COMPLETED, "COMPLETED"))
+            list.add(FilterItem(SHOW_NOT_COMPLETED, "NOT COMPLETED"))
 
             return list
         }

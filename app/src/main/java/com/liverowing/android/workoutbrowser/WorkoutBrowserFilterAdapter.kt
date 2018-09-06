@@ -12,6 +12,7 @@ class WorkoutBrowserFilterAdapter(
         private val items: List<FilterItem>,
         private var selectedItems: MutableList<FilterItem>,
         private val isMultipleSelected: Boolean,
+        private val isRequired: Boolean,
         private val onSelectChanged: (selectedItems: MutableList<FilterItem>) -> Unit) : RecyclerView.Adapter<WorkoutBrowserFilterAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(parent.inflate(R.layout.workout_browser_backdrop_item))
 
@@ -38,7 +39,7 @@ class WorkoutBrowserFilterAdapter(
                     selectedItems.add(item)
                 }
             } else {
-                if (isMultipleSelected) {
+                if (!isRequired) {
                     selectedItems.remove(item)
                 }
             }

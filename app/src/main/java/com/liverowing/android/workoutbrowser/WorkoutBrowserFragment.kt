@@ -3,11 +3,9 @@ package com.liverowing.android.workoutbrowser
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.text.InputFilter
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.view.get
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -162,19 +160,19 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         filterItemDecoration = GridSpanDecoration(0, 0, 8.dpToPx(), 0)
 
-        filterGroupByAdapter = WorkoutBrowserFilterAdapter(FilterItem.groupByItems(), filterGroupBySelectedItems, false, onSelectChanged = { selectedItems ->
+        filterGroupByAdapter = WorkoutBrowserFilterAdapter(FilterItem.groupByItems(), filterGroupBySelectedItems, false, true, onSelectChanged = { selectedItems ->
             filterGroupBySelectedItems = selectedItems
         })
 
-        filterWorkoutTypesAdapter = WorkoutBrowserFilterAdapter(FilterItem.workoutTypeItems(), filterWorkoutTypesSelectedItems, true, onSelectChanged = { selectedItems ->
+        filterWorkoutTypesAdapter = WorkoutBrowserFilterAdapter(FilterItem.workoutTypeItems(), filterWorkoutTypesSelectedItems, true, false, onSelectChanged = { selectedItems ->
             filterWorkoutTypesSelectedItems = selectedItems
         })
 
-        filterShowOnlyAdapter = WorkoutBrowserFilterAdapter(FilterItem.showItems(), filterShowOnlySelectedItems, true, onSelectChanged = { selectedItems ->
+        filterShowOnlyAdapter = WorkoutBrowserFilterAdapter(FilterItem.showOnlyItems(), filterShowOnlySelectedItems, false, false, onSelectChanged = { selectedItems ->
             filterShowOnlySelectedItems = selectedItems
         })
 
-        filterTagsAdapter = WorkoutBrowserFilterAdapter(FilterItem.tagItems(), filterTagsSelectedItems, true, onSelectChanged = { selectedItems ->
+        filterTagsAdapter = WorkoutBrowserFilterAdapter(FilterItem.tagItems(), filterTagsSelectedItems, true, false, onSelectChanged = { selectedItems ->
             filterTagsSelectedItems = selectedItems
         })
 
