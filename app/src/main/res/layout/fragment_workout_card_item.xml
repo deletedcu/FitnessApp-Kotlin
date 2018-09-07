@@ -76,7 +76,7 @@
             app:layout_constraintTop_toBottomOf="@id/fragment_workout_card_item_name"/>
 
         <TextView
-            android:id="@+id/fragment_workout_card_item_type"
+            android:id="@+id/fragment_workout_card_item_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin_medium"

@@ -51,6 +51,16 @@ fun Float.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
     return this.toDouble().secondsToTimespan(milliSecondPrecision)
 }
 
+fun Int.distanceFromValue() : String {
+    var value = ""
+    if (this >= 1000) {
+        value = (this.toDouble() / 1000).roundToDecimals(1).toString() + "k"
+    } else {
+        value = "${this}m"
+    }
+    return value
+}
+
 fun Double.roundToDecimals(numDecimalPlaces: Int): Double {
     val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
     return Math.round(this * factor) / factor
@@ -69,6 +79,24 @@ fun Double.secondsToTimespan(milliSecondPrecision: Boolean = false): String {
     sb.append(":" + if (this % 60 < 10) "0" else "")
 
     sb.append(seconds)
+
+    return sb.toString()
+}
+
+fun Int.minutesToTimespan(): String {
+    val hours = Math.floor(this.toDouble() / 3600).toInt()
+    val minutes = Math.floor((this.toDouble() % 3600) / 60).toInt()
+
+    val sb = StringBuffer()
+    if (hours > 0) {
+        sb.append(hours.toString() + ":")
+        if (minutes < 10) sb.append("0")
+        sb.append(minutes.toString())
+        sb.append("hr")
+    } else {
+        sb.append(minutes.toString())
+        sb.append("min")
+    }
 
     return sb.toString()
 }

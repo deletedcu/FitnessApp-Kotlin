@@ -1,5 +1,8 @@
 package com.liverowing.android.model.parse
 
+import com.liverowing.android.extensions.distanceFromValue
+import com.liverowing.android.extensions.minutesToTimespan
+import com.liverowing.android.extensions.secondsToTimespan
 import com.liverowing.android.model.pm.FilterItem
 import com.parse.*
 import java.util.*
@@ -114,6 +117,17 @@ class WorkoutType : ParseObject() {
         get() {
             return isFeatured == true || affiliate != null
         }
+
+    fun getValueText(): String {
+        val str = when (valueType) {
+            1 -> "DISTANCE | ${value.distanceFromValue()}"
+            2 -> "TIME | ${value.minutesToTimespan()}"
+            4 -> "INTERVAL"
+            else -> ""
+        }
+
+        return str
+    }
 
     companion object {
         const val VALUE_TYPE_DISTANCE = 1

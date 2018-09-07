@@ -69,6 +69,7 @@ class WorkoutBrowserAdapter(
                 }
                 fragment_workout_card_item_name.text = item.name
                 fragment_workout_card_item_createdby.text = item.createdBy?.username
+                fragment_workout_card_item_value.text = item.getValueText()
 
                 fragment_workout_card_item_image.setOnClickListener {
                     onMoreClick(item)
