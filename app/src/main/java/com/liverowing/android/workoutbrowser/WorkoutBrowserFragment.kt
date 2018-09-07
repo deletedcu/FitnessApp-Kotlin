@@ -283,6 +283,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
         filterShowOnlySelectedItems.clear()
         filterTagsSelectedItems.clear()
         presenter.reset()
+        isFilterChanged = true
 
         filterGroupByAdapter.notifyDataSetChanged()
         filterCreatedByAdapter.notifyDataSetChanged()
