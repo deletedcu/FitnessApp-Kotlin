@@ -90,12 +90,15 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
         f_workout_browser_toolbar.title = "WORKOUTS"
 
         viewManager = GridLayoutManager(activity!!, 2)
-        viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
-        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!)) { _, workoutType ->
+        viewDividerItemDecoration = GridSpanDecoration(8.dpToPx(), 16.dpToPx(), 8.dpToPx(), 16.dpToPx())
+        viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!), onClick =  { _, workoutType ->
             val action = WorkoutBrowserFragmentDirections.workoutBrowserDetailAction()
             action.setWorkoutType(workoutType)
             Navigation.findNavController(view).navigate(action)
-        }
+        }, onMoreClick = { _ ->
+
+        })
+
         viewManager.spanSizeLookup = viewAdapter.spanSizeLookup
 
         recyclerView = f_workout_browser_recyclerview.apply {
