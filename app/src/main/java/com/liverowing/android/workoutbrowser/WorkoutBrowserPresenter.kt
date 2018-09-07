@@ -36,8 +36,9 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
         isFirstLoading = false
 
         // Category
+        val userIds = createdBy.map { it.objectId!! }
         query = when(category[0].key) {
-            FilterItem.CATEGORY_FEATURED -> WorkoutType.featuredWorkouts()
+            FilterItem.CATEGORY_FEATURED -> WorkoutType.featuredWorkouts(userIds)
             FilterItem.CATEGORY_COMMUNITY -> WorkoutType.communityWorkouts()
             FilterItem.CATEGORY_RECENT -> WorkoutType.recentWorkouts()
             FilterItem.CATEGORY_MY_CUSTOM -> WorkoutType.myCustomWorkouts()
@@ -45,7 +46,7 @@ class WorkoutBrowserPresenter : MvpBasePresenter<WorkoutBrowserView>() {
             else -> WorkoutType.featuredWorkouts()
         }
 
-        if (category[0].key == FilterItem.CATEGORY_FEATURED) {
+        if (category[0].key == FilterItem.CATEGORY_FEATURED && createdBy.size == 0) {
             isFirstLoading = true
         }
 

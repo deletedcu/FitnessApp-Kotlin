@@ -20,25 +20,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <View
+    <LinearLayout
+        android:id="@+id/backdrop_createdby"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider_color2"
-        android:layout_marginTop="@dimen/activity_vertical_margin_semimedium"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CREATED BY"
-        android:textColor="@color/text_color_white2"
-        android:textAppearance="@style/TextAppearanceCustomCaption"
-        android:layout_marginBottom="@dimen/activity_vertical_margin_small"/>
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/backdrop_createdby_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color2"
+            android:layout_marginTop="@dimen/activity_vertical_margin_semimedium"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CREATED BY"
+            android:textColor="@color/text_color_white2"
+            android:textAppearance="@style/TextAppearanceCustomCaption"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_small"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/backdrop_createdby_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

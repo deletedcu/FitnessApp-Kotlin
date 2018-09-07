@@ -87,6 +87,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).setupToolbar(f_workout_browser_toolbar)
+        f_workout_browser_toolbar.title = "WORKOUTS"
 
         viewManager = GridLayoutManager(activity!!, 2)
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
@@ -131,6 +132,12 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
             filterGroupBySelectedItems = selectedItems
             presenter.category = selectedItems
             isFilterChanged = true
+
+            if (selectedItems[0].key == FilterItem.CATEGORY_FEATURED) {
+                backdrop_createdby.visibility = View.VISIBLE
+            } else {
+                backdrop_createdby.visibility = View.GONE
+            }
         })
 
         filterCreatedByAdapter = WorkoutBrowserFilterAdapter(featuredUsers, filterCreatedBySelectedItems, true, false, onSelectChanged = { selectedItems ->
@@ -284,6 +291,13 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
         filterTagsSelectedItems.clear()
         presenter.reset()
         isFilterChanged = true
+        backdrop_createdby.visibility = View.VISIBLE
+
+        filterGroupByRecyclerView.smoothScrollToPosition(0)
+        filterCreatedByRecyclerView.smoothScrollToPosition(0)
+        filterWorkoutTypesRecyclerView.smoothScrollToPosition(0)
+        filterShowOnlyRecyclerView.smoothScrollToPosition(0)
+        filterTagsRecyclerView.smoothScrollToPosition(0)
 
         filterGroupByAdapter.notifyDataSetChanged()
         filterCreatedByAdapter.notifyDataSetChanged()

@@ -100,10 +100,13 @@ class User : ParseUser() {
             return query
         }
 
-        fun featuredUsers(): ParseQuery<User> {
+        fun featuredUsers(userIds: List<String>? = null): ParseQuery<User> {
             val query = ParseQuery.getQuery(User::class.java)
             query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
             query.whereEqualTo("isFeatured", true)
+            if (userIds != null && userIds.size > 0) {
+                query.whereContainedIn("objectId", userIds)
+            }
 
             return query
         }
