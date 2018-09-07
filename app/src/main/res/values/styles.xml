@@ -131,6 +131,7 @@
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0.05</item>
     </style>
 
     <style name="TextAppearanceCustomHeaderline7">
@@ -149,6 +150,7 @@
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.025</item>
     </style>
 
     <style name="TextAppearanceCustomSubtitle3">

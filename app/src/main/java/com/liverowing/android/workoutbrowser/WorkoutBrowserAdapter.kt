@@ -1,5 +1,6 @@
 package com.liverowing.android.workoutbrowser
 
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +21,7 @@ class WorkoutBrowserAdapter(
         private val onMoreClick: (WorkoutType) -> Unit) : RecyclerView.Adapter<WorkoutBrowserAdapter.ViewHolder>() {
     val spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
-            return if (items[position] is WorkoutType) 1 else 2
+            return if (position % 3 == 2) 2 else 1
         }
     }
 
@@ -40,19 +41,32 @@ class WorkoutBrowserAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position], onClick, onMoreClick)
+        val isSingleCard = (position % 3 == 2)
+        holder.bind(items[position], isSingleCard, onClick, onMoreClick)
     }
 
     override fun getItemCount() = items.size
 
     class ViewHolder(view: View, private val glide: RequestManager) : RecyclerView.ViewHolder(view) {
-        fun bind(item: ParseObject, onClick: (View, WorkoutType) -> Unit, onMoreClick: (WorkoutType) -> Unit) = with(itemView) {
+        fun bind(item: ParseObject, isSingleCard: Boolean, onClick: (View, WorkoutType) -> Unit, onMoreClick: (WorkoutType) -> Unit) = with(itemView) {
             if (item is WorkoutType) {
                 glide
                         .load(item.image?.url)
                         .into(fragment_workout_card_item_image)
 
-                fragment_workout_card_item_description.text = item.descriptionText
+                if (isSingleCard) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        fragment_workout_card_item_name.setTextAppearance(R.style.TextAppearanceCustomHeadline6)
+                    } else {
+                        fragment_workout_card_item_name.setTextAppearance(context!!, R.style.TextAppearanceCustomHeadline6)
+                    }
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        fragment_workout_card_item_name.setTextAppearance(R.style.TextAppearanceCustomSubtitle2)
+                    } else {
+                        fragment_workout_card_item_name.setTextAppearance(context!!, R.style.TextAppearanceCustomSubtitle2)
+                    }
+                }
                 fragment_workout_card_item_name.text = item.name
                 fragment_workout_card_item_createdby.text = item.createdBy?.username
 
