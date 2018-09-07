@@ -1,6 +1,5 @@
 package com.liverowing.android.dashboard
 
-
 import android.app.Dialog
 import android.os.Bundle
 import android.view.*
@@ -19,13 +18,12 @@ import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogListener
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.model.pm.FilterItem
 import com.liverowing.android.util.GridSpanDecoration
-import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
 import com.liverowing.android.workouthistory.CardType
 import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import timber.log.Timber
-
 
 class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener, DashboardBottomSheetListener {
 
@@ -237,15 +235,15 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
 
     private fun titleOnClick(v: View) {
         val category = when (v.id) {
-            R.id.f_dashboard_featured_title -> WorkoutBrowserFragment.CATEGORY_FEATURED
-            R.id.f_dashboard_popular_title -> WorkoutBrowserFragment.CATEGORY_COMMUNITY
-            R.id.f_dashboard_recent_title -> WorkoutBrowserFragment.CATEGORY_RECENT
-            else -> WorkoutBrowserFragment.CATEGORY_FEATURED
+            R.id.f_dashboard_featured_title -> FilterItem.CATEGORY_FEATURED
+            R.id.f_dashboard_popular_title -> FilterItem.CATEGORY_COMMUNITY
+            R.id.f_dashboard_recent_title -> FilterItem.CATEGORY_RECENT
+            else -> FilterItem.CATEGORY_FEATURED
         }
 
         val filter = when (v.id) {
-            R.id.f_dashboard_popular_title -> WorkoutBrowserFragment.FILTER_POPULAR
-            else -> WorkoutBrowserFragment.FILTER_ALL
+            R.id.f_dashboard_popular_title -> FilterItem.FILTER_POPULAR
+            else -> FilterItem.FILTER_ALL
         }
 
         val action = DashboardFragmentDirections.workoutBrowserAction()

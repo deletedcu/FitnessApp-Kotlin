@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".workouthistory.WorkoutHistoryFragment">
+    tools:context=".workoutbrowser.WorkoutBrowserFragment">
 
     <androidx.core.widget.NestedScrollView
         style="@style/Widget.WorkoutBrowser.Backdrop"
@@ -61,6 +61,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/contentView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -85,21 +86,13 @@
                 android:layout_height="match_parent">
 
                 <include layout="@layout/loading_view" />
-
                 <include layout="@layout/error_view" />
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/contentView"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/f_workout_browser_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/f_workout_browser_recyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    android:paddingBottom="@dimen/activity_vertical_margin_large"/>
 
             </FrameLayout>
 

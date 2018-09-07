@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.LinearLayout
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.LceViewState
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.MvpLceViewStateFragment
 import com.hannesdorfmann.mosby3.mvp.viewstate.lce.data.RetainingLceViewState
@@ -20,6 +19,7 @@ import com.liverowing.android.MainActivity
 import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.extensions.toggleVisibility
+import com.liverowing.android.model.parse.User
 import com.liverowing.android.model.pm.FilterItem
 import com.liverowing.android.util.GridSpanDecoration
 import com.parse.ParseObject
@@ -27,31 +27,7 @@ import kotlinx.android.synthetic.main.fragment_workout_browser.*
 import kotlinx.android.synthetic.main.workout_browser_backdrop.*
 
 
-class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<ParseObject>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, SwipeRefreshLayout.OnRefreshListener, TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
-    companion object {
-        const val CATEGORY_FEATURED = 0
-        const val CATEGORY_COMMUNITY = 1
-        const val CATEGORY_RECENT = 2
-        const val CATEGORY_MY_CUSTOM = 3
-        const val CATEGORY_AFFILIATE = 4
-
-        const val FILTER_ALL = 0
-        const val FILTER_NEW = 1
-        const val FILTER_POPULAR = 2
-        const val FILTER_COMPLETED = 3
-        const val FILTER_NOT_COMPLETED = 4
-
-        const val TYPE_SINGLE_DISTANCE = 1
-        const val TYPE_SINGLE_TIME = 2
-        const val TYPE_INTERVALS = 4
-
-        const val TAG_POWER = 0
-        const val TAG_CARDIO = 1
-        const val TAG_CROSS_TRAINING = 2
-        const val TAG_HIIT = 3
-        const val TAG_SPEED = 4
-        const val TAG_WEIGHT_LOSS = 5
-    }
+class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseObject>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: WorkoutBrowserAdapter
@@ -79,6 +55,7 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     private var filterWorkoutTypesSelectedItems = mutableListOf<FilterItem>()
     private var filterShowOnlySelectedItems = mutableListOf<FilterItem>()
     private var filterTagsSelectedItems = mutableListOf<FilterItem>()
+    private var featuredUsers = mutableListOf<FilterItem>()
 
     // Backdrop menu values
     private var backdropShown = false
@@ -86,12 +63,12 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
     private val interpolator = AccelerateDecelerateInterpolator()
     private var height: Int = 0
 
+    private var isFilterChanged = false
 
     override fun createPresenter() = WorkoutBrowserPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setHasOptionsMenu(true)
         val displayMetrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
         height = displayMetrics.heightPixels
@@ -111,16 +88,6 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         (activity as MainActivity).setupToolbar(f_workout_browser_toolbar)
 
-//        f_workout_browser_filter_tabs.apply {
-//            getTabAt(presenter.filter)?.select()
-//            addOnTabSelectedListener(this@WorkoutBrowserFragment)
-//        }
-//
-//        f_workout_browser_category_tabs.apply {
-//            getTabAt(presenter.category)?.select()
-//            addOnTabSelectedListener(this@WorkoutBrowserFragment)
-//        }
-
         viewManager = GridLayoutManager(activity!!, 2)
         viewDividerItemDecoration = GridSpanDecoration(8.dpToPx())
         viewAdapter = WorkoutBrowserAdapter(dataSet, Glide.with(activity!!)) { _, workoutType ->
@@ -130,13 +97,13 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         }
         viewManager.spanSizeLookup = viewAdapter.spanSizeLookup
 
-        contentView.setOnRefreshListener(this@WorkoutBrowserFragment)
         recyclerView = f_workout_browser_recyclerview.apply {
             setHasFixedSize(true)
             addItemDecoration(viewDividerItemDecoration)
             layoutManager = viewManager
             adapter = viewAdapter
         }
+        recyclerView.isNestedScrollingEnabled = false
 
         f_workout_browser_toolbar.setNavigationOnClickListener {
             if (backdropShown) {
@@ -162,24 +129,44 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
         filterGroupByAdapter = WorkoutBrowserFilterAdapter(FilterItem.groupByItems(), filterGroupBySelectedItems, false, true, onSelectChanged = { selectedItems ->
             filterGroupBySelectedItems = selectedItems
+            presenter.category = selectedItems
+            isFilterChanged = true
+        })
+
+        filterCreatedByAdapter = WorkoutBrowserFilterAdapter(featuredUsers, filterCreatedBySelectedItems, true, false, onSelectChanged = { selectedItems ->
+            filterCreatedBySelectedItems = selectedItems
+            presenter.createdBy = selectedItems
+            isFilterChanged = true
         })
 
         filterWorkoutTypesAdapter = WorkoutBrowserFilterAdapter(FilterItem.workoutTypeItems(), filterWorkoutTypesSelectedItems, true, false, onSelectChanged = { selectedItems ->
             filterWorkoutTypesSelectedItems = selectedItems
+            presenter.types = selectedItems
+            isFilterChanged = true
         })
 
         filterShowOnlyAdapter = WorkoutBrowserFilterAdapter(FilterItem.showOnlyItems(), filterShowOnlySelectedItems, false, false, onSelectChanged = { selectedItems ->
             filterShowOnlySelectedItems = selectedItems
+            presenter.filter = selectedItems
+            isFilterChanged = true
         })
 
         filterTagsAdapter = WorkoutBrowserFilterAdapter(FilterItem.tagItems(), filterTagsSelectedItems, true, false, onSelectChanged = { selectedItems ->
             filterTagsSelectedItems = selectedItems
+            presenter.tags = selectedItems
+            isFilterChanged = true
         })
 
         filterGroupByRecyclerView = backdrop_groupby_recyclerview.apply {
             addItemDecoration(filterItemDecoration)
             layoutManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
             adapter = filterGroupByAdapter
+        }
+
+        filterCreatedByRecyclerView = backdrop_createdby_recyclerview.apply {
+            addItemDecoration(filterItemDecoration)
+            layoutManager = GridLayoutManager(activity!!, 1, GridLayoutManager.HORIZONTAL, false)
+            adapter = filterCreatedByAdapter
         }
 
         filterWorkoutTypesRecyclerView = backdrop_workouttypes_recyclerview.apply {
@@ -202,69 +189,17 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
 
     }
 
-    override fun onNewViewStateInstance() {
-        val args = WorkoutBrowserFragmentArgs.fromBundle(arguments)
-
-        args.tags?.split(",")?.forEach { presenter.tags.add(it.toInt()) }
-        args.types?.split(",")?.forEach { presenter.types.add(it.toInt()) }
-//        f_workout_browser_category_tabs.getTabAt(args.category)?.select()
-//        f_workout_browser_filter_tabs.getTabAt(args.filter)?.select()
-
-        if (args.category + args.filter == 0 || args.tags != null || args.types != null) {
-            loadData(false)
-        }
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-
-//        val items = menu.findItem(R.id.action_filter).subMenu!!
-//        for (i in 0..2) {
-//            items[i].isChecked = presenter.types.contains(i)
-//        }
-//
-//        for (i in 0..5) {
-//            items[5 + i].isChecked = presenter.tags.contains(i)
-//        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-//        inflater?.inflate(R.menu.workout_browser, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val checked = item.isChecked
-        if (item.order < 10) {
-            item.isChecked = !checked
-            if (checked) presenter.types.remove(item.order) else presenter.types.add(item.order)
-            presenter.loadWorkoutTypes(false)
-        } else if (item.order < 20) {
-            item.isChecked = !checked
-            if (checked) presenter.tags.remove(item.order - 10) else presenter.tags.add(item.order - 10)
-            presenter.loadWorkoutTypes(false)
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun loadData(pullToRefresh: Boolean) {
         presenter.loadWorkoutTypes(pullToRefresh)
     }
 
-    override fun showContent() {
-        super.showContent()
-        contentView.isRefreshing = false
-    }
-
-    override fun showError(e: Throwable?, pullToRefresh: Boolean) {
-        super.showError(e, pullToRefresh)
-        contentView.isRefreshing = false
-    }
-
-    override fun showLoading(pullToRefresh: Boolean) {
-        super.showLoading(pullToRefresh)
-        contentView.isRefreshing = pullToRefresh
+    override fun setFeaturedUsers(users: List<User>) {
+        featuredUsers.clear()
+        var index = 0
+        users.forEach {
+            featuredUsers.add(FilterItem(index++, it.username, it.objectId))
+        }
+        filterCreatedByAdapter.notifyDataSetChanged()
     }
 
     override fun createViewState(): LceViewState<List<ParseObject>, WorkoutBrowserView> = RetainingLceViewState()
@@ -283,29 +218,19 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         return e?.message!!
     }
 
-    override fun onRefresh() {
-        loadData(true)
+    override fun showError(e: Throwable?, pullToRefresh: Boolean) {
+        super.showError(e, pullToRefresh)
+        loadingView.visibility = View.GONE
     }
 
-    // TabOnSelectedListener
-    override fun onTabReselected(tab: TabLayout.Tab) {}
+    override fun showLoading(pullToRefresh: Boolean) {
+        super.showLoading(pullToRefresh)
+        loadingView.visibility = View.VISIBLE
+    }
 
-    override fun onTabUnselected(tab: TabLayout.Tab) {}
-    override fun onTabSelected(tab: TabLayout.Tab) {
-//        if (tab.parent.id == R.id.f_workout_browser_category_tabs) {
-//            presenter.reset()
-//            activity?.invalidateOptionsMenu()
-//            presenter.category = tab.position
-//
-//            f_workout_browser_filter_tabs.apply {
-//                removeOnTabSelectedListener(this@WorkoutBrowserFragment)
-//                getTabAt(0)?.select()
-////                addOnTabSelectedListener(this@WorkoutBrowserFragment)
-//            }
-//        } else if (tab.parent.id == R.id.f_workout_browser_filter_tabs) {
-//            presenter.filter = tab.position
-//        }
-//        presenter.loadWorkoutTypes(false)
+    override fun showContent() {
+        super.showContent()
+        loadingView.visibility = View.GONE
     }
 
     private fun onToggleBackdropMenu() {
@@ -317,6 +242,9 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         animatorSet.cancel()
 
         updateIcon()
+        if (backdropShown) {
+            product_grid.scrollTo(0, 0)
+        }
 
         val translateY = height - context!!.resources.getDimensionPixelSize(R.dimen.product_grid_reveal_height)
 
@@ -327,6 +255,11 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         }
         animatorSet.play(animator)
         animator.start()
+
+        if (!backdropShown && isFilterChanged) {
+            presenter.loadWorkoutTypes(false)
+            isFilterChanged = false
+        }
     }
 
     private fun updateIcon() {
@@ -349,9 +282,10 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<SwipeRefreshLayout, List<
         filterWorkoutTypesSelectedItems.clear()
         filterShowOnlySelectedItems.clear()
         filterTagsSelectedItems.clear()
+        presenter.reset()
 
         filterGroupByAdapter.notifyDataSetChanged()
-//        filterCreatedByAdapter.notifyDataSetChanged()
+        filterCreatedByAdapter.notifyDataSetChanged()
         filterWorkoutTypesAdapter.notifyDataSetChanged()
         filterShowOnlyAdapter.notifyDataSetChanged()
         filterTagsAdapter.notifyDataSetChanged()

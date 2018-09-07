@@ -18,6 +18,7 @@ import com.liverowing.android.R
 import com.liverowing.android.extensions.toggleVisibility
 import com.liverowing.android.model.parse.Segment
 import com.liverowing.android.model.parse.WorkoutType
+import com.liverowing.android.model.pm.FilterItem
 import com.liverowing.android.workoutbrowser.WorkoutBrowserFragment
 import com.liverowing.android.workoutbrowser.detail.WorkoutBrowserDetailFragmentDirections
 import kotlinx.android.synthetic.main.fragment_workout_details.*
@@ -67,7 +68,7 @@ class WorkoutDetailFragment : Fragment() {
             f_workout_detail_more_like_tags.text = "More ${workoutType.filterTagsFriendly.joinToString(" & ")} workouts"
             f_workout_detail_more_like_tags.setOnClickListener {
                 val action = WorkoutBrowserDetailFragmentDirections.workoutBrowserAction()
-                action.setCategory(WorkoutBrowserFragment.CATEGORY_FEATURED)
+                action.setCategory(FilterItem.CATEGORY_FEATURED)
                 action.setTags(workoutType.filterTagsActiveIndexes.joinToString(","))
                 findNavController().navigate(action)
             }
