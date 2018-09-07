@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.liverowing.android.MainActivity
 import com.liverowing.android.R
-import com.liverowing.android.dashboard.bottomSheet.DashboardBottomSheet
-import com.liverowing.android.dashboard.bottomSheet.DashboardBottomSheetListener
+import com.liverowing.android.views.bottomSheet.WorkoutTypeBottomSheet
+import com.liverowing.android.views.bottomSheet.WorkoutTypeBottomSheetListener
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogFragment
 import com.liverowing.android.dashboard.quickworkout.QuickWorkoutDialogListener
 import com.liverowing.android.extensions.dpToPx
@@ -25,7 +25,7 @@ import com.liverowing.android.workouthistory.DashboardAdapter
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import timber.log.Timber
 
-class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener, DashboardBottomSheetListener {
+class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), DashboardView, QuickWorkoutDialogListener, WorkoutTypeBottomSheetListener {
 
     private lateinit var itemDecoration: GridSpanDecoration
 
@@ -158,7 +158,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
     }
 
     private fun showBottomSheet(workoutType: WorkoutType) {
-        val bottomSheet = DashboardBottomSheet(workoutType, this)
+        val bottomSheet = WorkoutTypeBottomSheet(workoutType, this)
         bottomSheet.show(fragmentManager, bottomSheet.javaClass.toString())
     }
 
@@ -274,7 +274,7 @@ class DashboardFragment : MvpFragment<DashboardView, DashboardPresenter>(), Dash
         findNavController(view!!).navigate(action)
     }
 
-    // DashboardBottomSheet Listener
+    // WorkoutTypeBottomSheet Listener
     override fun onBookMarkClick(workoutType: WorkoutType) {
 
     }

@@ -20,14 +20,17 @@ import com.liverowing.android.R
 import com.liverowing.android.extensions.dpToPx
 import com.liverowing.android.extensions.toggleVisibility
 import com.liverowing.android.model.parse.User
+import com.liverowing.android.model.parse.WorkoutType
 import com.liverowing.android.model.pm.FilterItem
 import com.liverowing.android.util.GridSpanDecoration
+import com.liverowing.android.views.bottomSheet.WorkoutTypeBottomSheet
+import com.liverowing.android.views.bottomSheet.WorkoutTypeBottomSheetListener
 import com.parse.ParseObject
 import kotlinx.android.synthetic.main.fragment_workout_browser.*
 import kotlinx.android.synthetic.main.workout_browser_backdrop.*
 
 
-class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseObject>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView {
+class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseObject>, WorkoutBrowserView, WorkoutBrowserPresenter>(), WorkoutBrowserView, WorkoutTypeBottomSheetListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: WorkoutBrowserAdapter
@@ -95,8 +98,8 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
             val action = WorkoutBrowserFragmentDirections.workoutBrowserDetailAction()
             action.setWorkoutType(workoutType)
             Navigation.findNavController(view).navigate(action)
-        }, onMoreClick = { _ ->
-
+        }, onMoreClick = { workoutType ->
+            showBottomSheet(workoutType)
         })
 
         viewManager.spanSizeLookup = viewAdapter.spanSizeLookup
@@ -307,5 +310,23 @@ class WorkoutBrowserFragment : MvpLceViewStateFragment<LinearLayout, List<ParseO
         filterWorkoutTypesAdapter.notifyDataSetChanged()
         filterShowOnlyAdapter.notifyDataSetChanged()
         filterTagsAdapter.notifyDataSetChanged()
+    }
+
+    private fun showBottomSheet(workoutType: WorkoutType) {
+        val bottomSheet = WorkoutTypeBottomSheet(workoutType, this)
+        bottomSheet.show(fragmentManager, bottomSheet.javaClass.toString())
+    }
+
+    // BottomSheet Listener
+    override fun onBookMarkClick(workoutType: WorkoutType) {
+
+    }
+
+    override fun onShareClick(workoutType: WorkoutType) {
+
+    }
+
+    override fun onSendClick(workoutType: WorkoutType) {
+
     }
 }
