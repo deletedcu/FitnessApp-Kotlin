@@ -3,13 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.liverowing.android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <application
         android:name=".LiveRowing"
@@ -18,44 +23,103 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/network_security_config"
-        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-        <service
-            android:name=".PMService"
-            android:enabled="true"
-            android:exported="true" />
+        android:theme="@style/AppTheme">
+
+        <!-- FACEBOOK -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".SplashActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <!-- FACEBOOK -->
 
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@style/AppTheme.NoActionBar">
-            <nav-graph android:value="@navigation/main_nav_graph" />
-        </activity>
-
-        <activity
-            android:name=".loggedout.LoggedOutActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
-
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
-
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+        <meta-data
+            android:name="com.parse.SERVER_URL"
+            android:value="http://10.0.2.2:1337" />
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="ugn8WWO3EcgFvcTaFIMyOaE6RldMWwkDScwC1hwo" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="com.liverowing.android" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/usb_device_filter" />
+
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"
+                android:resource="@xml/usb_device_filter" />
+        </activity>
+        <activity android:name=".activity.workouttype.WorkoutTypeGridActivity" />
+        <activity android:name=".activity.workouttype.WorkoutTypeDetailActivity" />
+        <activity android:name=".activity.devicescan.DeviceScanActivity" />
+        <activity
+            android:name=".activity.race.RaceActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/title_activity_race"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+        <activity android:name=".RaceTestActivity" />
+        <activity android:name=".activity.login.AppAuthLogbook" />
+        <activity
+            android:name=".activity.login.LoginActivity"
+            android:theme="@style/AppTheme.LoginRegister" />
+        <activity
+            android:name=".activity.login.SignupActivity"
+            android:theme="@style/AppTheme.LoginRegister"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

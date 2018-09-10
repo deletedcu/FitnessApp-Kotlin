@@ -1,10 +1,17 @@
 package com.liverowing.android.model.pm
 
-import com.liverowing.android.extensions.*
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothGattCharacteristic
+import android.os.Parcelable
+import com.liverowing.android.extensions.calcDistance
+import com.liverowing.android.extensions.calcTime
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by henrikmalmberg on 2017-11-03.
  */
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class StrokeData(val elapsedTime: Double,
                       val distance: Double,
                       val driveLength: Float,
@@ -16,19 +23,19 @@ data class StrokeData(val elapsedTime: Double,
                       val workPerStroke: Float,
                       val strokeCount: Int
 
-) {
+) : Parcelable {
     companion object {
-        fun fromByteArray(data: ByteArray): StrokeData {
+        fun fromCharacteristic(data: BluetoothGattCharacteristic): StrokeData {
             val elapsedTime = data.calcTime(0)
             val distance = data.calcDistance(3)
-            val driveLength = data.getIntValue(FORMAT_UINT8,6).toFloat() / 100
-            val driveTime = data.getIntValue(FORMAT_UINT8,7).toFloat() / 100
-            val strokeRecoveryTime = data.getIntValue(FORMAT_UINT16,8).toFloat() / 100
-            val strokeDistance = data.getIntValue(FORMAT_UINT16,10).toFloat() / 100
-            val peakDriveForce = data.getIntValue(FORMAT_UINT16,12).toFloat() / 10
-            val avgDriveForce = data.getIntValue(FORMAT_UINT16,14).toFloat() / 10
-            val workPerStroke = data.getIntValue(FORMAT_UINT16,16).toFloat() / 10
-            val strokeCount = data.getIntValue(FORMAT_UINT16,18)
+            val driveLength = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8,6).toFloat() / 100
+            val driveTime = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8,7).toFloat() / 100
+            val strokeRecoveryTime = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,8).toFloat() / 100
+            val strokeDistance = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,10).toFloat() / 100
+            val peakDriveForce = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,12).toFloat() / 10
+            val avgDriveForce = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,14).toFloat() / 10
+            val workPerStroke = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,16).toFloat() / 10
+            val strokeCount = data.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,18)
 
             return StrokeData(
                     elapsedTime, distance, driveLength, driveTime, strokeRecoveryTime, strokeDistance, peakDriveForce, avgDriveForce, workPerStroke, strokeCount

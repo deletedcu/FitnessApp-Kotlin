@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    tools:orientation="vertical"
+    tools:parentTag="android.support.constraint.ConstraintLayout">
 
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/view_text_metric_title"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -22,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/view_text_metric_value"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -38,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_text_metric_middle" />
 
-    <androidx.constraintlayout.widget.Guideline
+    <android.support.constraint.Guideline
         android:id="@+id/view_text_metric_middle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

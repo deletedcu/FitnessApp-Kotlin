@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TintableImageView">
-        <attr name="tintColorStateList" format="reference|color" />
-    </declare-styleable>
-
     <declare-styleable name="TextMetricView">
         <attr name="title" format="string" />
         <attr name="value" format="string" />
@@ -15,7 +11,7 @@
     </declare-styleable>
 
     <declare-styleable name="RaceProgressView">
-        <!--<attr name="cornerRadius" format="integer" />-->
+        <attr name="cornerRadius" format="integer" />
         <attr name="startColor" format="color" />
         <attr name="endColor" format="color" />
         <attr name="name" format="string" />

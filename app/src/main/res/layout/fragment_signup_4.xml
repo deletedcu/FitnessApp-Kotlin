@@ -1,119 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/layout_step4"
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/activity_vertical_margin">
+        android:padding="@dimen/margin_16">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:text="@string/birthday_description"
-            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            android:textColor="@color/black_overlay"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginLeft="@dimen/margin_4"/>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
             android:id="@+id/a_signup_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            app:helperTextEnabled="true"
-            app:helperText="@string/birthday"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_marginTop="@dimen/margin_16"
+            android:editable="false"
+            android:clickable="true"
+            android:textColor="@color/black_overlay"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/a_signup_birthday_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <RadioGroup
-            android:id="@+id/radio_system"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/a_signup_gender_male"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/male"
-                android:textColor="@color/textColorDark"
-                android:checked="true"/>
-
-            <RadioButton
-                android:id="@+id/a_signup_gender_female"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.2"
-                android:text="@string/female"
-                android:textColor="@color/textColorDark"/>
-
-        </RadioGroup>
+            android:text="@string/birthday"
+            android:textSize="@dimen/text_size_10"
+            android:textColor="@color/black_overlay"
+            android:layout_margin="@dimen/margin_4"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:text="@string/choose_profile_pic"
-            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Medium"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_vertical_margin_small"/>
+            android:text="@string/password_confirm_description"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="@color/black_overlay"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginLeft="@dimen/margin_4"/>
 
-        <LinearLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin_large">
+            android:layout_marginTop="@dimen/margin_16">
 
             <ImageButton
-                android:id="@+id/btn_signup_profile_picture"
+                android:id="@+id/btn_profile_picture"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_add"
-                android:background="@drawable/circle_button"/>
+                android:background="@drawable/ic_plus"/>
 
-            <LinearLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/activity_vertical_margin_medium">
+                android:layout_marginLeft="@dimen/margin_8">
 
                 <TextView
-                    android:id="@+id/a_signup_username_textview"
+                    android:id="@+id/txt_signup_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin_small"
+                    android:layout_marginTop="2dp"
                     android:text="{username}"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+                    android:textSize="@dimen/text_size_15"
+                    android:textColor="@color/black_overlay"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin_small"
+                    android:layout_marginTop="4dp"
                     android:text="@string/cant_wait"
-                    android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Title.Description.Small"/>
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/black_overlay"/>
 
-            </LinearLayout>
+            </android.support.v7.widget.LinearLayoutCompat>
 
-        </LinearLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
 
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
-</ScrollView>
+</android.support.constraint.ConstraintLayout>

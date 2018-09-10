@@ -1,5 +1,11 @@
 package com.liverowing.android.model.pm
-import com.liverowing.android.extensions.*
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothGattCharacteristic
+import android.os.Parcelable
+import com.liverowing.android.extensions.calcDistance
+import com.liverowing.android.extensions.calcTime
+import com.liverowing.android.extensions.calcWorkoutDurationDistance
+import kotlinx.android.parcel.Parcelize
 import kotlin.math.floor
 
 /**
@@ -18,18 +24,20 @@ data class RowingStatus(val elapsedTime: Double,
                         val dragFactor: Int
 ) {
     companion object {
-        fun fromByteArray(data: ByteArray) : RowingStatus {
+        fun fromCharacteristic(data: BluetoothGattCharacteristic) : RowingStatus {
+            val uint8 = BluetoothGattCharacteristic.FORMAT_UINT8
+
             val time = data.calcTime(0)
             val distance = data.calcDistance(3)
-            val workoutType = WorkoutType.fromInt(data.getIntValue(FORMAT_UINT8, 6))
-            val intervalType = IntervalType.fromInt(data.getIntValue(FORMAT_UINT8, 7))
-            val workoutState = WorkoutState.fromInt(data.getIntValue(FORMAT_UINT8, 8))
-            val rowingState = RowingState.fromInt(data.getIntValue(FORMAT_UINT8, 9))
-            val strokeState = StrokeState.fromInt(data.getIntValue(FORMAT_UINT8, 10))
-            val workoutDurationType = DurationType.fromInt(data.getIntValue(FORMAT_UINT8, 17))
+            val workoutType = WorkoutType.fromInt(data.getIntValue(uint8, 6))
+            val intervalType = IntervalType.fromInt(data.getIntValue(uint8, 7))
+            val workoutState = WorkoutState.fromInt(data.getIntValue(uint8, 8))
+            val rowingState = RowingState.fromInt(data.getIntValue(uint8, 9))
+            val strokeState = StrokeState.fromInt(data.getIntValue(uint8, 10))
+            val workoutDurationType = DurationType.fromInt(data.getIntValue(uint8, 17))
             val workoutDuration = if (workoutDurationType == DurationType.TIME) data.calcTime(14) else data.calcWorkoutDurationDistance(14)
             val totalWorkDistance = data.calcWorkoutDurationDistance(14)
-            val dragFactor = data.getIntValue(FORMAT_UINT8, 18)
+            val dragFactor = data.getIntValue(uint8, 18)
 
             return RowingStatus(
                     time, distance, workoutType, intervalType, workoutState, rowingState,

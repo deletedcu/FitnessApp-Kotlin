@@ -1,9 +1,6 @@
 package com.liverowing.android.model.parse
 
-import com.liverowing.android.extensions.distanceFromValue
-import com.liverowing.android.extensions.minutesToTimespan
-import com.liverowing.android.extensions.secondsToTimespan
-import com.liverowing.android.model.pm.FilterItem
+import android.util.Log
 import com.parse.*
 import java.util.*
 
@@ -51,83 +48,29 @@ class WorkoutType : ParseObject() {
 
     var isDone by ParseDelegate<Boolean?>()
     var isPublic by ParseDelegate<Boolean?>()
-    var filterTags by ParseDelegate<List<Int>?>()
-    val filterTagsActiveIndexes: List<Int>
-        get() {
-            val tags = mutableListOf<Int>()
-            filterTags?.forEachIndexed { index, state ->
-                if (state == 1) {
-                    tags.add(index)
-                }
-            }
-
-            return tags
-        }
-    val filterTagsFriendly: List<String>
-        get() {
-            val mapping = hashMapOf(
-                    FilterItem.TAG_POWER to "Power",
-                    FilterItem.TAG_CARDIO to "Cardio",
-                    FilterItem.TAG_HIIT to "HIIT",
-                    FilterItem.TAG_CROSS_TRAINING to "Cross Training",
-                    FilterItem.TAG_SPEED to "Speed",
-                    FilterItem.TAG_WEIGHT_LOSS to "Weight loss"
-            )
-            val tags = mutableListOf<String>()
-            filterTags?.forEachIndexed { index, state ->
-                if (state == 1) {
-                    tags.add(mapping[index]!!)
-                }
-            }
-
-            return tags
-        }
+    var filterTags by ParseDelegate<List<String>?>()
     var likes by ParseDelegate<Int?>()
     var namedChallenger by ParseDelegate<User?>()
     var fixedChallenge by ParseDelegate<Workout?>()
     var isAutoCompete by ParseDelegate<Boolean?>()
     val friendlySegmentDescription: String
         get() {
-            val parts = mutableListOf<Pair<String, Int>>()
-
+            val parts = mutableListOf<String>()
             if (segments != null) {
-                var lastSegment: Segment? = null
                 for (segment in segments!!) {
-                    if (segment.value == lastSegment?.value && segment.restValue == lastSegment?.restValue) {
-                        val part = parts.removeAt(parts.size - 1)
-                        parts.add(Pair(part.first, part.second + 1))
-                    } else {
-                        var part = segment.friendlyValue
-                        if (segment.restValue != null && segment.restValue!! > 0) {
-                            part += "/${segment.friendlyRestValue}"
-                        }
-                        parts.add(Pair(part, 1))
+                    if (segment.isDataAvailable) {
+                        parts.add(segment.friendlyValue)
+                        parts.add(segment.friendlyRestValue)
                     }
-
-                    lastSegment = segment
                 }
             }
 
-            return parts.joinToString(", ") {
-                if (it.second > 1) "${it.second} x ${it.first}" else it.first
-            }
+            return parts.joinToString("/")
         }
-
     val hasLeaderboards: Boolean
         get() {
             return isFeatured == true || affiliate != null
         }
-
-    fun getValueText(): String {
-        val str = when (valueType) {
-            1 -> "DISTANCE | ${value.distanceFromValue()}"
-            2 -> "TIME | ${value.minutesToTimespan()}"
-            4 -> "INTERVAL"
-            else -> ""
-        }
-
-        return str
-    }
 
     companion object {
         const val VALUE_TYPE_DISTANCE = 1
@@ -142,65 +85,45 @@ class WorkoutType : ParseObject() {
         const val REST_TYPE_NORMAL = 0
         const val REST_TYPE_VARIABLE = 1
 
-        fun featuredWorkouts(userIds: List<String>? = null): ParseQuery<WorkoutType> {
-            val query = ParseQuery.getQuery(WorkoutType::class.java)
-            query.cachePolicy = ParseQuery.CachePolicy.NETWORK_ELSE_CACHE
+        fun featuredWorkouts(user: User? = null): ParseQuery<WorkoutType> {
+            val featuredWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            featuredWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
 
-            query.whereMatchesQuery("createdBy", User.featuredUsers(userIds))
-            query.whereNotEqualTo("isDeleted", true)
-            query.whereEqualTo("isFeatured", true)
+            featuredWorkouts.whereEqualTo("isFeatured", true)
+            featuredWorkouts.whereNotEqualTo("isDeleted", true)
 
-            query.include("segments")
-            query.include("createdBy")
+            featuredWorkouts.include("segments")
+            featuredWorkouts.include("createdBy")
 
-            query.orderByAscending("createdBy.rotationRank")
-            query.addDescendingOrder("createdAt")
+            featuredWorkouts.addDescendingOrder("createdAt")
 
-            return query
-        }
-
-        fun popularWorkouts(): ParseQuery<WorkoutType> {
-            val query = communityWorkouts()
-            query.addDescendingOrder("likes")
-            query.limit = 15
-
-            return query
-        }
-
-        fun recentWorkouts(): ParseQuery<WorkoutType> {
-            val query = ParseQuery.getQuery(WorkoutType::class.java)
-            query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            query.whereMatchesKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
-
-            query.include("createdBy")
-            query.include("segments")
-
-            query.addDescendingOrder("createdAt")
-
-            return query
+            return featuredWorkouts
         }
 
         fun recentAndLikedWorkouts(): ParseQuery<WorkoutType> {
-            // TODO: This is wrong.
-            val query = ParseQuery.getQuery(WorkoutType::class.java)
-            query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            query.whereMatchesKeyInQuery("objectId", "workoutType.objectId", User.completedWorkouts())
+            val completedWorkouts = ParseQuery.getQuery(Workout::class.java)
+            completedWorkouts.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+            completedWorkouts.whereEqualTo("isDone", true)
 
-            query.include("createdBy")
-            query.include("segments")
+            val recentAndLikedWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            recentAndLikedWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            recentAndLikedWorkouts.whereMatchesKeyInQuery("objectId", "workoutType.objectId", completedWorkouts)
 
-            return query
+            recentAndLikedWorkouts.include("createdBy")
+            recentAndLikedWorkouts.include("segments")
+
+            return recentAndLikedWorkouts
         }
 
         fun communityWorkouts(): ParseQuery<WorkoutType> {
-            val query = ParseQuery.getQuery(WorkoutType::class.java)
-            query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            query.whereEqualTo("isPublic", true)
+            val communityWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            communityWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            communityWorkouts.whereEqualTo("isPublic", true)
 
-            query.include("createdBy")
-            query.include("segments")
+            communityWorkouts.include("createdBy")
+            communityWorkouts.include("segments")
 
-            return query
+            return communityWorkouts
         }
 
         fun affiliateWorkouts(): ParseQuery<WorkoutType> {
@@ -209,7 +132,7 @@ class WorkoutType : ParseObject() {
 
             val affiliateWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
             affiliateWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            affiliateWorkouts.whereMatchesKeyInQuery("createdBy", "objectId", affiliatedUsers)
+            affiliateWorkouts.whereMatchesQuery("createdBy", affiliatedUsers)
 
             affiliateWorkouts.include("createdBy")
             affiliateWorkouts.include("segments")
@@ -218,14 +141,22 @@ class WorkoutType : ParseObject() {
         }
 
         fun myCustomWorkouts(): ParseQuery<WorkoutType> {
-            val query = ParseQuery.getQuery(WorkoutType::class.java)
-            query.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
-            query.whereEqualTo("createdBy", ParseUser.getCurrentUser())
+            val myCustomWorkouts = ParseQuery.getQuery(WorkoutType::class.java)
+            myCustomWorkouts.cachePolicy = ParseQuery.CachePolicy.CACHE_THEN_NETWORK
+            myCustomWorkouts.whereEqualTo("createdBy", ParseUser.getCurrentUser())
 
-            query.include("createdBy")
-            query.include("segments")
+            myCustomWorkouts.include("createdBy")
+            myCustomWorkouts.include("segments")
 
-            return query
+            return myCustomWorkouts
+        }
+
+        fun fetchWorkout(objectId: String): WorkoutType {
+            val search = ParseQuery.getQuery(WorkoutType::class.java)
+            search.include("createdBy")
+            search.include("segments")
+
+            return search.get(objectId)
         }
     }
 }

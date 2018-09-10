@@ -1,20 +1,17 @@
 <resources>
-
-
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorAccent">@color/primaryDarkColor</item>
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
 
-        <item name="android:windowTranslucentStatus">true</item>
-        <!--
-                <item name="colorControlNormal">@color/textp</item>
-                <item name="android:textColorSecondary">@color/secondaryTextColor</item>
-        -->
-        <item name="android:toolbarStyle">@style/AppTheme.Widget.Toolbar</item>
         <item name="toolbarStyle">@style/AppTheme.Widget.Toolbar</item>
+        <item name="bottomSheetDialogTheme">@style/LRBottomSheetDialogTheme</item>
 
-        <!--<item name="android:fontFamily">@font/lato</item>-->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
     <style name="AppTheme.NoActionBar.FullScreen" parent="BaseAppTheme">
@@ -24,195 +21,109 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="AppTheme" parent="BaseAppTheme" />
+    <style name="AppTheme.LoginRegister"  parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorControlNormal">@color/secondaryDarkColor</item>
+        <item name="colorControlActivated">@color/hat_color3</item>
+        <item name="colorControlHighlight">@color/hat_color2</item>
+    </style>
+
+
+    <style name="AppTheme" parent="BaseAppTheme">
+    </style>
 
     <style name="AppTheme.Widget" />
 
     <!-- ActionBar/Toolbar -->
     <style name="AppTheme.Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
         <item name="android:textColorPrimary">#ffffff</item>
-        <item name="android:textColorPrimaryInverse">#ffffff</item>
         <item name="android:textColorSecondary">#ffffff</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="titleTextColor">#ffffff</item>
-        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/action_bar_title_text_size</item>
     </style>
 
-    <style name="AppTheme.Widget.Toolbar.Popup" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Light</item>
+    <style name="AppTheme.Widget.Toolbar.Popup" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Widget.Toolbar.Spinner">
+        <item name="android:background">@null</item>
+        <item name="android:spinnerItemStyle">@style/AppTheme.Widget.Toolbar.Spinner.Item</item>
     </style>
 
-    <!-- TabLayout inside a Toolbar -->
-    <style name="AppTheme.Widget.Toolbar.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">#d15b5b</item>
-        <item name="tabIndicatorHeight">4dp</item>
-        <item name="tabIndicatorFullWidth">false</item>
-        <item name="tabPaddingStart">6dp</item>
-        <item name="tabPaddingEnd">6dp</item>
-        <item name="tabMinWidth">0dp</item>
-        <item name="tabTextAppearance">@style/AppTheme.Widget.Toolbar.TabLayout.TabTextAppearance</item>
-        <item name="tabSelectedTextColor">#ffffff</item>
+    <style name="AppTheme.Widget.Toolbar.Spinner.Item">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:drawableEnd">@drawable/ic_arrow_drop_down_white</item>
     </style>
-
-    <!-- TabLayout outside Toolbar -->
-    <style name="AppTheme.Widget.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">#d15b5b</item>
-        <item name="tabIndicatorHeight">2dp</item>
-        <item name="tabIndicatorFullWidth">false</item>
-        <item name="tabPaddingStart">6dp</item>
-        <item name="tabPaddingEnd">6dp</item>
-        <item name="tabMinWidth">0dp</item>
-        <item name="tabTextAppearance">@style/AppTheme.Widget.TabLayout.TabTextAppearance</item>
-        <item name="tabSelectedTextColor">#787878</item>
-        <item name="android:background">@drawable/tab_indicator_bottom_border</item>
-    </style>
-
-    <style name="AppTheme.Widget.TabLayout.TabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">#787878</item>
-        <item name="textAllCaps">true</item>
-    </style>
-
-    <style name="AppTheme.Widget.Toolbar.TabLayout.TabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">#a2bbc0</item>
-        <item name="textAllCaps">true</item>
-    </style>
-
 
 
     <style name="AppTheme.Widget.Button" parent="Base.Widget.AppCompat.Button.Colored"/>
 
     <style name="AppTheme.Widget.Button.White">
         <item name="android:backgroundTint">#ffffffff</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.Widget.Button.Transparent">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+    <style name="AppTheme.Widget.Button.Facebook">
+        <item name="android:backgroundTint">#3b5998</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.AppCompat.Title.Small" parent="TextAppearance.MaterialComponents.Overline">
-        <item name="android:textColor">@color/textColor</item>
+    <!-- TabLayout inside a Toolbar -->
+    <style name="LRToolbarTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">#d15b5b</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabPaddingStart">6dp</item>
+        <item name="tabPaddingEnd">6dp</item>
+        <item name="tabTextAppearance">@style/LRToolbar.TabLayout.TabTextAppearance</item>
+        <item name="tabSelectedTextColor">#ffffff</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.AppCompat.Title.Main" parent="AppTheme.TextAppearance.AppCompat.Title.Small">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/textColorDark</item>
-        <item name="android:textStyle">bold</item>
+    <style name="LRToolbar.TabLayout.TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">#a2bbc0</item>
+        <item name="textAllCaps">true</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.AppCompat.Title.Description.Small" parent="TextAppearance.AppCompat.Small">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/textColorDark</item>
+    <!-- Bottom Sheet -->
+    <style name="LRBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/LRBottomSheetStyle</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.AppCompat.Title.Description.Medium" parent="TextAppearance.AppCompat.Small">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/textColorDark</item>
-        <item name="android:letterSpacing">0.0125</item>
+    <style name="LRBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="behavior_peekHeight">300dp</item>
     </style>
 
-    <!--Dialog animation theme-->
-    <style name="DialogAnimationEnterExit" >
-        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
-    </style>
-    
-    <style name="FullScreenDialog" >
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-    </style>
-
-    <style name="TextAppearanceCustomHeadline6">
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:letterSpacing">0.05</item>
-    </style>
-
-    <style name="TextAppearanceCustomHeaderline7">
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textAllCaps">false</item>
+    <style name="BottomSheetDialogTitle">
+        <item name="android:textAllCaps">true</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="TextAppearanceCustomSubtitle1">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
+    <style name="LRTitle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearanceCustomSubtitle2">
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.025</item>
-    </style>
-
-    <style name="TextAppearanceCustomSubtitle3">
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">10sp</item>
-        <item name="android:letterSpacing">0.1</item>
-        <item name="android:textColor">@color/text_color2</item>
-    </style>
-
-    <style name="TextAppearanceCustomBody1">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="TextAppearanceCustomBody2">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextAppearanceCustomCaption">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearanceCustomCaption1">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">10sp</item>
-    </style>
-
-    <style name="TextAppearanceCustomButton">
-        <item name="fontFamily">@font/roboto_medium</item>
+    <style name="QuickWorkoutType">
         <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextAppearanceCustomOverline">
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:letterSpacing">0.1</item>
-        <item name="android:textColor">@color/text_color2</item>
-    </style>
-
-    <style name="TextAppearanceCustomSection" parent="TextAppearanceCustomCaption">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.08</item>
-    </style>
-
-    <style name="TextAppearanceCustomTitle">
-        <item name="fontFamily">@font/roboto_bold</item>
-        <item name="android:textAllCaps">false</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:letterSpacing">0.025</item>
     </style>
 
-    <style name="Widget.WorkoutBrowser.Backdrop" parent="">
-        <item name="android:background">?attr/colorPrimary</item>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>

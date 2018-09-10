@@ -1,11 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!--<string name="facebook_app_id" translatable="false">644407955731400</string>-->
-    <!--<string name="fb_login_protocol_scheme" translatable="false">fb644407955731400</string>-->
+<resources>
+    <string name="facebook_app_id" translatable="false">644407955731400</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb644407955731400</string>
 
     <string name="app_name">LiveRowing</string>
-    <!--<string name="action_settings">Settings</string>-->
-    <!--<string name="title_activity_login">Sign in</string>-->
-    <!--<string name="title_activity_login_register">Login</string>-->
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login_register">Login</string>
 
     <string name="signup_with_email">SIGN UP WITH EMAIL</string>
     <string name="signup">SIGN UP</string>
@@ -18,22 +18,17 @@
     <string name="password_confirm_description">One more time.\nYou better not copy &amp; p.</string>
     <string name="standard_system">Standard System</string>
     <string name="metric_system">Metric System</string>
-    <string name="male">MALE</string>
-    <string name="female">FEMALE</string>
     <string name="standard_system_description">The system the United States picked for some reason.</string>
     <string name="metric_system_description">The system the world uses.</string>
     <string name="system_description">You\'re doing great.\nPick the measuring system you fancy.</string>
     <string name="height_description">Ok, we need your height and weight so we can provide you some sweet stats.</string>
     <string name="birthday">BIRTHDAY</string>
     <string name="birthday_description">We swear. You are almost done. \nPlease enter your BIRTHDAY below.</string>
-    <string name="choose_profile_pic">If you still have some left in the tank. \nChoose a profile pic.</string>
+    <string name="choose_profile_pic">If you still have some left in the tank. \n Choose a profile pic.</string>
     <string name="cant_wait">Can\'t wait see you!</string>
     <string name="next">NEXT</string>
-    <string name="back">BACK</string>
-    <string name="height_feet_description">Feets (3\'0\" ~ 10\'0\")</string>
-    <string name="height_cm_description">Centimeters (90 cm ~ 300 cm)</string>
-    <string name="weight_kg_description">Kilograms (22 kg ~ 360 kg)</string>
-    <string name="weight_lbs_description">Pounds (50 lbs ~ 800 lbs)</string>
+    <string name="fuck_this">FUCK THIS</string>
+
 
     <string-array name="countries_array">
         <item>Afghanistan</item>
@@ -278,52 +273,48 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
-    <!--<string name="title_activity_main">MainActivity</string>-->
+    <string name="title_activity_main">MainActivity</string>
 
-    <!--<string name="navigation_drawer_open">Open navigation drawer</string>-->
-    <!--<string name="navigation_drawer_close">Close navigation drawer</string>-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!--<string name="title_activity_race">RaceFragment</string>-->
-    <!--<string name="dummy_button">Dummy Button</string>-->
-    <!--<string name="dummy_content">DUMMY\nCONTENT</string>-->
-
-    <!--&lt;!&ndash; TODO: Remove or change this placeholder text &ndash;&gt;-->
-    <!--<string name="hello_blank_fragment">Hello blank fragment</string>-->
-
-
-    <!--<string name="welcome">Preferences Example</string>-->
-    <!--<string name="list_size">List Size</string>-->
-    <!--<string name="settings">Settings</string>-->
-    <!--<string name="settings_summary">Example of Preferences</string>-->
-    <!--<string name="pref_show_delete">Show delete button?</string>-->
-    <!--<string name="pref_list_limit">List Size</string>-->
-    <!--<string name="pref_summary_list_size">Maximun rows to be shown in a list page</string>-->
-    <!--<string name="pref_color_theme">Color theme</string>-->
-    <!--<string name="pref_color_theme_value">#87CEEB</string>-->
-
-    <!--<string-array name="pref_color_theme_entries">-->
-    <!--<item>Black</item>-->
-    <!--<item>Sky Blue</item>-->
-    <!--<item>Red</item>-->
-    <!--<item>White</item>-->
-    <!--</string-array>-->
-    <!--<string-array name="pref_color_theme_values">-->
-    <!--<item>#000000</item>-->
-    <!--<item>#87CEEB</item>-->
-    <!--<item>#FF0000</item>-->
-    <!--<item>#FFFFFF</item>-->
-    <!--</string-array>-->
-
-    <!--<string name="pref_group_admin">Admin</string>-->
-    <!--<string name="pref_group_appearance">Appearance</string>-->
-    <!--<string name="pref_group_configure">Configuration</string>-->
-    <!--<string name="pref_group_configure_summary">Configuration of admin, appearance</string>-->
-    <!--<string name="pref_group_support">Support</string>-->
-    <!--<string name="pref_group_support_summary">About, Help</string>-->
-    <!--<string name="pref_support_about">About</string>-->
-    <!--<string name="pref_support_show_help">Help</string>-->
-    <string name="lr_appbar_scrolling_view_behavior" translatable="false" tools:override="true">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="title_activity_race">RaceActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="welcome">Preferences Example</string>
+    <string name="list_size">List Size</string>
+    <string name="settings">Settings</string>
+    <string name="settings_summary">Example of Preferences</string>
+    <string name="pref_show_delete">Show delete button?</string>
+    <string name="pref_list_limit">List Size</string>
+    <string name="pref_summary_list_size">Maximun rows to be shown in a list page</string>
+    <string name="pref_color_theme">Color theme</string>
+    <string name="pref_color_theme_value">#87CEEB</string>
+
+    <string-array name="pref_color_theme_entries">
+        <item>Black</item>
+        <item>Sky Blue</item>
+        <item>Red</item>
+        <item>White</item>
+    </string-array>
+    <string-array name="pref_color_theme_values">
+        <item>#000000</item>
+        <item>#87CEEB</item>
+        <item>#FF0000</item>
+        <item>#FFFFFF</item>
+    </string-array>
+
+    <string name="pref_group_admin">Admin</string>
+    <string name="pref_group_appearance">Appearance</string>
+    <string name="pref_group_configure">Configuration</string>
+    <string name="pref_group_configure_summary">Configuration of admin, appearance</string>
+    <string name="pref_group_support">Support</string>
+    <string name="pref_group_support_summary">About, Help</string>
+    <string name="pref_support_about">About</string>
+    <string name="pref_support_show_help">Help</string>
 </resources>
